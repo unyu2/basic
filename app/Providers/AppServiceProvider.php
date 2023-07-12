@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-
+use App\Models\Setting;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,9 +13,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        view()->composer('layouts.master', function ($view) {
+            $view->with('setting', Setting::first());
+        });
+        view()->composer('layouts.auth', function ($view) {
+            $view->with('setting', Setting::first());
+        });
+        view()->composer('auth.login', function ($view) {
+            $view->with('setting', Setting::first());
+        });
     }
-
     /**
      * Bootstrap any application services.
      *

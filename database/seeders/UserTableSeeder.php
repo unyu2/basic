@@ -13,11 +13,23 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'name'	=> 'administrator',
-            'email'	=> 'admin@gmail.com',
-            'password'	=> bcrypt('123')
-    ]);
+        $users = array(
+            [
+                'name' => 'Administrators',
+                'email' => 'admins@gmail.com',
+                'password' => bcrypt('123'),
+                'foto' => '/img/user.jpg',
+                'level' => 1,
+                'nip' => 0,
+                'bagian' => 0
+            ]
+        );
 
+        array_map(function (array $user) {
+            User::query()->updateOrCreate(
+                ['email' => $user['email']],
+                $user
+            );
+        }, $users);
     }
 }
