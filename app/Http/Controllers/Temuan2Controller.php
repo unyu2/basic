@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\temuanImports; 
+
 use Illuminate\Http\Request;
 use App\Models\Proyek;
 use App\Models\Temuan;
@@ -26,7 +29,7 @@ class Temuan2Controller extends Controller
         $produk = Produk::all()->pluck('nama_produk','id_produk');
         $car = Car::all()->pluck('nama_car','id_car');
 
-        return view('temuan2.index', compact('proyek', 'produk', 'temuan'));
+        return view('temuan2.index', compact('proyek', 'produk', 'temuan', 'car'));
     }
 
     public function data()
@@ -34,7 +37,8 @@ class Temuan2Controller extends Controller
         $temuan = Temuan::leftJoin('proyek', 'proyek.id_proyek', 'temuan.id_proyek')
         ->leftJoin('users', 'users.id', 'temuan.id_user')
         ->leftJoin('produk', 'produk.id_produk', 'temuan.id_produk')
-        ->select('temuan.*', 'nama_proyek', 'name', 'nama_produk')
+        ->leftJoin('car', 'car.id_car', 'temuan.id_car')
+        ->select('temuan.*', 'nama_proyek', 'name', 'nama_produk', 'nama_car')
         ->orderBy('id_temuan', 'DESC')
         ->get();
     
@@ -56,6 +60,9 @@ class Temuan2Controller extends Controller
             ->editColumn('id_produk', function ($temuan) {
                 return $temuan->nama_produk ?? '';
             })
+            ->editColumn('id_car', function ($temuan) {
+                return $temuan->nama_car ?? '';
+            })
             ->editColumn('id_user', function ($temuan) {
                 return $temuan->nama_user_temuan ?? '';
             })
@@ -64,6 +71,7 @@ class Temuan2Controller extends Controller
             })
             ->addColumn('aksi', function ($temuan) {
                 $buttons = '<div class="btn-group">';
+                $buttons .= '<button type="button" onclick="editForm2(`'. route('temuan.update', $temuan->id_temuan) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>';        
                 if ($temuan->status !== 'Closed') {
                     $buttons .= '<button type="button" onclick="editForm(`'. route('temuan.update', $temuan->id_temuan) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-pencil">Closing</i></button>';        
                     $buttons .= '<button type="button" onclick="deleteData(`'. route('temuan.destroy', $temuan->id_temuan) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
@@ -184,22 +192,31 @@ class Temuan2Controller extends Controller
 
             $temuan = Temuan::with('proyek')->where('id_temuan', $id)->find($id);
             $datatemuan[] = $temuan;
-
             $temuans = Proyek::with('temuan')->where('id_proyek', $id)->find($id);
             $datatemuans[] = $temuans;
-
             $x1 = Proyek::all()->pluck('nama_proyek','id_temuan');
             $datatemuanss[] = $x1;
-
-
-
-
         }
-
         $no  = 1;
         $pdf = PDF::loadView('temuan2.barcode', compact('datatemuan', 'no', 'datatemuans','datatemuanss'));
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('temuan.pdf');
+    }
+
+    public function importExcel(Request $request)
+    {
+        try {
+            $file = $request->file('file'); // Ambil file Excel dari request
+    
+            // Pastikan Anda sudah membuat class Import yang sesuai dengan skema impor Anda
+            Excel::import(new temuanImports, $file);
+    
+            // Redirect ke halaman index dengan pesan sukses
+            return redirect()->route('temuan2.index')->with('success', 'Import data berhasil.');
+        } catch (\Exception $e) {
+            // Tampilkan pesan error yang lebih rinci
+            return redirect()->route('temuan2.index')->with('error', 'Import data gagal: ' . $e->getMessage() . ' Line: ' . $e->getLine());
+        }
     }
 }
 

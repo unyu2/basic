@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Temuan;
 use App\Models\Proyek;
+use App\Models\Car;
 use App\Models\PermintaanDetail;
 use Carbon\Carbon;
 
@@ -12,13 +13,14 @@ class ChartController extends Controller
     public function index()
     {
         $proyek = Proyek::all()->pluck('nama_proyek', 'id_proyek');
+        $car = Car::all()->pluck('nama_car', 'id_car');
 
         $fetch_id_proyek = Temuan::select("id_proyek")
             ->groupBy('id_proyek')
             ->orderBy('id_proyek', 'DESC')
             ->get();
             
-        return view('charts.charts', compact('fetch_id_proyek', 'proyek'));
+        return view('charts.charts', compact('fetch_id_proyek', 'proyek', 'car'));
     }
 
     
@@ -131,6 +133,7 @@ class ChartController extends Controller
             return response()->json($output);
         }
     }
+
     public function fetch_chart_detail($id_proyek)
     {
         $data = Temuan::select("id_temuan", "id_proyek", "jumlah", "nama_produks", "created_at")

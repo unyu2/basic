@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
+<div class="modal fade" id="modal-form2" tabindex="-1" role="dialog" aria-labelledby="modal-form2">
     <div class="modal-dialog modal-lg" role="document">
         <form action="" method="post" class="form-horizontal">
             @csrf
@@ -41,12 +41,24 @@
                     <div class="form-group row">
                         <label for="status2" class="col-lg-1 col-lg-offset-1 control-label">Status PR</label>
                         <div class="col-lg-3">
-                        <input value="PR" name="status2" id="status2" class="form-control" required readonly>
+                            <input value="PR" name="status2" id="status2" class="form-control" required readonly>
                             <span class="help-block with-errors"></span>
                         </div>
                         <label for="nopr" class="col-lg-1 col-lg-offset-1 control-label">No PR</label>
                         <div class="col-lg-3">
-                            <input name="nopr" id="nopr" class="form-control">
+                            <input name="nopr" id="nopr" class="form-control" required readonly>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="status3" class="col-lg-1 col-lg-offset-1 control-label">Status PO</label>
+                        <div class="col-lg-3">
+                            <input value="PO" name="status3" id="status3" class="form-control" required readonly>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                        <label for="nopo" class="col-lg-1 col-lg-offset-1 control-label">No PO</label>
+                        <div class="col-lg-3">
+                            <input name="nopo" id="nopo" class="form-control">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

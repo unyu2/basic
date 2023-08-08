@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Data Original - Permintaan Barang Detail
+Permintaan Barang Detail
 @endsection
 
 @section('breadcrumb')
@@ -39,6 +39,7 @@ Data Original - Permintaan Barang Detail
 </div>
 
 @includeIf('minta.form')
+@includeIf('minta.form2')
 @endsection
 
 @push('scripts')
@@ -101,7 +102,7 @@ Data Original - Permintaan Barang Detail
 
     function editForm(url) {
         $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Edit Status');
+        $('#modal-form .modal-title').text('Tidak Lanjut PR');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
@@ -113,8 +114,6 @@ Data Original - Permintaan Barang Detail
                 $('#modal-form [name=id_produk]').val(response.id_produk);
                 $('#modal-form [name=jumlah]').val(response.jumlah);
                 $('#modal-form [name=status]').val(response.status);
-                $('#modal-form [name=status2]').val(response.status2);
-                $('#modal-form [name=status3]').val(response.status3);
                 $('#modal-form [name=site]').val(response.site);
                 $('#modal-form [name=nopo]').val(response.nopo);
                 $('#modal-form [name=nopr]').val(response.nopr);
@@ -152,6 +151,45 @@ Data Original - Permintaan Barang Detail
                 .submit();
         }
     }
+
+    function editForm2(url) {
+        $('#modal-form2').modal('show');
+        $('#modal-form2 .modal-title').text('Edit Status');
+
+        $('#modal-form2 form')[0].reset();
+        $('#modal-form2 form').attr('action', url);
+        $('#modal-form2 [name=_method]').val('put');
+        $('#modal-form2 [name=id_produk]').focus();
+
+        $.get(url)
+            .done((response) => {
+                $('#modal-form2 [name=id_produk]').val(response.id_produk);
+                $('#modal-form2 [name=jumlah]').val(response.jumlah);
+                $('#modal-form2 [name=status]').val(response.status);
+                $('#modal-form2 [name=status2]').val(response.status2);
+                $('#modal-form2 [name=site]').val(response.site);
+                $('#modal-form2 [name=nopo]').val(response.nopo);
+                $('#modal-form2 [name=nopr]').val(response.nopr);
+            })
+            .fail((errors) => {
+                alert('Tidak dapat menampilkan data');
+                return;
+            });
+    }
+
+    $('#modal-form2').validator().on('submit', function (e) {
+            if (! e.preventDefault()) {
+                $.post($('#modal-form2 form').attr('action'), $('#modal-form2 form').serialize())
+                    .done((response) => {
+                        $('#modal-form2').modal('hide');
+                        table.ajax.reload();
+                    })
+                    .fail((errors) => {
+                        alert('Tidak dapat menyimpan data');
+                        return;
+                    });
+            }
+        });
 
 </script>
 @endpush

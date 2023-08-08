@@ -15,12 +15,12 @@ class Proyek extends Model
 
     public function temuan()
     {
-        return $this->hasMany(Temuan::class, 'id_temuan', 'id_temuan');
+        return $this->belongsTo(Temuan::class, 'id_temuan', 'id_temuan');
     }
 
     public function permintaan()
     {
-        return $this->hasMany(Permintaan::class, 'id_permintaan', 'id_permintaan');
+        return $this->belongsTo(Permintaan::class, 'id_permintaan', 'id_permintaan');
     }
 
     public function konfigurasi()
@@ -30,6 +30,6 @@ class Proyek extends Model
 
     public function design()
     {
-        return $this->hasMany(Design::class, 'id_design', 'id_design');
+        return $this->belongsTo(Design::class, 'id_design', 'id_design');
     }
 }

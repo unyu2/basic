@@ -15,7 +15,7 @@ class CreateTemuanTable extends Migration
     {
         Schema::create('temuan', function (Blueprint $table) {
             $table->increments('id_temuan');
-            $table->unsignedInteger('id_proyek');
+            $table->unsignedInteger('id_proyek')->nullable();
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedBigInteger('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
@@ -30,9 +30,9 @@ class CreateTemuanTable extends Migration
             $table->string('nama_produks',100)->nullable();
             $table->string('kode_emu')->nullable();
             $table->string('ncr',25)->nullable()->index();
-            $table->string('status',25)->index();
+            $table->string('status',25)->nullable()->index();
             $table->string('kode_temuan',25)->nullable();
-            $table->text('nama_temuan');
+            $table->text('nama_temuan')->nullable();
 
             $table->string('jenis',25)->nullable();
             $table->text('penyebab')->nullable();

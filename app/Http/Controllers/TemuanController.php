@@ -34,7 +34,8 @@ class TemuanController extends Controller
         $temuan = Temuan::leftJoin('proyek', 'proyek.id_proyek', 'temuan.id_proyek')
         ->leftJoin('users', 'users.id', 'temuan.id_user')
         ->leftJoin('produk', 'produk.id_produk', 'temuan.id_produk')
-        ->select('temuan.*', 'nama_proyek', 'name', 'nama_produk')
+        ->leftJoin('car', 'car.id_car', 'temuan.id_car')
+        ->select('temuan.*', 'nama_proyek', 'name', 'nama_produk', 'nama_car')
         ->orderBy('id_temuan', 'DESC')
         ->get();
     
@@ -56,6 +57,9 @@ class TemuanController extends Controller
             ->editColumn('id_produk', function ($temuan) {
                 return $temuan->nama_produk ?? '';
             })
+            ->editColumn('id_car', function ($temuan) {
+                return $temuan->nama_car ?? '';
+            })
             ->editColumn('id_user', function ($temuan) {
                 return $temuan->nama_user_temuan ?? '';
             })
@@ -64,6 +68,8 @@ class TemuanController extends Controller
             })
             ->addColumn('aksi', function ($temuan) {
                 $buttons = '<div class="btn-group">';
+                $buttons .= '<button type="button" onclick="editForm2(`'. route('temuan.update', $temuan->id_temuan) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>';        
+
                 if ($temuan->status !== 'Closed') {
                     $buttons .= '<button type="button" onclick="editForm(`'. route('temuan.update', $temuan->id_temuan) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>';        
                     $buttons .= '<button type="button" onclick="deleteData(`'. route('temuan.destroy', $temuan->id_temuan) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
@@ -200,4 +206,6 @@ class TemuanController extends Controller
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('temuan.pdf');
     }
+
+
 }

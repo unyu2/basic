@@ -215,11 +215,8 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
 
         Route::get('/design/dataModal', [DesignController::class, 'dataModal'])->name('design.dataModal');
         
-
         Route::get('design/dataDetail', [DesignController::class, 'dataDetail'])->name('design.dataDetail');
         Route::get('/design/{id_design}/showDetail', [DesignController::class, 'showDetail'])->name('design.showDetail');
-
-
 
         Route::put('/design/{id_design}', [DesignController::class, 'updatex'])->name('design.updatex');
         Route::put('/design/{id_design}/release', [DesignController::class, 'release'])->name('design.release');
@@ -229,7 +226,6 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
         Route::post('/design/exportSelected', [DesignController::class, 'exportSelected'])->name('design.exportSelected');
         Route::post('/design/cetakPdf', [DesignController::class, 'cetakPdf'])->name('design.cetakPdf');
         Route::resource('/design', DesignController::class);
-
 
         Route::get('/design_detail/data', [DesignDetailController::class, 'data'])->name('design_detail.data');
 
@@ -269,6 +265,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
         Route::post('chart/fetch_data_car', [ChartController::class, 'fetch_data_car']);
         Route::post('chart/fetch_data_produk', [ChartController::class, 'fetch_data_produk']);
         Route::post('chart/fetch_data_detail', [ChartController::class, 'fetch_data_detail']);
+        Route::post('/charts/charts/fetch_data_detail_ts', [ChartController::class, 'fetch_data_detail_ts']);
         Route::post('chart/fetch_data_bagian', [ChartController::class, 'fetch_data_bagian']);
         Route::post('chart/fetch_data_status', [ChartController::class, 'fetch_data_status']);
         Route::post('chart/fetch_data_tanggal_status', [ChartController::class, 'fetch_data_tanggal_status']);
@@ -324,6 +321,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
         Route::resource('/pengujian', PengujianController::class);
 
         Route::get('/temuan2/data', [Temuan2Controller::class, 'data'])->name('temuan2.data');
+        Route::post('/temuan2/import', [Temuan2Controller::class, 'importExcel'])->name('temuan2.import');
         Route::post('/temuan2/delete-selected', [Temuan2Controller::class, 'deleteSelected'])->name('temuan2.delete_selected');
         Route::post('/temuan2/cetak-barcode', [Temuan2Controller::class, 'cetakBarcode'])->name('temuan2.cetak_barcode');
         Route::resource('/temuan2', Temuan2Controller::class);
@@ -418,11 +416,14 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
 
         Route::get('/permintaan/data', [PermintaanController::class, 'data'])->name('permintaan.data');
         Route::get('/permintaan/{id}/create', [PermintaanController::class, 'create'])->name('permintaan.create');
-        Route::resource('/permintaan', PermintaanController::class);
+        Route::resource('/permintaan', PermintaanController::class)
+            ->except('create');
 
         Route::get('/permintaan_detail/{id}/data', [PermintaanDetailController::class, 'data'])->name('permintaan_detail.data');
         Route::get('/permintaan_detail/loadform/{diskon}/{total}', [PermintaanDetailController::class, 'loadForm'])->name('permintaan_detail.load_form');
-        Route::resource('/permintaan_detail', PermintaanDetailController::class);
+        Route::resource('/permintaan_detail', PermintaanDetailController::class)
+            ->except('create', 'show', 'edit');
+
 
 
         Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');

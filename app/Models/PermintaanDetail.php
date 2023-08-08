@@ -15,11 +15,11 @@ class PermintaanDetail extends Model
 
     public function produk()
     {
-        return $this->hasOne(Produk::class, 'id_produk', 'id_produk');
+        return $this->belongsTo(Produk::class, 'id_produk', 'id_produk');
     }
 
     public function permintaan()
     {
-        return $this->hasOne(Permintaan::class, 'id_permintaan', 'id_permintaan');
+        return $this->belongsTo(Permintaan::class, 'id_permintaan', 'id_permintaan');
     }
 }

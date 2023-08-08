@@ -146,6 +146,8 @@
         .on('draw.dt', function () {
             loadForm($('#diskon').val());
         });
+
+        
         table2 = $('.table-produk').DataTable();
 
         $(document).on('input', '.quantity', function () {

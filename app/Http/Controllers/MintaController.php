@@ -26,11 +26,10 @@ class MintaController extends Controller
     public function data()
     {
         $minta = Minta::leftJoin('produk', 'produk.id_produk', 'permintaan_detail.id_produk')
-        ->select('permintaan_detail.*', 'nama_produk', 'komat', 'satuan')
+        ->leftjoin('permintaan', 'permintaan.id_permintaan', 'permintaan_detail.id_permintaan')
+        ->select('permintaan_detail.*', 'nama_produk', 'komat', 'satuan', 'memo')
+        ->orderby('updated_at', 'ASC')
         ->get();
-
-        $mintas = Minta::leftJoin('permintaan', 'permintaan.id_permintaan', 'permintaan_detail.id_permintaan')
-        ->select('permintaan_detail.*', 'memo');
 
         return datatables()
             ->of($minta)
@@ -38,18 +37,21 @@ class MintaController extends Controller
             ->addColumn('created_at', function ($permintaan_detail) {
                 return tanggal_indonesia($permintaan_detail->created_at, false);
             })
-            ->editColumn('id_permintaan', function ($mintas) {
-                return $mintas->permintaan->memo ?? '';
+            ->editColumn('id_permintaan', function ($minta) {
+                return $minta->permintaan->memo ?? '';
             })
-            ->editColumn('proyek', function ($mintas) {
-                return $mintas->permintaan->nama_proyeks ?? '';
+            ->editColumn('proyek', function ($minta) {
+                return $minta->permintaan->nama_proyeks ?? '';
             })
             ->addColumn('aksi', function ($minta) {
-                return '
-                <div class="btn-group">  
-                <button type="button" onclick="editForm(`'. route('minta.update', $minta->id_permintaan_detail) .'`)" class="btn btn-block btn-success btn-xs">Process</button>
-                </div>
-                ';
+                $buttons = '<div class="btn-group">';
+                $buttons .= '<button type="button" onclick="editForm2(`'. route('minta.update', $minta->id_permintaan_detail) .'`)" class="btn btn-block btn-success btn-xs">Process PO</button>';
+                if ($minta->status2 !== 'PR') {
+                    $buttons .= '<button type="button" onclick="editForm(`'. route('minta.update', $minta->id_permintaan_detail) .'`)" class="btn btn-block btn-success btn-xs">Process PR</button>';
+                }
+                $buttons .= '</div>';
+        
+                return $buttons;
             })
             ->rawColumns(['aksi', 'id_permintaan_detail'])
             ->make(true);

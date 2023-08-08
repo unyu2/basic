@@ -46,7 +46,16 @@
                         </div>
                     </div>
 
-                            <input type="hidden" value="{{auth()->id()}}" name="id_users" id="#" class="form-control" readonly>
+                            <input type="hidden" value="{{auth()->id()}}" name="id_users" id="#" class="form-control">
+                            <span class="help-block with-errors"></span>
+
+                            <input type="hidden" name="dampak" id="dampak" class="form-control" >
+                            <span class="help-block with-errors"></span>
+
+                            <input type="hidden" name="frekuensi" id="frekuensi" class="form-control" >
+                            <span class="help-block with-errors"></span>
+
+                            <input type="hidden" name="pantau" id="pantau" class="form-control" >
                             <span class="help-block with-errors"></span>
 
                     <div class="form-group row">

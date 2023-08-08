@@ -20,10 +20,10 @@ class CreatePemintaanTable extends Migration
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
             $table->string('memo')->nullable()->index();
             $table->string('nama_proyeks')->nullable();
-            $table->integer('id_user')->index();
+            $table->integer('id_user')->nullable()->index();
             $table->integer('total_item')->nullable();
             $table->integer('total_harga')->nullable();
-            $table->tinyInteger('diskon')->default(0);
+            $table->tinyInteger('diskon')->nullable();
             $table->integer('bayar')->nullable();
             $table->timestamps();
         });

@@ -34,6 +34,7 @@
                             <th>Kode</th>
                             <th>NCR</th>
                             <th>Proyek</th>
+                            <th>TS</th>
                             <th>Produk</th>
                             <th>Kasus</th>
                             <th>Level</th>
@@ -48,6 +49,7 @@
 </div>
 
 @includeIf('temuan.form')
+@includeIf('temuan.form2')
 @endsection
 
 @push('scripts')
@@ -72,6 +74,7 @@
                 {data: 'kode_temuan'},
                 {data: 'ncr'},
                 {data: 'id_proyek'},
+                {data: 'id_car'},
                 {data: 'id_produk'},
                 {data: 'nama_temuan'},
                 {data: 'level'},
@@ -194,6 +197,50 @@
                 .attr('action', url)
                 .submit();
         }
+    }
+
+    function editForm2(url) {
+        $('#modal-form2').modal('show');
+        $('#modal-form2 .modal-title').text('Detail Temuan');
+
+        $('#modal-form2 form')[0].reset();
+        $('#modal-form2 form').attr('action', url);
+        $('#modal-form2 [name=_method]').val('put');
+        $('#modal-form2 [name=id_temuan]').focus();
+
+        $.get(url)
+            .done((response) => {
+                $('#modal-form2 [name=id_proyek]').val(response.id_proyek);
+                $('#modal-form2 [name=id_user]').val(response.id_user);
+                $('#modal-form2 [name=kode_emu]').val(response.kode_emu);
+                $('#modal-form2 [name=ncr]').val(response.ncr);
+                $('#modal-form2 [name=id_produk]').val(response.id_produk);
+                $('#modal-form2 [name=id_car]').val(response.id_car);
+                $('#modal-form2 [name=dampak]').val(response.dampak);
+                $('#modal-form2 [name=frekuensi]').val(response.frekuensi);
+                $('#modal-form2 [name=pantau]').val(response.pantau);
+                $('#modal-form2 [name=status]').val(response.status);
+                $('#modal-form2 [name=jenis]').val(response.jenis);
+                $('#modal-form2 [name=nama_temuan]').val(response.nama_temuan);
+                $('#modal-form2 [name=car]').val(response.car);
+                $('#modal-form2 [name=level]').val(response.level);
+                $('#modal-form2 [name=subsistem]').val(response.subsistem);
+                $('#modal-form2 [name=id_produk]').val(response.id_produk);
+                $('#modal-form2 [name=jumlah]').val(response.jumlah);
+                $('#modal-form2 [name=bagian]').val(response.bagian);
+                $('#modal-form2 [name=operasi]').val(response.operasi);
+                $('#modal-form2 [name=aksi]').val(response.aksi);
+                $('#modal-form2 [name=penyelesaian]').val(response.aksi);
+                $('#modal-form2 [name=penyebab]').val(response.penyebab);
+                $('#modal-form2 [name=akibat1]').val(response.akibat1);
+                $('#modal-form2 [name=akibat2]').val(response.akibat2);
+                $('#modal-form2 [name=akibat3]').val(response.akibat3);
+                $('#modal-form2 [name=saran]').val(response.saran);
+            })
+            .fail((errors) => {
+                alert('Tidak dapat menampilkan data');
+                return;
+            });
     }
 </script>
 @endpush

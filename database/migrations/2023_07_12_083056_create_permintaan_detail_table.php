@@ -15,9 +15,9 @@ class CreatePermintaanDetailTable extends Migration
     {
         Schema::create('permintaan_detail', function (Blueprint $table) {
             $table->increments('id_permintaan_detail');
-            $table->unsignedInteger('id_permintaan');
+            $table->unsignedInteger('id_permintaan')->nullable();
             $table->foreign('id_permintaan')->references('id_permintaan')->on('permintaan')->onDelete('restrict')->onUpdate('restrict');
-            $table->unsignedInteger('id_produk');
+            $table->unsignedInteger('id_produk')->nullable();
             $table->foreign('id_produk')->references('id_produk')->on('produk')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedInteger('id_proyek')->nullable();
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
@@ -29,7 +29,7 @@ class CreatePermintaanDetailTable extends Migration
             $table->text('nopo')->nullable();
             $table->integer('harga_beli')->nullable();
             $table->integer('jumlah')->nullable();
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->integer('subtotal')->nullable();
             $table->timestamps();
         });
