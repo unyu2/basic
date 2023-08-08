@@ -19,7 +19,7 @@
                                 </div>
                     </div>
                     <div class="form-group row">
-                        <label for="status" class="col-lg-2 col-lg-offset-1 control-label">Status Dokumen</label>
+                        <label for="status" class="col-lg-2 col-lg-offset-1 control-label">Status IS</label>
                         <div class="col-lg-6">
                             <input name="status" id="status"  class="form-control" readonly>
                             <span class="help-block with-errors"></span>
@@ -34,6 +34,8 @@
 </div>
 <br>
 <br>
+                    @foreach ($emu as $item)
+                       @if(!empty($item->p1))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 1</label>
                         <div class="col-lg-3">
@@ -43,13 +45,17 @@
                         </div>
                         <label for="p1" class="col-lg-2 col-lg-offset-1 control-label">Keterangan 1</label>
                         <div class="col-lg-6">
-                            <textarea value="p1" type="text" name="p1" id="" class="form-control" readonly>
+                            <textarea value="p1" type="text" name="p1" id="p1" class="form-control" readonly>
                             </textarea>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p2))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 2</label>
                         <div class="col-lg-3">
@@ -64,8 +70,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p3))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 3</label>
                         <div class="col-lg-3">
@@ -80,8 +90,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p4))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 4</label>
                         <div class="col-lg-3">
@@ -96,8 +110,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p5))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 5</label>
                         <div class="col-lg-3">
@@ -112,8 +130,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p6))
                     <div class="form-group row">
                         <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 6</label>
                         <div class="col-lg-3">
@@ -128,8 +150,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p7))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 7</label>
                         <div class="col-lg-3">
@@ -144,8 +170,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p8))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 8</label>
                         <div class="col-lg-3">
@@ -160,8 +190,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p9))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 9</label>
                         <div class="col-lg-3">
@@ -176,8 +210,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p10))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 10</label>
                         <div class="col-lg-3">
@@ -192,8 +230,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p11))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 11</label>
                         <div class="col-lg-3">
@@ -208,8 +250,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p12))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 12</label>
                         <div class="col-lg-3">
@@ -224,8 +270,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p13))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 13</label>
                         <div class="col-lg-3">
@@ -240,8 +290,12 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    @endif
+                    @endforeach
                     <br>
 <br>
+@foreach ($emu as $item)
+                       @if(!empty($item->p14))
                     <div class="form-group row">
                     <label for="" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 14</label>
                         <div class="col-lg-3">
@@ -254,7 +308,9 @@
                             <textarea value="p14" type="text" name="p14" id="" class="form-control" readonly>
                             </textarea>
                             <span class="help-block with-errors"></span>
-                        </div>               
+                        </div>
+                        @endif
+                    @endforeach              
 
                         <br>
                         <br>

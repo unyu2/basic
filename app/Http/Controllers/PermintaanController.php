@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use App\Models\Permintaan;
 use App\Models\PermintaanDetail;
 use App\Models\Produk;
 use App\Models\Proyek;
+use App\Models\User;
+
 
 class PermintaanController extends Controller
 {
@@ -61,45 +64,49 @@ class PermintaanController extends Controller
             ->make(true);
     }
 
-    public function create($id)
+    public function create($id_proyek)
     {
+        // Buat permintaan baru dengan id_proyek yang diberikan
         $permintaan = new Permintaan();
-        $permintaan->id_proyek = $id;
-        $permintaan->id_user     = auth()->id();
-        $permintaan->total_item  = 0;
+        $permintaan->id_proyek = $id_proyek;
+        $permintaan->id_user = 0;
+        $permintaan->total_item = 0;
         $permintaan->total_harga = 0;
-        $permintaan->memo        = 0;
-        $permintaan->nama_proyeks = 0;
-        $permintaan->diskon      = 0;
-        $permintaan->bayar       = 0;
+        $permintaan->memo = '';
+        $permintaan->nama_proyeks = '';
+        $permintaan->diskon = 0;
+        $permintaan->bayar = 0;
+    
         $permintaan->save();
-
+    
+        // Simpan id_permintaan dan id_proyek dalam sesi
         session(['id_permintaan' => $permintaan->id_permintaan]);
         session(['id_proyek' => $permintaan->id_proyek]);
-
+    
         return redirect()->route('permintaan_detail.index');
     }
-
+    
     public function store(Request $request)
     {
+        // Ambil permintaan berdasarkan id_permintaan yang diterima dari request
         $permintaan = Permintaan::findOrFail($request->id_permintaan);
+    
+        // Update atribut-atribut permintaan dengan data yang diterima dari request
         $permintaan->total_item = $request->total_item;
         $permintaan->total_harga = $request->total;
         $permintaan->memo = $request->memo;
         $permintaan->nama_proyeks = $request->nama_proyeks;
         $permintaan->diskon = $request->diskon;
         $permintaan->bayar = $request->bayar;
-        $permintaan->update();
-
-        $detail = PermintaanDetail::where('id_permintaan', $permintaan->id_permintaan)->get();
-        foreach ($detail as $item) {
-            $produk = Produk::find($item->id_produk);
-            $produk->stok_minta += $item->jumlah;
-            $produk->update();
-        }
-
+        $permintaan->id_user = auth()->id();
+    
+        $permintaan->save();
+    
+        // Update stok produk yang terkait dengan permintaan (jika ada)
+    
         return redirect()->route('permintaan.index');
     }
+    
 
     public function show($id)
     {

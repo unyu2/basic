@@ -141,12 +141,6 @@ class ChartController extends Controller
         return $data;
     }
 
-
-
-
-
-
-
     public function fetch_data_bagian(Request $request)
     {
         if ($request->input('id_proyek')) {
@@ -225,14 +219,14 @@ class ChartController extends Controller
             $closedCount = 0;
 
             foreach ($chart_data as $row) {
-                if ($row->status == 'Open Bo') {
+                if ($row->status == 'Open') {
                     $openCount += $row->jumlah;
                 } elseif ($row->status == 'Closed') {
                     $closedCount += $row->jumlah;
                 }
 
                 $output[] = [
-                    'status' => 'Open Bo',
+                    'status' => 'Open',
                     'created_at' => $row->created_at,
                     'jumlah' => $openCount
                 ];
@@ -258,7 +252,7 @@ class ChartController extends Controller
             $totalCountClosed = 0;
     
             foreach ($chart_data as $row) {
-                if ($row->status == 'Open Bo') {
+                if ($row->status == 'Open') {
                     $totalCountOpenBo += $row->jumlah;
                 } elseif ($row->status == 'Closed') {
                     $totalCountClosed += $row->jumlah;
@@ -285,7 +279,7 @@ class ChartController extends Controller
             $totalCountClosed = 0;
     
             foreach ($chart_data as $row) {
-                if ($row->status == 'Open Bo') {
+                if ($row->status == 'Open') {
                     $totalCountOpenBo += $row->jumlah;
                 } elseif ($row->status == 'Closed') {
                     $totalCountClosed += $row->jumlah;

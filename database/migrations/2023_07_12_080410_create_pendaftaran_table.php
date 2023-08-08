@@ -15,9 +15,10 @@ class CreatePendaftaranTable extends Migration
     {
         Schema::create('pendaftaran', function (Blueprint $table) {
             $table->increments('id_pendaftaran');
-            $table->unsignedInteger('id_proyek')->default(0);
+            
+            $table->unsignedInteger('id_proyek')->nullable();
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
-            $table->unsignedInteger('id_subpengujian')->default(0);
+            $table->unsignedInteger('id_subpengujian')->nullable();
             $table->foreign('id_subpengujian')->references('id_subpengujian')->on('subpengujian')->onDelete('restrict')->onUpdate('restrict');
             $table->integer('total_item');
             $table->integer('total_harga');

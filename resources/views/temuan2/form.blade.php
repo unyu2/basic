@@ -45,45 +45,28 @@
                         <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="id_users" class="col-lg-2 col-lg-offset-1 control-label">ID Manager</label>
-                        <div class="col-lg-6">
-                            <input value="{{auth()->id()}}" name="id_users" id="#" class="form-control" readonly>
+
+                            <input type="hidden" value="{{auth()->id()}}" name="id_users" id="#" class="form-control" readonly>
                             <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
+
                     <div class="form-group row">
                     <label for="jenis" class="col-lg-2 col-lg-offset-1 control-label">Jenis Permasalahan</label>
                         <div class="col-lg-6">
-                        <input value="jenis" name="jenis" id="#" class="form-control" readonly>
+                        <input name="jenis" id="jenis" class="form-control" readonly>
                         <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="level" class="col-lg-2 col-lg-offset-1 control-label">Bobot</label>
                         <div class="col-lg-6">
-                        <input value="level" name="level" id="level" class="form-control" readonly>               
+                        <input name="level" id="level" class="form-control" readonly>               
                         <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="status" class="col-lg-2 col-lg-offset-1 control-label">Status</label>
                         <div class="col-lg-6">
-                        <select name="status" id="status" class="form-control" required autofocus>
-                        <option value="Closed">Closed</option>
-                        </select>                        
-                        <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                    <label for="nama_proyeks" class="col-lg-2 col-lg-offset-1 control-label">Proyek</label>
-                        <div class="col-lg-6">
-                        <select name="nama_proyeks" id="nama_proyeks" class="form-control" autofocus required>
-                        @foreach ($proyek as $key => $item)
-                                <option value=""></option>
-                                <option value="{{ $item }}">{{ $item }}</option>
-                                @endforeach
-                            </select>
+                        <input value="Closed" name="status" id="status" class="form-control" readonly>                      
                         <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -94,6 +77,7 @@
                         <option></option>
                         <option>Pengadaan</option>
                         <option>Perbaikan</option>
+                        <option>Pengadaan & Perbaikan</option>
                         </select>                        
                         <span class="help-block with-errors"></span>
                         </div>

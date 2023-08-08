@@ -15,15 +15,15 @@
         <div class="box">
             <div class="box-header with-border">
                 <button onclick="addForm('{{ route('user.store') }}')" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Tambah</button>
+                <a href="{{ route('user.export') }}" class="btn btn-primary btn-xs btn-flat"><i class="fa fa-file-excel"></i> Export Excel</a>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-stiped table-bordered">
                     <thead>
                         <th width="5%">No</th>
+                        <th>Refrensi ID</th>
                         <th>Nama</th>
                         <th>Email</th>
-                        <th>Level</th>
-                        <th>Bagian</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
@@ -50,10 +50,9 @@
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'id'},
                 {data: 'name'},
                 {data: 'email'},
-                {data: 'level'},
-                {data: 'bagian'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });
@@ -102,6 +101,7 @@
                 $('#modal-form [name=email]').val(response.email);
                 $('#modal-form [name=nip]').val(response.nip);
                 $('#modal-form [name=bagian]').val(response.bagian);
+                $('#modal-form [name=level]').val(response.level);
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');

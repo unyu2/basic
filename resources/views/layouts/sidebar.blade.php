@@ -23,14 +23,24 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('dashboardx') }}">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard 2</span>
+                <a href="{{ route('charts') }}">
+                    <i class="fa fa-cube"></i> <span>Chart OIL</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('chartsDesign') }}">
+                    <i class="fa fa-cube"></i> <span>Chart Design</span>
                 </a>
             </li>
             <li class="header">MASTER</li>
             <li>
-                <a href="{{ route('charts') }}">
-                    <i class="fa fa-cube"></i> <span>chart</span>
+                <a href="{{ route('sistem.index') }}">
+                    <i class="fa fa-cube"></i> <span>Sistem</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('subsistem.index') }}">
+                    <i class="fa fa-cube"></i> <span>Sub Sistem</span>
                 </a>
             </li>
             <li>
@@ -39,13 +49,28 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('kepala_gambar.index') }}">
+                    <i class="fa fa-cube"></i> <span>Kepala Gambar</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('konfigurasi.index') }}">
+                    <i class="fa fa-cube"></i> <span>Konfigurasi</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('produk.index') }}">
                     <i class="fa fa-cube"></i> <span>Komponen</span>
                 </a>
             </li>
             <li>
-                <a href="{{ route('sistem.index') }}">
-                    <i class="fa fa-cube"></i> <span>Sistem</span>
+                <a href="{{ route('jabatan.index') }}">
+                    <i class="fa fa-cube"></i> <span>Jabatan</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('part.index') }}">
+                    <i class="fa fa-cube"></i> <span>Part</span>
                 </a>
             </li>
             <li>
@@ -73,6 +98,18 @@
                     <i class="fa fa-cube"></i> <span>Supplier</span>
                 </a>
             </li>
+            <li class="header">DESIGN DRAWING</li>
+            <li>
+                <a href="{{ route('design.index') }}">
+                    <i class="fa fa-cube"></i> <span>Design Drawing</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('design_detail.index') }}">
+                    <i class="fa fa-cube"></i> <span>Release Design Drawing</span>
+                </a>
+            </li>
+
             <li class="header">INSPEKSI</li>
             <li>
                 <a href="{{ route('full_calender') }}" target="_blank">
@@ -81,12 +118,17 @@
             </li>
             <li>
                 <a href="{{ route('dmu.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Buat Doc Inspeksi EMU/DMU </span>
+                    <i class="fa fa-cubes"></i> <span>Buat Doc Inspeksi Com EMU/DMU </span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('dmuapv.index') }}">
+                    <i class="fa fa-cubes"></i> <span>Aprove Doc Inspeksi Com EMU/DMU </span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('emu.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Start Inspeksi Emu/DMU</span>
+                    <i class="fa fa-cubes"></i> <span>Start Inspeksi Com Emu/DMU</span>
                 </a>
             </li>
             <li>

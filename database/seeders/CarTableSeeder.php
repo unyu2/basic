@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CarTableSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class CarTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('car')->insert(
+        DB::table('car')->insert([
             [
                 'id_car' => '13',
                 'nama_car' => 'TS1',
@@ -138,6 +139,6 @@ class CarTableSeeder extends Seeder
                 'id_car' => '43',
                 'nama_car' => 'TS31',
             ]
-        );
+        ]);
     }
 }

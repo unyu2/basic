@@ -7,6 +7,7 @@ use App\Models\Proyek;
 use App\Models\Temuan;
 use App\Models\Emu;
 use App\Models\Produk;
+use App\Models\Car;
 use App\Models\Setting;
 use App\Models\User;
 use PDF;
@@ -23,53 +24,55 @@ class Temuan2Controller extends Controller
         $temuan = Temuan::orderBy('id_temuan', 'desc')->get();
         $proyek = Proyek::all()->pluck('nama_proyek','id_proyek');
         $produk = Produk::all()->pluck('nama_produk','id_produk');
+        $car = Car::all()->pluck('nama_car','id_car');
 
         return view('temuan2.index', compact('proyek', 'produk', 'temuan'));
     }
 
     public function data()
     {
-        $coba = Temuan::orderBy('id_temuan', 'desc')->get();
         $temuan = Temuan::leftJoin('proyek', 'proyek.id_proyek', 'temuan.id_proyek')
-            ->select('temuan.*', 'nama_proyek');
-        $temuanss = Temuan::leftJoin('users', 'users.id', 'temuan.id_user')
-            ->select('temuan.*', 'name');
-        $produk = Produk::leftJoin('produk', 'produk.id_produk', 'temuan.id_produk')
-        ->select('temuan.*', 'nama_produk');
-        $emus = Temuan::with('user')->orderBy('id_temuan');
-        $temuans = Temuan::orderBy('kode_temuan');
-
+        ->leftJoin('users', 'users.id', 'temuan.id_user')
+        ->leftJoin('produk', 'produk.id_produk', 'temuan.id_produk')
+        ->select('temuan.*', 'nama_proyek', 'name', 'nama_produk')
+        ->orderBy('id_temuan', 'DESC')
+        ->get();
+    
         return datatables()
             ->of($temuan)
             ->addIndexColumn()
             ->addColumn('select_all', function ($temuan) {
-                return '
-                    <input type="checkbox" name="id_temuan[]" value="'. $temuan->id_temuan .'">
-                ';
+                return '<input type="checkbox" name="id_temuan[]" value="'. $temuan->id_temuan .'">';
             })
-            ->addColumn('created_at', function ($temuans) {
-                return tanggal_indonesia($temuans->created_at, false);
+            ->addColumn('created_at', function ($temuan) {
+                return tanggal_indonesia($temuan->created_at, false);
             })
-            ->addColumn('updated_at', function ($temuans) {
-                return tanggal_indonesia($temuans->updated_at, false);
+            ->addColumn('updated_at', function ($temuan) {
+                return tanggal_indonesia($temuan->updated_at, false);
             })
             ->editColumn('id_proyek', function ($temuan) {
-                return $temuan->proyek->nama_proyek ?? '';
+                return $temuan->nama_proyek ?? '';
             })
-            ->editColumn('id_produk', function ($produk) {
-                return $produk->produk->nama_produk ?? '';
+            ->editColumn('id_produk', function ($temuan) {
+                return $temuan->nama_produk ?? '';
             })
-            ->editColumn('id_user', function ($emus) {
-                return $emus->user->name ?? '';
+            ->editColumn('id_user', function ($temuan) {
+                return $temuan->nama_user_temuan ?? '';
+            })
+            ->editColumn('id_user_proyek', function ($temuan) {
+                return $temuan->nama_user_proyek ?? '';
             })
             ->addColumn('aksi', function ($temuan) {
-                return '
-                <div class="btn-group">
-                <button type="button" onclick="editForm(`'. route('temuan2.update', $temuan->id_temuan) .'`)" class="btn btn-success btn-xs">Closing</button>
-                    <button type="button" onclick="deleteData(`'. route('temuan2.destroy', $temuan->id_temuan) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                </div>
-                ';
+                $buttons = '<div class="btn-group">';
+                if ($temuan->status !== 'Closed') {
+                    $buttons .= '<button type="button" onclick="editForm(`'. route('temuan.update', $temuan->id_temuan) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-pencil">Closing</i></button>';        
+                    $buttons .= '<button type="button" onclick="deleteData(`'. route('temuan.destroy', $temuan->id_temuan) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                  }
+                $buttons .= '</div>';
+        
+                return $buttons;
             })
+
             ->rawColumns(['aksi', 'kode_temuan', 'select_all'])
             ->make(true);
     }
@@ -93,7 +96,13 @@ class Temuan2Controller extends Controller
     public function store(Request $request)
     {
         $temuan = Temuan::latest()->first() ?? new Temuan();
-        $request['kode_temuan'] = 'PRB'. tambah_nol_didepan((int)$temuan->id_temuan +1, 6);
+        $request['kode_temuan'] = 'OIL'. tambah_nol_didepan((int)$temuan->id_temuan +1, 6);
+
+        $temuan->frekuensi = $request->frekuensi;
+        $temuan->pantau = $request->pantau;
+        $temuan->dampak = $request->dampak;
+        
+        $request['nilai'] = $temuan->frekuensi * $temuan->pantau * $temuan->dampak;
 
         $temuan = Temuan::create($request->all());
 

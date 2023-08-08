@@ -20,42 +20,42 @@ class DashboardController extends Controller
         
         $temuan_all= Temuan::where('id_proyek','123')->count();
         $temuan_closed= Temuan::where ('status','Closed')->where('id_proyek','123')->count();
-        $temuan_open= Temuan::where ('status','Open Bo')->where('id_proyek','123')->count();
+        $temuan_open= Temuan::where ('status','Open')->where('id_proyek','123')->count();
         $temuan_closed_medium= Temuan::where ('status','Closed')->where('id_proyek','123')->where('level','Medium')->count();
-        $temuan_open_medium= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','Medium')->count();
+        $temuan_open_medium= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','Medium')->count();
         $temuan_closed_high= Temuan::where ('status','Closed')->where('id_proyek','123')->where('level','High')->count();
-        $temuan_open_high= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->count();
-        $temuan_convert_c1= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','13')->count();
-        $temuan_convert_c2= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','14')->count();
-        $temuan_convert_c3= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','15')->count();
-        $temuan_convert_c4= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','16')->count();
-        $temuan_convert_c5= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','17')->count();
-        $temuan_convert_c6= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','18')->count();
-        $temuan_convert_c7= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','19')->count();
-        $temuan_convert_c8= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','20')->count();
-        $temuan_convert_c9= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','21')->count();
-        $temuan_convert_c10= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','22')->count();
-        $temuan_convert_c11= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','23')->count();
-        $temuan_convert_c12= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','24')->count();
-        $temuan_convert_c13= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','25')->count();
-        $temuan_convert_c14= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','26')->count();
-        $temuan_convert_c15= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','27')->count();
-        $temuan_convert_c16= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','28')->count();
-        $temuan_convert_c17= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','29')->count();
-        $temuan_convert_c18= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','30')->count();
-        $temuan_convert_c19= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','31')->count();
-        $temuan_convert_c20= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','32')->count();
-        $temuan_convert_c21= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','33')->count();
-        $temuan_convert_c22= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','34')->count();
-        $temuan_convert_c23= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','35')->count();
-        $temuan_convert_c24= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','36')->count();
-        $temuan_convert_c25= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','37')->count();
-        $temuan_convert_c26= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','38')->count();
-        $temuan_convert_c27= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','39')->count();
-        $temuan_convert_c28= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','40')->count();
-        $temuan_convert_c29= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','41')->count();
-        $temuan_convert_c30= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','42')->count();
-        $temuan_convert_c31= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('level','High')->where('id_car','43')->count();
+        $temuan_open_high= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->count();
+        $temuan_convert_c1= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','13')->count();
+        $temuan_convert_c2= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','14')->count();
+        $temuan_convert_c3= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','15')->count();
+        $temuan_convert_c4= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','16')->count();
+        $temuan_convert_c5= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','17')->count();
+        $temuan_convert_c6= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','18')->count();
+        $temuan_convert_c7= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','19')->count();
+        $temuan_convert_c8= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','20')->count();
+        $temuan_convert_c9= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','21')->count();
+        $temuan_convert_c10= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','22')->count();
+        $temuan_convert_c11= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','23')->count();
+        $temuan_convert_c12= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','24')->count();
+        $temuan_convert_c13= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','25')->count();
+        $temuan_convert_c14= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','26')->count();
+        $temuan_convert_c15= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','27')->count();
+        $temuan_convert_c16= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','28')->count();
+        $temuan_convert_c17= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','29')->count();
+        $temuan_convert_c18= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','30')->count();
+        $temuan_convert_c19= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','31')->count();
+        $temuan_convert_c20= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','32')->count();
+        $temuan_convert_c21= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','33')->count();
+        $temuan_convert_c22= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','34')->count();
+        $temuan_convert_c23= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','35')->count();
+        $temuan_convert_c24= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','36')->count();
+        $temuan_convert_c25= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','37')->count();
+        $temuan_convert_c26= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','38')->count();
+        $temuan_convert_c27= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','39')->count();
+        $temuan_convert_c28= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','40')->count();
+        $temuan_convert_c29= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','41')->count();
+        $temuan_convert_c30= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','42')->count();
+        $temuan_convert_c31= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','43')->count();
         
 
 
@@ -266,7 +266,7 @@ class DashboardController extends Controller
             $data_tanggal[] = (int) substr($tanggal_awal, 8, 2);
 
     $temuan_closeds= Temuan::where ('status','Closed')->where('id_proyek','123')->where('created_at', 'LIKE', "%$tanggal_awal%")->count();
-    $temuan_opens= Temuan::where ('status','Open Bo')->where('id_proyek','123')->where('created_at', 'LIKE', "%$tanggal_awal%")->count();
+    $temuan_opens= Temuan::where ('status','Open')->where('id_proyek','123')->where('created_at', 'LIKE', "%$tanggal_awal%")->count();
 
     $temuan = $temuan_opens + $temuan_closeds;
     $temuans [] += $temuan;

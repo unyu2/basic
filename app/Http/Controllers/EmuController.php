@@ -1,14 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+
 use App\Models\Emu;
 use App\Models\EmuDetail;
 use App\Models\Produk;
 use App\Models\Proyek;
 use App\Models\Car;
 use App\Models\Dmu;
+use App\Models\User;
 use App\Models\Subpengujian;
 
 class EmuController extends Controller
@@ -38,6 +39,10 @@ class EmuController extends Controller
 
         return view('emu.index', compact('emuss','x1','x2','emus', 'x3', 'r1','r2','r3','r4','r5','r6','r7'));
     }
+
+
+
+    
     public function data()
     {
         $emus = Emu::leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
@@ -53,8 +58,8 @@ class EmuController extends Controller
         $subpengujian = Subpengujian::orderBy('id_subpengujian', 'desc')->get();
         $subpengujians = Subpengujian::all()->pluck('nama_subpengujian', 'id_dmu');
 
-    $emu = Emu::orderBy('id_emu', 'desc')->get();
-    //  $dmu = Dmu::orderBy('id_dmu')->get();
+        $emu = Emu::orderBy('id_emu', 'desc')->get();
+        $dmu = Dmu::orderBy('id_dmu')->get();
 
         return datatables()
             ->of($emu)
@@ -163,8 +168,8 @@ class EmuController extends Controller
     {
         $emu = new Emu();
         $emu->id_dmu = $id;
-        $emu->id_subpengujian = 0;
-        $emu->id_proyek = 0;
+        $emu->id_subpengujian = Null;
+        $emu->id_proyek = Null;
         $emu->total_item  = 0;
         $emu->total_harga = 0;
         $emu->nama_proyeks = 0;
@@ -172,13 +177,15 @@ class EmuController extends Controller
         $emu->status = 0;
         $emu->keterangan  = 0;
         $emu->bayar = 0;
-        $emu->id_users = 0;
+        $emu->id_users = Null;
         $emu->id_user = auth()->id();
         $emu->kode_emu = 0;
         $emu->Approved = 0;
         $emu->lanjut = 0;
-        $emu->id_car = 0;
-        $emu->form = 0;      
+        $emu->id_car = Null;
+        $emu->form = 0;
+        
+        $emu->t_operasi = 0;
 
         $emu->nama_dmu1=0;
         $emu->nama_dmu2=0;
@@ -396,7 +403,6 @@ class EmuController extends Controller
 
         session(['id_emu' => $emu->id_emu]);
         session(['id_dmu' => $emu->id_dmu]);
-        session(['id_subpengujian' => $emu->id_subpengujian]);
 
         return redirect()->route('emu_detail.index');
     }
@@ -416,10 +422,11 @@ class EmuController extends Controller
         $emu->Approved = $request->Approved;
         $emu->lanjut = $request->lanjut;
         $emu->total_harga = 0;
-        $emu->id_users = "Not Valid Belum Approve";
+        $emu->id_users = auth()->id();
         $emu->diskon = 0;
         $emu->bayar = 0;
         $emu->kode_emu = 'X-'. tambah_nol_didepan((int)$emu->id_emu +1, 7);
+        $emu->t_operasi = $request->t_operasi;
 
         $emu->nama_dmu1=$request->nama_dmu1;
         $emu->nama_dmu2=$request->nama_dmu2;

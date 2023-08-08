@@ -20,8 +20,10 @@
                 <table class="table table-stiped table-bordered">
                     <thead>
                         <th width="5%">No</th>
+                        <th>Rerfrensi ID</th>
                         <th>Kode</th>
                         <th>Proyek</th>
+                        <th>Status</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
@@ -48,8 +50,10 @@
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'id_proyek'},
                 {data: 'kode_proyek'},
                 {data: 'nama_proyek'},
+                {data: 'status'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });
@@ -92,6 +96,17 @@
             .done((response) => {
                 $('#modal-form [name=nama_proyek]').val(response.nama_proyek);
                 $('#modal-form [name=kode_proyek]').val(response.kode_proyek);
+                $('#modal-form [name=start_date]').val(response.start_date);
+                $('#modal-form [name=finish_date]').val(response.finish_date);
+                $('#modal-form [name=status]').val(response.status);
+                $('#modal-form [name=konf1]').val(response.konf1);
+                $('#modal-form [name=konf2]').val(response.konf2);
+                $('#modal-form [name=konf3]').val(response.konf3);
+                $('#modal-form [name=konf4]').val(response.konf4);
+                $('#modal-form [name=konf5]').val(response.konf5);
+                $('#modal-form [name=konf6]').val(response.konf6);
+                $('#modal-form [name=konf7]').val(response.konf7);
+                $('#modal-form [name=konf8]').val(response.konf8);
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');
@@ -114,5 +129,6 @@
                 });
         }
     }
+
 </script>
 @endpush

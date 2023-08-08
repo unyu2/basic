@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-   Start Inspeksi
+   Start Inspeksi Emu
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Start Inspeksi</li>
+    <li class="active">Start Inspeksi Emu</li>
 @endsection
 
 @section('content')

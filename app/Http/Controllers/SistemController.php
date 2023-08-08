@@ -43,7 +43,7 @@ class SistemController extends Controller
      */
     public function create()
     {
-        //
+        return view('dmu.form1');
     }
 
     /**

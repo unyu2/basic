@@ -63,4 +63,19 @@ class User extends Authenticatable
     {
         return $query->where('level', '!=', 1);
     }
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'bagian');
+    }
+
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'id_level', 'level');
+    }
+
+    public function design()
+    {
+        return $this->hasMany(Design::class, 'id', 'id-check');
+    }
 }

@@ -15,6 +15,11 @@ class PinjamDetail extends Model
 
     public function produk()
     {
-        return $this->hasOne(Produk::class, 'id_produk', 'id_produk');
+        return $this->belongsTo(Produk::class, 'id_produk', 'id_produk');
+    }
+
+    public function pinjam()
+    {
+        return $this->belongsTo(Pinjam::class, 'id_pinjam', 'id_pinjam');
     }
 }

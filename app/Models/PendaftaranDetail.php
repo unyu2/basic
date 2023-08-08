@@ -15,11 +15,16 @@ class PendaftaranDetail extends Model
 
     public function pengujian()
     {
-        return $this->hasOne(Pengujian::class, 'id_pengujian', 'id_pengujian');
+        return $this->belongsTo(Pengujian::class, 'id_pengujian', 'id_pengujian');
     }
 
     public function subpengujian()
     {
-        return $this->hasOne(Subpengujian::class, 'id_subpengujian', 'id_subpengujian');
+        return $this->belongsTo(Subpengujian::class, 'id_subpengujian', 'id_subpengujian');
+    }
+
+    public function pendafaran()
+    {
+        return $this->belongsTo(Pendaftaran::class, 'id_pendaftaran', 'id_pendaftaran');
     }
 }

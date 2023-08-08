@@ -3,14 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\User;
+use App\Models\Jabatan;
+use App\Models\Level;
+use App\Exports\userExport;
 
 class UserController extends Controller
 {
     public function index()
     {
-        return view('user.index');
+
+        $strata = Jabatan::leftJoin('users', 'users.id', 'jabatan.id_jabatan')
+        ->select('jabatan.*', 'bagian', 'jabatan.nama_jabatan as nama_jabatan')
+        ->get();
+
+        $levels = Level::leftJoin('users', 'users.id', 'level.id_level')
+        ->select('level.*', 'level', 'nama_level')
+        ->get();
+        $level = User::all();
+
+        return view('user.index', compact('strata','level','levels'));
+    }
+
+    public function exportExcel()
+    {
+        $user = User::all();
+        return Excel::download(new userExport($user), 'Data_User.xlsx');
     }
 
     public function data()

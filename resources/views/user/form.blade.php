@@ -53,7 +53,13 @@
                     <div class="form-group row">
                         <label for="bagian" class="col-lg-3 col-lg-offset-1 control-label">Bagian</label>
                         <div class="col-lg-6">
-                            <input type="text" name="bagian" id="bagian" class="form-control" required autofocus>
+                        <select type="text" name="bagian" id="bagian" class="form-control" required autofocus>
+                            <option value=""></option>
+                            @foreach ($strata as $item)
+                            <option value="{{ $item->id_jabatan }}">{{ $item->nama_jabatan }}</option>
+                             @endforeach  
+                        </select>
+
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -61,13 +67,10 @@
                         <label for="level" class="col-lg-3 col-lg-offset-1 control-label">Level Sistem</label>
                         <div class="col-lg-6">   
                             <select name="level" id="level" class="form-control" required>
-                                        <option value=""></option>
-                                        <option value="2">Staff</option>
-                                        <option value="3">Manager</option>
-                                        <option value="4">Senior Manager</option>
-                                        <option value="5">Eksekutif</option>
-                                        <option value="6">Eksternal Outsourche</option>
-                                        <option value="7">Pengadaan</option>
+                            <option value=""></option>
+                            @foreach ($levels as $item)
+                            <option value="{{ $item->id_level }}">{{ $item->nama_level }}</option>
+                             @endforeach  
                             </select>
                         <span class="help-block with-errors"></span>
                         </div>

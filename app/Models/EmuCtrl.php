@@ -25,7 +25,7 @@ class EmuCtrl extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'id_user');
+        return $this->belongsto(User::class, 'id', 'id_user');
     }
     public function proyek()
     {

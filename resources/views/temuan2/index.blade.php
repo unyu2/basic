@@ -30,7 +30,6 @@
                             <th width="5%">No</th>
                             <th>Tanggal Buat</th>
                             <th>Tanggal Penyelesaian</th>
-                            <th>Pembuat</th>
                             <th>Kode</th>
                             <th>NCR</th>
                             <th>Proyek</th>
@@ -68,8 +67,6 @@
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'created_at'},
                 {data: 'updated_at'},
-                {data: 'id_user'},
-                {data: 'kode_emu'},
                 {data: 'kode_temuan'},
                 {data: 'ncr'},
                 {data: 'id_proyek'},
@@ -128,9 +125,9 @@
                 $('#modal-form [name=ncr]').val(response.ncr);
                 $('#modal-form [name=id_produk]').val(response.id_produk);
                 $('#modal-form [name=id_car]').val(response.id_car);
-                $('#modal-form [name=status]').val(response.status);
                 $('#modal-form [name=nama_temuan]').val(response.nama_temuan);
                 $('#modal-form [name=jenis]').val(response.jenis);
+                $('#modal-form [name=level]').val(response.level);
                 $('#modal-form [name=bobot]').val(response.bobot);
             })
             .fail((errors) => {

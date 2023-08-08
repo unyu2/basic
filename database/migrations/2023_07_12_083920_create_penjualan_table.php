@@ -15,6 +15,7 @@ class CreatePenjualanTable extends Migration
     {
         Schema::create('penjualan', function (Blueprint $table) {
             $table->increments('id_penjualan');
+            
             $table->unsignedInteger('id_member')->nullable();
             $table->foreign('id_member')->references('id_member')->on('member')->onDelete('restrict')->onUpdate('restrict');
             $table->integer('total_item');

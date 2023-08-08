@@ -17,4 +17,9 @@ class Permintaan extends Model
     {
         return $this->belongsTo(Proyek::class, 'id_proyek', 'id_proyek');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id', 'id_user');
+    }
 }

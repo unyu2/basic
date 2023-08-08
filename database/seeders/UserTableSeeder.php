@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+
 
 class UserTableSeeder extends Seeder
 {
@@ -16,7 +19,7 @@ class UserTableSeeder extends Seeder
         $users = array(
             [
                 'name' => 'Administrators',
-                'email' => 'admins@gmail.com',
+                'email' => 'admin@gmail.com',
                 'password' => bcrypt('123'),
                 'foto' => '/img/user.jpg',
                 'level' => 1,

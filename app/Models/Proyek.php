@@ -22,4 +22,14 @@ class Proyek extends Model
     {
         return $this->hasMany(Permintaan::class, 'id_permintaan', 'id_permintaan');
     }
+
+    public function konfigurasi()
+    {
+        return $this->belongsTo(Konfigurasi::class, 'id_konfigurasi', 'id_konfigurasi');
+    }
+
+    public function design()
+    {
+        return $this->hasMany(Design::class, 'id_design', 'id_design');
+    }
 }

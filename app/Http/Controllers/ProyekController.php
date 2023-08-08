@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Proyek;
+use App\Models\Konfigurasi;
 
 class ProyekController extends Controller
 {
@@ -14,7 +15,10 @@ class ProyekController extends Controller
      */
     public function index()
     {
-        return view('proyek.index');
+       $proyek = Proyek::orderBy('id_proyek', 'desc')->get();
+       $konfigurasi = Konfigurasi::all()->pluck('nama_konfigurasi', 'id_konfigurasi');
+
+        return view('proyek.index', compact('proyek','konfigurasi'));
     }
 
     public function data()
@@ -54,10 +58,7 @@ class ProyekController extends Controller
      */
     public function store(Request $request)
     {
-        $proyek = new Proyek();
-        $proyek->kode_proyek = $request->kode_proyek;
-        $proyek->nama_proyek = $request->nama_proyek;
-        $proyek->save();
+        $proyek = Proyek::create($request->all());
 
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -95,13 +96,12 @@ class ProyekController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $proyek = Proyek::find($id);
-        $proyek->kode_proyek = $request->kode_proyek;
-        $proyek->nama_proyek = $request->nama_proyek;
-        $proyek->update();
-
+        $proyek = Proyek::findOrFail($id);
+        $proyek->update($request->all());
+    
         return response()->json('Data berhasil disimpan', 200);
     }
+
 
     /**
      * Remove the specified resource from storage.

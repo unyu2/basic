@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use App\Models\Dmu;
@@ -21,13 +22,53 @@ class EmuCtrlController extends Controller
     public function index()
     {
 
-       $emu = Emu::orderBy('id_emu', 'asc')->get();
+       $userlog = Auth::id();
+       $emu = Emu::orderBy('id_emu', 'asc')->where('id_user', $userlog)->get();
+
+       $dmus = Dmu::find(session('id_dmu'));
+       $emus = Dmu::find(session('id_emu'));
 
        $dmu = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
-       ->select('dmu.*', 'nama_subpengujian', 'nama_dmu');
- //     ->get();
+       ->select('dmu.*', 'nama_subpengujian', 'nama_dmu')
+       ->get();
 
-        return view('emu_ctrl.index', compact('dmu', 'emu'));
+ $nilairev='Rev.0';
+ if ($nilairev === 'Rev.0') {
+   $inputrev = 'Rev.A';
+} elseif ($nilairev === 'Rev.A') {
+   $inputrev = 'Rev.B';
+} elseif ($nilairev === 'Rev.B') {
+   $inputrev = 'Rev.C';
+} elseif ($nilairev === 'Rev.C') {
+   $inputrev = 'Rev.D';
+} elseif ($nilairev === 'Rev.D') {
+   $inputrev = 'Rev.E';
+} elseif ($nilairev === 'Rev.E') {
+   $inputrev = 'Rev.F';
+} elseif ($nilairev === 'Rev.F') {
+   $inputrev = 'Rev.G';
+} elseif ($nilairev === 'Rev.G') {
+   $inputrev = 'rev.H';
+} elseif ($nilairev === 'Rev.H') {
+   $inputrev = 'Rev.I';
+} elseif ($nilairev === 'Rev.I') {
+   $inputrev = 'Rev.J';
+} else {
+   $inputrev = '0';
+}
+$nilairev = $inputrev;
+
+$nilaiapv ='waiting';
+if ($nilaiapv === 'waiting') {
+   $inputapv = 'Approved';
+} elseif ($nilaiapv === 'Approved') {
+   $inputapv = 'waiting';
+} else {
+   $inputapv = '0';
+}
+$nilaiapv = $inputapv;
+
+        return view('emu_ctrl.index', compact('dmu', 'emu', 'nilairev', 'nilaiapv', 'dmus', 'emus'));
     }
 
     public function data()
@@ -74,15 +115,15 @@ class EmuCtrlController extends Controller
             ->addColumn('id_dmu', function ($emu) {
                 return  $emu->nama_dmu;
             })
-            
-
             ->addColumn('aksi', function ($emu) {
-                return '
-                <div class="btn-group">
-                    <button type="button" onclick="deleteData(`'. route('emu_ctrl.destroy', $emu->id_emu) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                    <button type="button" onclick="editForm(`'. route('emu_ctrl.update', $emu->id_emu) .'`)" class="btn btn-success btn-xs">Approve</button>
-                    </div>
-                ';
+                $buttons = '<div class="btn-group">';
+                if ($emu->status !== 'Approved') {
+                    $buttons .= '<button type="button" onclick="deleteData(`'. route('emu_ctrl.destroy', $emu->id_emu) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';        
+                    $buttons .= '<button type="button" onclick="editForm(`'. route('emu_ctrl.update', $emu->id_emu) .'`)" class="btn btn-success btn-xs">Approve</button>';
+                  }
+                $buttons .= '</div>';
+        
+                return $buttons;
             })
             ->rawColumns(['aksi', 'nama_proyek', 'select_all'])
             ->make(true);

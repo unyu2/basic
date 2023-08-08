@@ -228,7 +228,7 @@
                     <div class="form-group row">
                         <label for="status" class="col-lg-2 col-lg-offset-1 control-label">Status</label>
                         <div class="col-lg-6">
-                            <input value="Open BO" name="status" id="status" class="form-control" readonly>
+                            <input value="Open" name="status" id="status" class="form-control" readonly>
                         <span class="help-block with-errors"></span>
                         </div>
                     </div>

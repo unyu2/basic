@@ -1,6 +1,6 @@
 <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="" method="post" class="form-horizontal">
+        <form action="{{ route('dmu.storeModal') }}" method="post" class="form-horizontal" enctype="multipart/form-data">
             @csrf
             @method('post')
 
@@ -11,6 +11,20 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
+                <div class="form-group row">
+                        <label for="status" class="col-lg-2 col-lg-offset-1 control-label">Status</label> 
+                        <div class="col-lg-6">
+                            <input value="Waiting" name="status" id="status" class="form-control" required autofocus readonly>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                       <label type="hidden" for="revisi" class="col-lg-2 col-lg-offset-1 control-label">Revisi</label>
+                    <div class="col-lg-6">
+                       <input value="Rev.0" name="revisi" id="revisi" class="form-control" required autofocus readonly>
+                       <span class="help-block with-errors"></span>
+                   </div>
+                </div>
                 <div class="form-group row">
                         <label for="id_subpengujian" class="col-lg-2 col-lg-offset-1 control-label">Pengujian</label>
                         <div class="col-lg-6">
@@ -53,6 +67,7 @@
                     <div class="form-group row">
                         <br>
                     </div>
+
                     <div class="form-group row">
                         <label for="nama_dmu1" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 1</label>
                         <div class="col-lg-6">
@@ -65,6 +80,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto1" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 1</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto1" class="form-control" id="foto1" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode1" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -196,8 +222,8 @@
                     <div class="form-group row">
                         <label for="nama_dmu2" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 2</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu2" id="nama_dmu2" class="form-control" required autofocus>
-                                <option value=""></option required autofocus>
+                        <select name="nama_dmu2" id="nama_dmu2" class="form-control" autofocus>
+                                <option value=""></option autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
@@ -205,6 +231,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto2" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 2</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto2" class="form-control" id="foto2" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode2" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -336,8 +373,8 @@
                     <div class="form-group row">
                         <label for="nama_dmu3" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 3</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu3" id="nama_dmu3" class="form-control" required autofocus>
-                                <option value=""></option required autofocus>
+                        <select name="nama_dmu3" id="nama_dmu3" class="form-control" autofocus>
+                                <option value=""></option  autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
@@ -345,6 +382,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto3" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 3</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto3" class="form-control" id="foto3" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode3" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -477,8 +525,8 @@
                     <div class="form-group row">
                         <label for="nama_dmu4" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 4</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu4" id="nama_dmu4" class="form-control" required autofocus>
-                                <option value=""></option required autofocus>
+                        <select name="nama_dmu4" id="nama_dmu4" class="form-control"  autofocus>
+                                <option value=""></option  autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
                                 @endforeach
@@ -486,6 +534,18 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto4" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 4</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto4" class="form-control" id="foto4" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
+
                     <div class="form-group row">
                         <label for="metode4" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -617,7 +677,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu5" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 5</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu5" id="nama_dmu5" class="form-control" required autofocus>
+                        <select name="nama_dmu5" id="nama_dmu5" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -626,6 +686,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto5" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 5</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto5" class="form-control" id="foto5" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode5" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -757,7 +828,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu6" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 6</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu6" id="nama_dmu6" class="form-control" required autofocus>
+                        <select name="nama_dmu6" id="nama_dmu6" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -766,6 +837,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="6" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 6</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto6" class="form-control" id="foto6" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+                    
                     <div class="form-group row">
                         <label for="metode6" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -897,7 +979,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu7" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 7</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu7" id="nama_dmu7" class="form-control" required autofocus>
+                        <select name="nama_dmu7" id="nama_dmu7" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -906,6 +988,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto7" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 7</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto7" class="form-control" id="foto7" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode7" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -1037,7 +1130,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu8" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 8</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu8" id="nama_dmu8" class="form-control" required autofocus>
+                        <select name="nama_dmu8" id="nama_dmu8" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -1046,6 +1139,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto8" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 8</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto8" class="form-control" id="foto8" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode8" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -1177,7 +1281,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu9" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 9</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu9" id="nama_dmu9" class="form-control" required autofocus>
+                        <select name="nama_dmu9" id="nama_dmu9" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -1186,6 +1290,18 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto9" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 9</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto9" class="form-control" id="foto9" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
+
                     <div class="form-group row">
                         <label for="metode9" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -1317,7 +1433,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu10" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 10</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu10" id="nama_dmu10" class="form-control" required autofocus>
+                        <select name="nama_dmu10" id="nama_dmu10" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -1326,6 +1442,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto10" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 10</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto10" class="form-control" id="foto10" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode10" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -1457,7 +1584,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu11" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 11</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu11" id="nama_dmu11" class="form-control" required autofocus>
+                        <select name="nama_dmu11" id="nama_dmu11" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -1466,6 +1593,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto11" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 11</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto11" class="form-control" id="foto11" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode11" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -1597,7 +1735,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu12" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 12</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu12" id="nama_dmu12" class="form-control" required autofocus>
+                        <select name="nama_dmu12" id="nama_dmu12" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -1606,6 +1744,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto12" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 12</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto12" class="form-control" id="foto12" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode12" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -1737,7 +1886,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu13" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 13</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu13" id="nama_dmu13" class="form-control" required autofocus>
+                        <select name="nama_dmu13" id="nama_dmu13" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -1746,6 +1895,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto13" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 13</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto13" class="form-control" id="foto13" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode13" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -1878,7 +2038,7 @@
                     <div class="form-group row">
                         <label for="nama_dmu14" class="col-lg-2 col-lg-offset-1 control-label">Sub Sistem 14</label>
                         <div class="col-lg-6">
-                        <select name="nama_dmu14" id="nama_dmu14" class="form-control" required autofocus>
+                        <select name="nama_dmu14" id="nama_dmu14" class="form-control" autofocus>
                                 <option value=""></option required autofocus>
                                 @foreach ($sistem as $key => $item)
                                 <option value="{{ $item }}">{{ $item }}</option>
@@ -1887,6 +2047,17 @@
                         </select>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="foto14" class="col-lg-2 col-lg-offset-1 control-label">Gambar Sub Sistem 14</label>
+                        <div class="col-lg-4">
+                            <input type="file" name="foto14" class="form-control" id="foto14" onchange="preview('.tampil-ft', this.files[0], 300)">
+                            <span class="help-block with-errors"></span>
+                            <br>
+                            <div class="tampil-ft"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="metode14" class="col-lg-2 col-lg-offset-1 control-label">Detail Pengujian</label>
                         <div class="col-lg-6">
@@ -2014,7 +2185,7 @@
                     
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>
+                    <button  class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>
                     <button type="button" class="btn btn-sm btn-flat btn-warning" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Batal</button>
                 </div>
             </div>

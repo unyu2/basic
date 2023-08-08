@@ -212,10 +212,10 @@
         // Create the data table.
         let data = new google.visualization.DataTable();
         data.addColumn('string', 'Tanggal');
-        data.addColumn('number', 'Open Bo');
+        data.addColumn('number', 'Open');
         data.addColumn('number', 'Closed');
 
-        let openData = {}; // Object to store Open BO data
+        let openData = {}; // Object to store Open data
         let closedData = {}; // Object to store Closed data
 
         $.each(jsonData, (i, jsonData) => {
@@ -224,7 +224,7 @@
             let jumlah = parseFloat($.trim(jsonData.jumlah));
 
             // Add data to the respective objects based on status
-            if (status === 'Open Bo') {
+            if (status === 'Open') {
                 openData[tanggal] = jumlah;
             } else if (status === 'Closed') {
                 closedData[tanggal] = jumlah;
@@ -356,7 +356,7 @@
         chart.draw(data, options);
 
         // Display the number of Open and Closed
-        var openCount = statusData['Open Bo'] || 0;
+        var openCount = statusData['Open'] || 0;
         var closedCount = statusData['Closed'] || 0;
 
         $('#open_count').text(openCount);

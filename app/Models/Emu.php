@@ -25,7 +25,11 @@ class Emu extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'id_user');
+        return $this->belongsTo(User::class, 'id', 'id_user');
+    }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'id', 'id_users');
     }
 
     public function setting()

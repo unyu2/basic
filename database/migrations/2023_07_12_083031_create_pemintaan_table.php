@@ -15,7 +15,8 @@ class CreatePemintaanTable extends Migration
     {
         Schema::create('permintaan', function (Blueprint $table) {
             $table->increments('id_permintaan');
-            $table->unsignedInteger('id_proyek');
+
+            $table->unsignedInteger('id_proyek')->nullable();
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
             $table->string('memo')->nullable()->index();
             $table->string('nama_proyeks')->nullable();

@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Emu;
 use App\Models\Temuan;
 
-class Dashboard19x1Controller extends Controller
+class Dashboard19x2Controller extends Controller
 {
     public function index()
     {

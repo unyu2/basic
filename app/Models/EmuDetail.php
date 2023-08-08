@@ -15,11 +15,11 @@ class EmuDetail extends Model
 
     public function produk()
     {
-        return $this->hasOne(Produk::class, 'id_produk', 'id_produk');
+        return $this->belongsTo(Produk::class, 'id_produk', 'id_produk');
     }
 
     public function proyek()
     {
-        return $this->hasOne(Proyek::class, 'id_proyek', 'id_proyek');
+        return $this->belongsTo(Proyek::class, 'id_proyek', 'id_proyek');
     }
 }

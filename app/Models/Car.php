@@ -13,8 +13,8 @@ class Car extends Model
     protected $primaryKey = 'id_car';
     protected $guarded = [];
 
-    public function emu()
-    {
-        return $this->hasMany(Emu::class, 'id_emu', 'id_emu');
-    }
+//    public function emu()
+//    {
+//        return $this->hasMany(Emu::class, 'id_emu', 'id_emu');
+//    } 
 }

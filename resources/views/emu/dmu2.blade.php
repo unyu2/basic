@@ -15,7 +15,7 @@
                         <th><i class="fa fa-cog"></i></th>
                     </thead>
                     <tbody>
-                        @foreach ($r2 as $key => $item)
+                        @foreach ($r1 as $key => $item)
                             <tr>
 
                                 <td width="5%">{{ $key+1 }}</td>

@@ -18,7 +18,7 @@ class CreatePemesananTable extends Migration
             $table->string('kode_pemesanan_detail')->nullable();
             $table->unsignedInteger('id_member')->nullable();
             $table->foreign('id_member')->references('id_member')->on('member')->onDelete('restrict')->onUpdate('restrict');
-            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
             $table->integer('total_item');
             $table->string('surat')->default(0)->index();

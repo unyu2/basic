@@ -350,6 +350,21 @@ $('#modal-form [name=Tc2_15]').val(response.Tc2_15);
 $('#modal-form [name=Tc3_15]').val(response.Tc3_15);
 $('#modal-form [name=Tc4_15]').val(response.Tc4_15);
 
+$('#modal-form [name=p1]').val(response.p1);
+$('#modal-form [name=p2]').val(response.p2);
+$('#modal-form [name=p3]').val(response.p3);
+$('#modal-form [name=p4]').val(response.p4);
+$('#modal-form [name=p5]').val(response.p5);
+$('#modal-form [name=p6]').val(response.p6);
+$('#modal-form [name=p7]').val(response.p7);
+$('#modal-form [name=p8]').val(response.p8);
+$('#modal-form [name=p9]').val(response.p9);
+$('#modal-form [name=p10]').val(response.p10);
+$('#modal-form [name=p11]').val(response.p11);
+$('#modal-form [name=p12]').val(response.p12);
+$('#modal-form [name=p13]').val(response.p13);
+$('#modal-form [name=p14]').val(response.p14);
+
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');

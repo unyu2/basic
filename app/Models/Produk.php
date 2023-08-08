@@ -12,5 +12,10 @@ class Produk extends Model
     protected $table = 'produk';
     protected $primaryKey = 'id_produk';
     protected $guarded = [];
+
+        public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'id_user');
+    }
 }
 
