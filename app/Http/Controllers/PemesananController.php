@@ -65,7 +65,7 @@ class PemesananController extends Controller
     public function create()
     {
         $pemesanan = new Pemesanan();
-        $pemesanan->id_member = 0;
+        $pemesanan->id_member = Null;
         $pemesanan->total_item = 0;
         $pemesanan->total_harga = 0;
         $pemesanan->diskon = 0;

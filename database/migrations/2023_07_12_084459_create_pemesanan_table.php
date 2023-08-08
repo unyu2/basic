@@ -21,7 +21,7 @@ class CreatePemesananTable extends Migration
             $table->unsignedBigInteger('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
             $table->integer('total_item');
-            $table->string('surat')->default(0)->index();
+            $table->string('surat')->nullable()->index();
             $table->string('eta')->default(0);
             $table->integer('total_harga')->default(0);
             $table->tinyInteger('diskon')->default(0);

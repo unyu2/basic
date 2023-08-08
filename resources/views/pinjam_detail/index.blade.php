@@ -187,32 +187,32 @@
     }
 
     function tambahBarang() {
-        $.post('{{ route('transaksi.store') }}', $('.form-barang').serialize())
-            .done(response => {
-                $('#kode_barang').focus();
-                table.ajax.reload(() => loadForm($('#diskon').val()));
+    $.post('{{ route('transaksi.store') }}', $('.form-barang').serialize())
+        .done(response => {
+            $('#kode_barang').focus();
+            table.ajax.reload();
+        })
+        .fail(errors => {
+            alert('Tidak dapat menyimpan data');
+            return;
+        });
+}
+
+function deleteData(url) {
+    if (confirm('Yakin ingin menghapus data terpilih?')) {
+        $.post(url, {
+                '_token': $('[name=csrf-token]').attr('content'),
+                '_method': 'delete'
             })
-            .fail(errors => {
-                alert('Tidak dapat menyimpan data');
+            .done((response) => {
+                table.ajax.reload();
+            })
+            .fail((errors) => {
+                alert('Tidak dapat menghapus data');
                 return;
             });
     }
-
-    function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'delete'
-                })
-                .done((response) => {
-                    table.ajax.reload(()=> loadForm($('#diskon').val()));
-                })
-                .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
-                    return;
-                });
-        }
-    }
+}
 
     function loadForm(diskon = 0, diterima = 0) {
         $('#total').val($('.total').text());

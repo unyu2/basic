@@ -15,17 +15,17 @@ class Pemesanan extends Model
 
     public function member()
     {
-        return $this->hasOne(Member::class, 'id_member', 'id_member');
+        return $this->belongsTo(Member::class, 'id_member', 'id_member');
     }
 
     public function proyek()
     {
-        return $this->hasOne(Proyek::class, 'id_proyek', 'id_proyek');
+        return $this->belongsTo(Proyek::class, 'id_proyek', 'id_proyek');
     }
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'id_user');
+        return $this->belongsTo(User::class, 'id', 'id_user');
     }
 }
 

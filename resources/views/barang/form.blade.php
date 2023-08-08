@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="pj" class="col-lg-2 col-lg-offset-1 control-label">Kategori</label>
+                        <label for="pj" class="col-lg-2 col-lg-offset-1 control-label">Penanggung Jawab</label>
                         <div class="col-lg-6">
                             <select name="pj" id="pj" class="form-control" required autofocus>
                                 <option value=""></option>

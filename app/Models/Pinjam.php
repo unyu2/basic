@@ -15,7 +15,12 @@ class Pinjam extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'id_user');
+        return $this->belongsTo(User::class, 'id', 'id_user');
+    }
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'id_barang', 'id_barang');
     }
 }
 

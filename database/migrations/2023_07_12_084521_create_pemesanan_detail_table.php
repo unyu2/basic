@@ -15,17 +15,17 @@ class CreatePemesananDetailTable extends Migration
     {
         Schema::create('pemesanan_detail', function (Blueprint $table) {
             $table->increments('id_pemesanan_detail');
-            $table->unsignedInteger('id_pemesanan');
+            $table->unsignedInteger('id_pemesanan')->nullable();
             $table->foreign('id_pemesanan')->references('id_pemesanan')->on('pemesanan')->onDelete('restrict')->onUpdate('restrict');
-            $table->unsignedInteger('id_produk');
+            $table->unsignedInteger('id_produk')->nullable();
             $table->foreign('id_produk')->references('id_produk')->on('produk')->onDelete('restrict')->onUpdate('restrict');
             $table->string('kode_pemesanan_detail')->nullable();
-            $table->integer('harga_jual');
-            $table->string('trainset')->index();
-            $table->integer('jumlah');
-            $table->string('status');
-            $table->tinyInteger('diskon')->default(0);
-            $table->integer('subtotal');
+            $table->integer('harga_jual')->nullable();
+            $table->string('trainset')->index()->nullable();
+            $table->integer('jumlah')->nullable();
+            $table->string('status')->nullable();
+            $table->tinyInteger('diskon')->nullable();
+            $table->integer('subtotal')->nullable();
             $table->timestamps();
         });
     }

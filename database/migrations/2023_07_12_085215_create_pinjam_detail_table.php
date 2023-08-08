@@ -15,10 +15,8 @@ class CreatePinjamDetailTable extends Migration
     {
         Schema::create('pinjam_detail', function (Blueprint $table) {
             $table->increments('id_pinjam_detail');
-            $table->unsignedInteger('id_pinjam');
-            $table->foreign('id_pinjam')->references('id_pinjam')->on('pinjam')->onDelete('restrict')->onUpdate('restrict');
-            $table->unsignedInteger('id_produk');
-            $table->foreign('id_produk')->references('id_produk')->on('produk')->onDelete('restrict')->onUpdate('restrict');
+            $table->integer('id_pinjam')->null();
+            $table->integer('id_barang')->null();
             $table->integer('jumlah');
             $table->timestamps();
         });

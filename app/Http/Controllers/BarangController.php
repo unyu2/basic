@@ -80,7 +80,7 @@ class BarangController extends Controller
     {
         $barang = Barang::latest()->first() ?? new Barang();
         $request['kode_barang'] = 'INV'. tambah_nol_didepan((int)$barang->id_barang +1);
-    //    $request['stok'] = $barang->jumlah;
+        $request['stok'] = $barang->jumlah;
 
         $barang = Barang::create($request->all());
 

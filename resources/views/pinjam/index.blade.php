@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-        Peminjaman Inventaris
+        Peminjaman Barang Inventaris
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Peminjaman Inventaris</li>
+    <li class="active">Peminjaman Barang Inventaris</li>
 @endsection
 
 @section('content')

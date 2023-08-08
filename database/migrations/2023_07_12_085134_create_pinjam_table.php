@@ -18,8 +18,8 @@ class CreatePinjamTable extends Migration
 
             $table->unsignedBigInteger('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
-            $table->integer('fungsi');
-            $table->integer('total_item');
+            $table->string('fungsi');
+            $table->integer('total_item')->nullable();
             $table->timestamps();
         });
     }

@@ -22,4 +22,9 @@ class PinjamDetail extends Model
     {
         return $this->belongsTo(Pinjam::class, 'id_pinjam', 'id_pinjam');
     }
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'id_barang', 'id_barang');
+    }
 }

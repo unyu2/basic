@@ -25,6 +25,7 @@ class CreateBarangTable extends Migration
             $table->string('pj')->index();
             $table->string('lokasi')->index();
             $table->integer('jumlah');
+            $table->integer('stok');
             $table->timestamps();
         });
     }
