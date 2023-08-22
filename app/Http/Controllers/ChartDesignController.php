@@ -145,6 +145,118 @@ public function fetch_data_status_bobot(Request $request)
 
 //*------------------------------------------------------------------------------------/*
 
+public function fetch_chart_gantt($id_proyek)
+{
+    $data = Design::select("id_design", "nama_design", "refrensi_design", "id_proyek", "kode_design", "tanggal_prediksi", "prediksi_hari", "status", "created_at")
+        ->orderBy('id_proyek', 'ASC')
+        ->where('id_proyek', $id_proyek)
+        ->get();
+
+    return $data;
+}
+
+public function fetch_data_gantt(Request $request)
+{
+    if ($request->input('id_proyek')) {
+        // Mengambil data design berdasarkan proyek
+        $chart_data = $this->fetch_chart_gantt($request->input('id_proyek'));
+
+        // Inisialisasi array untuk menyimpan data Gantt Chart
+        $ganttData = [];
+
+        // Mengisi data Gantt Chart
+        foreach ($chart_data as $row) {
+            $nama_design = $row->nama_design;
+            $kode_design = $row->kode_design;
+            $refrensi_design = $row->refrensi_design;
+            $tanggal_prediksi = Carbon::parse($row->tanggal_prediksi)->format('Y-m-d');
+            $prediksi_hari = $row->prediksi_hari;
+        
+            // Menghitung tanggal prediksi akhir dengan menambahkan prediksi_hari ke tanggal_prediksi
+            $tanggal_prediksi_akhir = Carbon::parse($tanggal_prediksi)->addDays($prediksi_hari)->format('Y-m-d');
+        
+            $status = $row->status;
+
+            // Inisialisasi variabel $prosentase
+            $prosentase = 0;
+
+            // Mengubah nilai $prosentase sesuai dengan kolom "status"
+            if ($status === 'Release') {
+                $prosentase = 100; // Bila Release, prosentase 100%
+            } elseif ($status === 'Proses Revisi') {
+                $prosentase = 50; // Bila Proses Revisi, prosentase 50%
+            } else {
+                // Bila status tidak sesuai dengan Open, Release, atau Proses Revisi, maka tetap 0%
+                $prosentase = 0;
+            }
+
+            $ganttData[] = [
+                'task' => $nama_design,
+                'code' => $kode_design,
+                'startDate' => $tanggal_prediksi,
+                'endDate' => $tanggal_prediksi_akhir,
+                'duration' => $prediksi_hari,
+                'prosentase' => $prosentase,
+                'refrensi' => $refrensi_design,
+            ];
+        }
+
+
+        // Mengembalikan data Gantt Chart dalam format JSON
+        return response()->json($ganttData);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//*------------------------------------------------------------------------------------/*
 
 public function fetch_chart_data_CurvaS($id_proyek)
 {

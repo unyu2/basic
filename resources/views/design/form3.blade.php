@@ -1,8 +1,14 @@
-<div class="modal fade" id="modal-form4" tabindex="-1" role="dialog" aria-labelledby="modal-form4">
+<style>
+    .hidden-form {
+        display: none;
+    }
+</style>
+
+<div class="modal fade" id="modal-form3" tabindex="-1" role="dialog" aria-labelledby="modal-form3">
     <div class="modal-dialog modal-lg" role="document">
-    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data" data-toggle="validator">
+        <form action="{{ route('design.storeRevisi') }}" method="post" class="form-horizontal" enctype="multipart/form-data">
             @csrf
-            @method('put')
+            @method('post')
 
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,6 +17,21 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="nama_design" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
+                        <div class="col-lg-6">
+                            <input name="nama_design" id="nama_design" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="kode_design" class="col-lg-2 col-lg-offset-1 control-label">Kode Design</label> 
+                        <div class="col-lg-6">
+                            <input name="kode_design" id="kode_design" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
                     <div class="form-group row">
                     <label for="id_proyek" class="col-lg-2 col-lg-offset-1 control-label">Proyek</label>
                         <div class="col-lg-6">
@@ -35,21 +56,14 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                <div class="form-group row">
-                        <label for="nama_design" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
+                    <div class="form-group row hidden-form ">
+                        <label for="bobot_rev" class="col-lg-2 col-lg-offset-1 control-label">Bobot Revisi</label> 
                         <div class="col-lg-6">
-                            <input name="nama_design" id="nama_design" class="form-control" required autofocus>
+                        <input type="text" name="bobot_rev" id="bobot_rev" class="form-control" autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-
-                    <div class="form-group row">
-                        <label for="kode_design" class="col-lg-2 col-lg-offset-1 control-label">Kode Design</label> 
-                        <div class="col-lg-6">
-                            <input name="kode_design" id="kode_design" class="form-control" required autofocus>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
+                    
                     <div class="form-group row">
                         <label for="konfigurasi" class="col-lg-2 col-lg-offset-1 control-label">Dipakai Konfigurasi</label> 
                         <div class="col-lg-6">
@@ -57,14 +71,7 @@
                             <span style="color: green;">Pisahkan dengan titik koma (;). Ex: Tec;Mc;dst..</span>
                             <span class="help-block with-errors"></span>
                         </div>
-                    </div> <!--
-                    <div class="form-group row">
-                        <label for="nilai" class="col-lg-2 col-lg-offset-1 control-label">Nilai</label> 
-                        <div class="col-lg-6">
-                            <input value="" name="nilai" id="nilai" class="form-control" autofocus>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div> -->
+                    </div>
                     <div class="form-group row">
                         <label for="status" class="col-lg-2 col-lg-offset-1 control-label">Status</label> 
                         <div class="col-lg-6">
@@ -93,7 +100,7 @@
                         </div>
                         <label for="lembar" class="col-lg-1 control-label">Sheet</label>
                         <div class="col-lg-2">
-                            <input name="lembar" id="lembar" class="form-control" required autofocus>
+                            <input type="number" name="lembar" id="lembar" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -135,79 +142,11 @@
                         </div>
                     </div>
 
-         <!--           <br>
-                    <a> <b><center>-- Pilih Konfigurasi Kereta Yang Digunakan Dalam Drawing --</center></b></a>
-                    </br>
-                   <div class="form-group row">
-                        <label for="konf_emu" class="col-lg-1 col-lg-offset-1 control-label">EMU</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_emu as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_emu[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_dmu" class="col-lg-1 control-label">DMU</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_dmu as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_dmu[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_light" class="col-lg-1 control-label">Light / Tram</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_light as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_light[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="konf_coach" class="col-lg-1 col-lg-offset-1 control-label">Coach</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_coach as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_coach[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_wagon" class="col-lg-1 control-label">Wagon</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_wagon as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_wagon[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_other" class="col-lg-1 control-label">Other</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_other as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_other[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div> -->
-
 <!---------------------------------------------------------------------------------------------------------------------------------------- -->
                     
                 </div>
                 <div class="modal-footer">
-                    <button onclick="redirectTo" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>
+                    <button  class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>
                     <button type="button" class="btn btn-sm btn-flat btn-warning" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Batal</button>
                 </div>
             </div>

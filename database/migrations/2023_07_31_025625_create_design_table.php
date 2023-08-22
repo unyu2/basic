@@ -15,25 +15,44 @@ class CreateDesignTable extends Migration
     {
         Schema::create('design', function (Blueprint $table) {
             $table->increments('id_design');
-            $table->unsignedInteger('id_kepala_gambar');
+
+            $table->unsignedInteger('id_kepala_gambar')->nullable();
             $table->foreign('id_kepala_gambar')->references('id_kepala_gambar')->on('kepala_gambar')->onDelete('restrict')->onUpdate('restrict');
-            $table->unsignedInteger('id_proyek');
+            $table->unsignedInteger('id_proyek')->nullable();
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
 
-            $table->string('kode_design');
-            $table->string('nama_design');
+            $table->string('kode_design')->nullable();
+            $table->string('nama_design')->nullable();
 
-            $table->string('revisi');
-            $table->date('refrensi_design');
-            $table->date('tanggal_prediksi');
-            $table->integer('prediksi_hari');
-            $table->string('status');
-            $table->string('size');
-            $table->integer('lembar');
-            $table->string('konfigurasi');
-            $table->integer('id_draft');
-            $table->integer('id_check');
-            $table->integer('id_approve');
+            $table->string('revisi')->nullable();
+
+            $table->string('refrensi_design')->nullable();
+            $table->date('tanggal_refrensi')->nullable();
+
+            $table->date('tanggal_prediksi')->nullable();
+            $table->integer('tp_dd')->nullable();
+            $table->integer('tp_mm')->nullable();
+            $table->integer('tp_yy')->nullable();
+
+            $table->integer('prediksi_hari')->nullable();
+            $table->date('prediksi_akhir')->nullable();
+            $table->integer('pa_dd')->nullable();
+            $table->integer('pa_mm')->nullable();
+            $table->integer('pa_yy')->nullable();
+
+            $table->integer('bobot_rev')->nullable();
+
+            $table->string('status')->nullable();
+            $table->integer('prosentase')->nullable();
+            $table->string('size')->nullable();
+            $table->integer('lembar')->nullable();
+
+            $table->string('konfigurasi')->nullable();
+            
+            $table->integer('id_draft')->nullable();
+            $table->integer('id_check')->nullable();
+            $table->integer('id_approve')->nullable();
+
             $table->timestamps();
         });
     }

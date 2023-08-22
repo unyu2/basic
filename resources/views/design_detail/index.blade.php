@@ -22,6 +22,7 @@
             <div class="box-header with-border">
                 <div class="btn-group">
                     <button onclick="addForm('{{ route('design_detail.store') }}')" class="btn btn-success btn-flat"><i class="fa fa-plus-circle"></i> Tambah Data Design Drawing</button>
+                    <button onclick="addForm('{{ route('design.store') }}')" class="btn btn-warning btn-flat"><i class="fa fa-plus-circle"></i>Edit Schedule Design</button>
                     <button onclick="deleteSelected('{{ route('design_detail.delete_selected') }}')" class="btn btn-danger btn-flat"><i class="fa fa-trash"></i> Hapus Masal</button>
                     <a href="{{ route('design_detail.export') }}" class="btn btn-primary btn-flat"><i class="fa fa-file-excel"></i> Export Excel</a>
 
@@ -152,7 +153,7 @@ $(function () {
 
     function addForm(url) {
         $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Tambah Data Design Drawing');
+        $('#modal-form .modal-title').text('Buat & Edit Schedule Dokumen');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
@@ -203,7 +204,7 @@ $(function () {
 
     function editForm(url) {
     $('#modal-form').modal('show');
-    $('#modal-form .modal-title').text('Edit Your Design Drawing Data');
+    $('#modal-form .modal-title').text('Edit Data Dokumen');
 
     $('#modal-form form')[0].reset();
     $('#modal-form form').attr('action', url);
@@ -274,7 +275,7 @@ $(function () {
 
     function editForm4(url) {
     $('#modal-form4').modal('show');
-    $('#modal-form4 .modal-title').text('Edit Design Drawing');
+    $('#modal-form4 .modal-title').text('Buat Data Dokumen Baru');
 
     $('#modal-form4 form')[0].reset();
     $('#modal-form4 form').attr('action', url);
@@ -330,6 +331,8 @@ $(function () {
             success: function(data) {
                 $('#refrensi_design').val(data.kode_design);
                 $('#tanggal_refrensi').val(data.tanggal_prediksi);
+                $('#id_refrensi').val(data.id_refrensi);
+
 
                 if (data.tanggal_prediksi !== $('#tanggal_refrensi').val()) {
                 $('#tanggal_refrensi').val(data.tanggal_prediksi);
@@ -343,6 +346,11 @@ $(function () {
         });
     }
 
+
+
+
+
+    
 //-------------------------------------------------------------------------------------
 
 

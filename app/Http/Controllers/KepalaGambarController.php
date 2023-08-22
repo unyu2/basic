@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\KepalaGambar;
 use App\Models\Jabatan;
+use App\Imports\kepalaImports;
+use Maatwebsite\Excel\Facades\Excel; 
 
 class KepalaGambarController extends Controller
 {
@@ -123,4 +126,22 @@ class KepalaGambarController extends Controller
 
         return response(null, 204);
     }
+
+    public function importExcel(Request $request)
+    {
+        try {
+            $file = $request->file('file'); // Ambil file Excel dari request
+    
+            // Pastikan Anda sudah membuat class Import yang sesuai dengan skema impor Anda
+            Excel::import(new kepalaImports, $file);
+    
+            // Redirect ke halaman index dengan pesan sukses
+            return redirect()->route('kepala_gambar.index')->with('success', 'Import data berhasil.');
+        } catch (\Exception $e) {
+            // Tampilkan pesan error yang lebih rinci
+            return redirect()->route('kepala_gambar.index')->with('error', 'Import data gagal: ' . $e->getMessage() . ' Line: ' . $e->getLine());
+        }
+    }
+
+
 }

@@ -54,9 +54,7 @@ class JabatanController extends Controller
      */
     public function store(Request $request)
     {
-        $jabatan = new Jabatan();
-        $jabatan->nama_jabatan = $request->nama_jabatan;
-        $jabatan->save();
+        $jabatan = Jabatan::create($request->all());
 
         return response()->json('Data berhasil disimpan', 200);
     }
@@ -95,8 +93,7 @@ class JabatanController extends Controller
     public function update(Request $request, $id)
     {
         $jabatan = Jabatan::find($id);
-        $jabatan->nama_jabatan = $request->nama_jabatan;
-        $jabatan->update();
+        $jabatan->update($request->all());
 
         return response()->json('Data berhasil disimpan', 200);
     }

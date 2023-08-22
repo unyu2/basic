@@ -139,6 +139,13 @@ class Temuan2Controller extends Controller
     public function edit($id)
     {
         $temuan = Temuan::find($id);
+
+        $temuan->frekuensi = $request->frekuensi;
+        $temuan->pantau = $request->pantau;
+        $temuan->dampak = $request->dampak;
+        
+        $request['nilai'] = $temuan->frekuensi * $temuan->pantau * $temuan->dampak;
+
         $temuan->update($request->all());
 
         return response()->json('Data berhasil disimpan', 200);

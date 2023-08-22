@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 use App\Models\Setting;
+use App\Models\Design;
 use Illuminate\Support\ServiceProvider;
+use App\Observers\DesignObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +32,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Design::observe(DesignObserver::class);
     }
 }

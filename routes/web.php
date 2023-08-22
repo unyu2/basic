@@ -40,6 +40,7 @@ use App\Http\Controllers\{
 
     ChartController,
     ChartDesignController,
+    ChartJadwalController,
     DwgController,
     DesignController,
     DesignDetailController,
@@ -212,29 +213,29 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
         Route::get('/design/export', [DesignController::class, 'exportExcel'])->name('design.export');
         Route::get('/design/exportLog', [DesignController::class, 'exportExcelLog'])->name('design.exportLog');
         Route::post('/design/import', [DesignController::class, 'importExcel'])->name('design.import');
-
         Route::get('/design/dataModal', [DesignController::class, 'dataModal'])->name('design.dataModal');
-        
+        Route::get('/design/dataModal2', [DesignController::class, 'dataModal2'])->name('design.dataModal2');
         Route::get('design/dataDetail', [DesignController::class, 'dataDetail'])->name('design.dataDetail');
         Route::get('/design/{id_design}/showDetail', [DesignController::class, 'showDetail'])->name('design.showDetail');
 
         Route::put('/design/{id_design}', [DesignController::class, 'updatex'])->name('design.updatex');
         Route::put('/design/{id_design}/release', [DesignController::class, 'release'])->name('design.release');
         Route::get('design/pilihData/{id}', [DesignController::class, 'pilihData'])->name('design.pilihData');
-        Route::post('/design', [DesignController::class, 'store'])->name('design.store');
+        Route::get('design/pilihRevisi/{id}', [DesignController::class, 'pilihRevisi'])->name('design.pilihRevisi');
+        Route::post('/design/storeRevisi', [DesignController::class, 'storeRevisi'])->name('design.storeRevisi');
         Route::post('/design/delete-selected', [DesignController::class, 'deleteSelected'])->name('design.delete_selected');
         Route::post('/design/exportSelected', [DesignController::class, 'exportSelected'])->name('design.exportSelected');
         Route::post('/design/cetakPdf', [DesignController::class, 'cetakPdf'])->name('design.cetakPdf');
         Route::resource('/design', DesignController::class);
 
-        Route::get('/design_detail/data', [DesignDetailController::class, 'data'])->name('design_detail.data');
 
      //   Route::get('/design_detail/showRef', [DesignDetailController::class, 'showRef'])->name('design_detail.showRef');
 
         Route::get('/design_detail/export', [DesignDetailController::class, 'exportExcel'])->name('design_detail.export');
         Route::get('/design_detail/dataModal', [DesignDetailController::class, 'dataModal'])->name('design_detail.dataModal');
-        Route::put('/design_detail/{id}', [DesignDetailController::class, 'updatex'])->name('design_detail.updatex');
+        Route::get('/design_detail/data', [DesignDetailController::class, 'data'])->name('design_detail.data');
         Route::get('design_detail/pilihData/{id}', [DesignDetailController::class, 'pilihData'])->name('design_detail.pilihData');
+        Route::put('/design_detail/{id}', [DesignDetailController::class, 'updatex'])->name('design_detail.updatex');
         Route::post('/design_detail', [DesignDetailController::class, 'store'])->name('design_detail.store');
      //   Route::post('/design_detail/storeModal', [DesignDetailController::class, 'storeModal'])->name('design_detail.storeModal');
         Route::post('/design_detail/delete-selected', [DesignDetailController::class, 'deleteSelected'])->name('design_detail.delete_selected');
@@ -249,6 +250,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
         Route::resource('/kategori', KategoriController::class);
 
         Route::get('/kepala_gambar/data', [KepalaGambarController::class, 'data'])->name('kepala_gambar.data');
+        Route::post('/kepala_gambar/import', [KepalaGambarController::class, 'importExcel'])->name('kepala_gambar.import');
         Route::resource('/kepala_gambar', KepalaGambarController::class);
 
         Route::get('/konfigurasi/data', [KonfigurasiController::class, 'data'])->name('konfigurasi.data');
@@ -275,8 +277,15 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
 
         Route::get('/charts/chartsDesign', [ChartDesignController::class, 'index'])->name('chartsDesign');
         Route::post('/charts/chartDesign/fetch_data_status', [ChartDesignController::class, 'fetch_data_status']);
+
+        Route::post('/charts/chartDesign/fetch_data_gantt', [ChartDesignController::class, 'fetch_data_gantt']);
+
         Route::post('/charts/chartDesign/fetch_data_status_bobot', [ChartDesignController::class, 'fetch_data_status_bobot']);
         Route::post('/charts/chartDesign/fetch_data_curvaS', [ChartDesignController::class, 'fetch_data_curvaS']);
+
+        Route::get('/charts/chartsJadwal', [ChartJadwalController::class, 'index'])->name('chartsJadwal');
+
+
 
 
 

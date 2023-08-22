@@ -31,25 +31,21 @@ class Design extends Model
     public function proyek()
     {
         return $this->belongsTo(Proyek::class, 'id_proyek', 'id_proyek');
-
-        
     }
 
     public function subsistem()
     {
         return $this->belongsTo(Subsistem::class, 'id_subsistem', 'id_subsistem');
-        
     }
 
     public function kepalagambar()
     {
         return $this->belongsTo(KepalaGambar::class, 'id_kepala_gambar', 'id_kepala_gambar');
-        
     }
 
     public function designdetail()
     {
-        return $this->hasMany(DesignDetail::class, 'id_design_detail', 'id_design_detail');
+        return $this->belongsTo(DesignDetail::class, 'id_design_detail', 'id_design_detail');
     }
 
 }

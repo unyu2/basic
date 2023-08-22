@@ -41,6 +41,13 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    <div class="form-group row hidden-form ">
+                        <label for="bobot_rev" class="col-lg-2 col-lg-offset-1 control-label">Bobot Revisi</label> 
+                        <div class="col-lg-6">
+                        <input type="text" value="3" placeholder="3" name="bobot_rev" id="bobot_rev" class="form-control" autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
                 <div class="form-group row">
                         <label for="nama_design" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
                         <div class="col-lg-6">
@@ -56,18 +63,19 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    
                     <div class="form-group row">
                         <label for="konfigurasi" class="col-lg-2 col-lg-offset-1 control-label">Dipakai Konfigurasi</label> 
                         <div class="col-lg-6">
                             <input name="konfigurasi" id="konfigurasi" class="form-control" required autofocus>
-                            <span style="color: red;">Pisahkan dengan titik koma (;). Ex: Tec;Mc;dst..</span>
+                            <span style="color: green;">Pisahkan dengan titik koma (;). Ex: Tec;Mc;dst..</span>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="status" class="col-lg-2 col-lg-offset-1 control-label">Status</label> 
                         <div class="col-lg-6">
-                            <input value="open" name="status" id="status" class="form-control" required autofocus readonly>
+                            <input value="Open" name="status" id="status" class="form-control" required autofocus readonly>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -92,7 +100,7 @@
                         </div>
                         <label for="lembar" class="col-lg-1 control-label">Sheet</label>
                         <div class="col-lg-2">
-                            <input name="lembar" id="lembar" class="form-control" required autofocus>
+                            <input type="number" name="lembar" id="lembar" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -134,6 +142,7 @@
                         </div>
                     </div>
 
+                    
          <!--           <br>
                     <a> <b><center>-- Pilih Konfigurasi Kereta Yang Digunakan Dalam Drawing --</center></b></a>
                     </br>
@@ -202,37 +211,38 @@
                         </div>
                     </div> -->
 
-                        <br>
+                       <br>
                         <a> <b><center> !!!!! DATA UNTUK SCHEDULE !!!!! DATA UNTUK SCHEDULE !!!!!</center></b></a>
                         <br>
 
-                    <div class="form-group row">
+                   <div class="form-group row">
                         <label for="tanggal_prediksi" class="col-lg-2 col-lg-offset-1 control-label datepicker">Prediksi Tanggal (Start)</label> 
                         <div class="col-lg-6 datepicker">
-                            <input type="date" name="tanggal_prediksi" id="tanggal_prediksi" class="form-control datepicker" autofocus>
-                            <span style="color: red;">Dilakukan pengisian bila tidak memiliki (First Document) Refrensi Gambar Design.</span>
-                            <span style="color: red;">Kosongkan Bila Telah Mengisi Refrensi.</span>
+                            <input type="date" name="tanggal_prediksi" id="tanggal_prediksi" class="form-control datepicker">
+                            <span style="color: green;">Dilakukan pengisian bila tidak memiliki (First Document) Refrensi Gambar Design.</span>
+                            <span style="color: green;">Kosongkan Bila Telah Mengisi Refrensi.</span>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
+                     <div class="form-group row">
                         <label for="refrensi_design" class="col-lg-2 col-lg-offset-1 control-label">Refrensi Jadwal Design (Bila Ada)</label> 
                         <div class="col-lg-2">
                         <button onclick="addRef()" type="button" class="btn btn-info">Pilih Refrensi</button>
                         </div>
                         <div class="col-lg-4">
-                            <input name="refrensi_design" id="refrensi_design" class="form-control" autofocus>
-                            <input type="hidden" name="tanggal_refrensi" id="tanggal_refrensi" class="form-control" autofocus>
+                            <input name="refrensi_design" id="refrensi_design" class="form-control">
+                            <input type="date" name="tanggal_refrensi" id="tanggal_refrensi" class="form-control hidden-form">
+
 
                             <span class="help-block with-errors"></span>
-                            <span style="color: red;">Gunakan Refrensi Document (field ini) Bila Prediksi Tanggal Start Tidak Bisa Ditentukan.</span>
+                            <span style="color: green;">Gunakan Refrensi Document (field ini) Bila Prediksi Tanggal Start Tidak Bisa Ditentukan.</span>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label for="prediksi_hari" class="col-lg-2 col-lg-offset-1 control-label">Prediksi (Hari)</label> 
                         <div class="col-lg-6">
-                            <input name="prediksi_hari" id="prediksi_hari" class="form-control" required autofocus>
+                            <input type="number" name="prediksi_hari" id="prediksi_hari" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -248,19 +258,4 @@
     </div>
 </div>
 
-<!--
-<script>
-    const refrensiDesignInput = document.getElementById('refrensi_design');
-    const tanggalprediksiInput = document.getElementById('tanggal_prediksi');
-
-    refrensiDesignInput.style.display = 'none';
-
-    tanggalprediksiInput.addEventListener('change', function() {
-        if (tanggalprediksiInput.value.trim() !== '') {
-            refrensiDesignInput.style.display = 'none';
-        } else {
-            refrensiDesignInput.style.display = 'block';
-        }
-    });
-</script> -->
 

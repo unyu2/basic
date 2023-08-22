@@ -245,6 +245,17 @@ class ChartController extends Controller
         }
     }
 
+
+    public function fetch_chart_data_tahun($id_proyek)
+    {
+        $data = Temuan::select("id_temuan", "id_proyek", "jumlah", "status", "created_at")
+            ->orderBy('created_at', 'ASC')
+            ->where('id_proyek', $id_proyek)
+            ->get();
+    
+        return $data;
+    }
+    
     public function fetch_data_curvas_tahun(Request $request)
     {
         if ($request->input('id_proyek')) {
@@ -253,25 +264,38 @@ class ChartController extends Controller
             $output = [];
             $totalCountOpenBo = 0;
             $totalCountClosed = 0;
+            $totalTemuan = 0;
     
             foreach ($chart_data as $row) {
                 if ($row->status == 'Open') {
-                    $totalCountOpenBo += $row->jumlah;
+                    $totalCountOpenBo = $row->jumlah;
+                    $totalCountClosed = 0; // Reset the closed count
                 } elseif ($row->status == 'Closed') {
-                    $totalCountClosed += $row->jumlah;
+                    $totalCountClosed = $row->jumlah;
+                    $totalCountOpenBo = 0; // Reset the open count
                 }
-    
+            
+                // Tambahkan jumlah temuan ke totalTemuan
+                $totalTemuan = $totalCountOpenBo + $totalCountClosed;
+            
+                // Ubah nilai negatif menjadi nol
+                $totalCountClosedNonNegative = max($totalCountClosed, 0);
+                $totalTemuanNonNegative = max($totalTemuan, 0);
+            
+                // Tambahkan data ke dalam output
                 $output[] = [
                     'created_at' => $row->created_at,
-                    'totalCount' => $totalCountOpenBo + $totalCountClosed,
-                    'closedCount' => $totalCountClosed
+                    'totalCount' => $totalTemuanNonNegative,
+                    'closedCount' => $totalCountClosedNonNegative,
+                    'totalTemuan' => $totalTemuanNonNegative
                 ];
             }
     
             return response()->json($output);
         }
     }
-
+    
+    
     public function fetch_data_curvas_minggu(Request $request)
     {
         if ($request->input('id_proyek')) {
@@ -309,15 +333,6 @@ class ChartController extends Controller
         return $data;
     }
 
-    public function fetch_chart_data_tahun($id_proyek)
-    {
-        $data = Temuan::select("id_temuan", "id_proyek", "jumlah", "status", "created_at")
-            ->orderBy('created_at', 'ASC')
-            ->where('id_proyek', $id_proyek)
-            ->get();
-
-        return $data;
-    }
 
     public function fetch_chart_data_minggu($id_proyek)
     {

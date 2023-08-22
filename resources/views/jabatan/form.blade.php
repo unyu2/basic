@@ -12,13 +12,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group row">
-                        <label for="nama_jabatan" class="col-lg-2 col-lg-offset-1 control-label">Jabatan</label>
+                        <label for="nama_jabatan" class="col-lg-2 col-lg-offset-1 control-label">Bagian</label>
                         <div class="col-lg-6">
                             <input type="text" name="nama_jabatan" id="nama_jabatan" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                 </div>
+                    <div class="form-group row">
+                        <label for="kode_unit" class="col-lg-2 col-lg-offset-1 control-label">Kode Unit</label>
+                        <div class="col-lg-6">
+                            <input type="text" name="kode_unit" id="kode_unit" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>
                     <button type="button" class="btn btn-sm btn-flat btn-warning" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Batal</button>

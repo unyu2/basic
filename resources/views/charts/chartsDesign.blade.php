@@ -50,6 +50,14 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="chart">
+            <!-- Sales Chart Canvas -->
+            <div id="chart_div4" style="width: 100%; height: 400px;"></div>
+        </div>
+    </div>
+</div>
         </div>
         <!-- /.box -->
     </div>
@@ -356,7 +364,91 @@ $(document).ready(function() {
 </script>
 
 
+<!-- GANTT CHART STATUS -->
+<script type="text/javascript">
+    $('body').addClass('sidebar-collapse');
 
+    google.charts.load('current', {
+        'packages': ['gantt']
+    });
 
+    google.charts.setOnLoadCallback(drawStatusGanttChart);
+
+    function drawStatusGanttChart(chart_data, chart_main_title) {
+        let jsonData = chart_data;
+
+        let data = new google.visualization.DataTable();
+        data.addColumn('string', 'Task ID');
+      data.addColumn('string', 'Task Name');
+      data.addColumn('string', 'Resource');
+      data.addColumn('date', 'Start Date');
+      data.addColumn('date', 'End Date');
+      data.addColumn('number', 'Duration');
+      data.addColumn('number', 'Percent Complete');
+      data.addColumn('string', 'Dependencies');
+
+        let ganttData = []; 
+
+        $.each(jsonData, (i, jsonDataItem) => {
+    let startDate = new Date(jsonDataItem.startDate);
+    let endDate = new Date(jsonDataItem.endDate);
+
+    let percentComplete = 0.0;
+    if (jsonDataItem.prosentase !== null) {
+        if (jsonDataItem.status === 'Release') {
+            percentComplete = 1.0;
+        } else if (jsonDataItem.status === 'Proses Revisi') {
+            percentComplete = 0.5;
+        }
+    }
+
+    ganttData.push([
+        jsonDataItem.code,
+        jsonDataItem.task,
+        null,
+        startDate,
+        endDate,
+        null, 
+        prosentase,
+        null, 
+    ]);
+});
+        data.addRows(ganttData);
+        var options = {
+            height: 400
+        };
+        var chart = new google.visualization.Gantt(document.getElementById('chart_div4'));
+        chart.draw(data, options);
+    }
+});
+
+    function loadStatusGanttChartData(id_proyek, title) {
+        const temp_title = title + ' ' + id_proyek;
+        $.ajax({
+            url: '/charts/chartDesign/fetch_data_gantt',
+            method: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                id_proyek: id_proyek
+            },
+            dataType: "JSON",
+            success: function(data) {
+                console.log(data); // Tambahkan baris ini
+                drawStatusGanttChart(data, temp_title);
+            }
+        });
+        console.log(`Proyek: ${id_proyek}`);
+    }
+
+    $(document).ready(function() {
+        $('#id_proyek').change(function() {
+            var selectedProyekId = $(this).val();
+            if (selectedProyekId != '') {
+                loadStatusGanttChartData(selectedProyekId, 'Gantt Chart Proyek - ID:');
+            }
+        });
+    });
+
+</script>
 
 @endpush

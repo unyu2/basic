@@ -32,6 +32,11 @@
                     <i class="fa fa-cube"></i> <span>Chart Design</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('chartsJadwal') }}">
+                    <i class="fa fa-cube"></i> <span>Chart Jadwal</span>
+                </a>
+            </li>
             <li class="header">MASTER</li>
             <li>
                 <a href="{{ route('sistem.index') }}">
@@ -143,12 +148,12 @@
             </li>
             <li>
                 <a href="{{ route('temuan.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Daftarkan Temuan</span>
+                    <i class="fa fa-cubes"></i> <span>Daftarkan Temuan (OIL)</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('temuan2.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Tindak Lanjut Temuan</span>
+                    <i class="fa fa-cubes"></i> <span>Tindak Lanjut Temuan (OIL)</span>
                 </a>
             </li>
             <li>

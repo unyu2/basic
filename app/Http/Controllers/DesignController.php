@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\DesignRevisiUpdated;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Auth;
 
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,6 +23,7 @@ use App\Models\Subsistem;
 use App\Models\KepalaGambar;
 use App\Models\DesignDetail;
 use App\Models\User;
+use DateTime;
 use PDF;
 
 class DesignController extends Controller
@@ -91,6 +91,19 @@ class DesignController extends Controller
             ->editColumn('id_proyek', function ($design) {
                 return $design->nama_proyek ?? '';
             })
+            ->addColumn('kondisi', function ($design) {
+                $tanggalPrediksi = new DateTime($design->tanggal_prediksi);
+
+                $today = new DateTime();
+                $interval = $tanggalPrediksi->diff($today);
+                $selisihHari = $interval->days;
+            
+                if ($tanggalPrediksi > $today) {
+                    return $selisihHari . ' Hari';
+                } else {
+                    return '-' . $selisihHari . ' Hari';
+                }
+            })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
                 $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
@@ -134,6 +147,36 @@ class DesignController extends Controller
             ->make(true);
     }
 
+    public function dataModal2()
+
+    {
+        $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
+            ->select('design.*', 'nama_proyek')
+            ->orderBy('id_design', 'DESC')
+            ->get();
+
+        return datatables()
+            ->of($design)
+            ->addIndexColumn()
+            ->addColumn('select_all', function ($design) {
+                return '
+                    <input type="checkbox" name="id_design[]" value="'. $design->id_design .'">
+                ';
+            })
+            ->editColumn('id_proyek', function ($design) {
+                return $design->nama_proyek ?? '';
+            })
+            ->addColumn('aksi', function ($design) {
+                $buttons = '<div class="btn-group">';                   
+                $buttons .= '<button type="button" onclick="pilihBaru(`'. route('design.pilihData', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat">Pilih</button>';
+                $buttons .= '</div>';
+        
+                return $buttons;
+            })
+            ->rawColumns(['aksi', 'id_design', 'select_all'])
+            ->make(true);
+    }
+
 
     public function dataDetail(Request $request)
     {
@@ -164,7 +207,6 @@ class DesignController extends Controller
     public function show($id)
     {
         $design = Design::find($id);
-
         return response()->json($design);
     }
 
@@ -199,21 +241,112 @@ class DesignController extends Controller
 
     }
 
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
+{
+    // Mencari data dengan kode yang sama
+    $existingDesign = Design::where('kode_design', $request->kode_design)->first();
+
+    // Jika ada data dengan kode yang sama, hapus data tersebut
+    if ($existingDesign) {
+        $existingDesign->delete();
+    }
+
+    // Buat dan simpan data baru
+    $design = Design::create($request->all());
+
+    // Mengisi kolom kode_design
+    $design->kode_design = $request->kode_design;
+
+    if ($request->filled('tanggal_refrensi')) {
+        $design->tanggal_prediksi = $request->tanggal_refrensi;
+    } else {
+        $design->tanggal_prediksi = $request->tanggal_prediksi;
+    }
+
+    // Menghitung prediksi akhir
+    $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
+    $design->pa_yy = $design->prediksi_akhir->format('Y');
+    $design->pa_mm = $design->prediksi_akhir->format('m');
+    $design->pa_dd = $design->prediksi_akhir->format('d');
+
+    // Memecah tanggal_prediksi menjadi tiga bagian
+    list($year, $month, $day) = explode('-', $design->tanggal_prediksi);
+    $design->tp_yy = $year;
+    $design->tp_mm = $month;
+    $design->tp_dd = $day;
+
+    $design->save();
+
+    return response()->json('Data berhasil disimpan', 200);
+}
+
+
+
+
+
+    public function stores(Request $request)
     {
+        // Mencari data dengan kode yang sama
+        $existingDesign = Design::where('kode_design', $request->kode_design)->first();
+    
+        // Jika ada data dengan kode yang sama, hapus data tersebut
+        if ($existingDesign) {
+            $existingDesign->delete();
+        }
+    
+        // Buat dan simpan data baru
         $design = Design::create($request->all());
+     //   $design->id_refrensi = $design->id_design;
+        $design->kode_design = $request->kode_design;
     
         if ($request->filled('tanggal_refrensi')) {
             $design->tanggal_prediksi = $request->tanggal_refrensi;
         } else {
-            $design->tanggal_prediksi = $request->tanggal_prediksi;
+           $design->tanggal_prediksi = $request->tanggal_prediksi;
         }
+    
         $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
 
+    
         $design->save();
     
         return response()->json('Data berhasil disimpan', 200);
     }
+
+    public function storeRevisi(Request $request)
+    {
+        // Mencari data dengan kode yang sama
+        $existingDesign = Design::where('kode_design', $request->kode_design)->first();
+    
+        // Jika ada data dengan kode yang sama, hapus data tersebut
+        if ($existingDesign) {
+            $existingDesign->delete();
+        }
+    
+        // Buat dan simpan data baru
+        $design = Design::create($request->all());
+        $design->kode_design = $request->kode_design;
+    
+        if ($request->filled('tanggal_refrensi')) {
+            $design->tanggal_prediksi = $request->tanggal_refrensi;
+        } else {
+           $design->tanggal_prediksi = $request->tanggal_prediksi;
+        }
+    
+        $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
+    
+        $design->save();
+    
+        return response()->json('Data berhasil disimpan', 200);
+    }
+      
 
 
     /**
@@ -227,45 +360,9 @@ class DesignController extends Controller
     public function update(Request $request, $id)
     {
         $design = Design::find($id);
-    
-        // Cek apakah tanggal_refrensi diisi atau tidak
-        if ($request->filled('tanggal_refrensi')) {
-            $design->tanggal_refrensi = $request->tanggal_refrensi;
-            $design->tanggal_prediksi = $request->tanggal_prediksi; // Gunakan tanggal_prediksi dari form
-        } else {
-            // Jika tanggal_refrensi tidak diisi, periksa apakah tanggal_prediksi diisi dari form
-            if ($request->filled('tanggal_prediksi')) {
-                $design->tanggal_prediksi = $request->tanggal_prediksi;
-            }
-        }
-    
-        // Jika tanggal_prediksi diisi, perbarui kolom prediksi_akhir
-        if ($request->filled('tanggal_prediksi')) {
-            $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
-        }
-    
-        // Simpan perubahan
-        $design->save();
-    
-        return response()->json(['message' => 'Data berhasil diupdate']);
+        return response()->json('Data berhasil disimpan', 200);
     }
-
-    public function updates(Request $request, $id)
-        {
-            $design = Design::find($id);
-
-            if ($request->filled('tanggal_refrensi')) {
-                $design->tanggal_prediksi = $request->tanggal_refrensi;
-            } else {
-                $design->tanggal_prediksi = $request->tanggal_prediksi;
-            }
-            $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
-
-            $design->save();
-
-            return response()->json(['message' => 'Data berhasil diupdate']);
-            
-        }
+    
     
     public function updatex(Request $request, $id)
     {
@@ -364,7 +461,6 @@ class DesignController extends Controller
     }
 
 
-
     public function cetakPdf(Request $request)
     {
         $datadesign = array();
@@ -391,10 +487,11 @@ class DesignController extends Controller
     public function exportExcel()
     {
         $design = Design::leftJoin('proyek', 'proyek.id_proyek', '=', 'design.id_proyek')
+        ->leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', '=', 'design.id_kepala_gambar')
         ->leftJoin('users as check_user', 'check_user.id', '=', 'design.id_check')
         ->leftJoin('users as approve_user', 'approve_user.id', '=', 'design.id_approve')
         ->leftJoin('users as draft_user', 'draft_user.id', '=', 'design.id_draft')
-        ->select('design.*', 'proyek.nama_proyek', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+        ->select('design.*', 'proyek.nama_proyek', 'kepala_gambar.nama', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
         ->get();
     
         return Excel::download(new designExport($design), 'design.xlsx');

@@ -59,22 +59,6 @@
         </div>
     </div>
     <div class="row">
-        <div >
-            <div class="chart">
-                <!-- Sales Chart Canvas -->
-                <div id="chart_div4" style="width: 100%; height: 600px;"></div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div >
-            <div class="chart">
-                <!-- Sales Chart Canvas -->
-                <div id="chart_div5" style="width: 100%; height: 600px;"></div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div>
             <div class="chart">
                 <!-- Sales Chart Canvas -->
@@ -302,146 +286,62 @@
     });
 </script>
 
-<script type="text/javascript">
-    // Load the Visualization API and the corechart package.
-    google.charts.load('current', {
-        'packages': ['corechart']
-    });
-
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.charts.setOnLoadCallback(drawStatusPieChart);
-
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data, and
-    // draws it.
-    function drawStatusPieChart(chart_data, chart_main_title) {
-        let jsonData = chart_data;
-
-        // Create the data table.
-        let data = new google.visualization.DataTable();
-        data.addColumn('string', 'Status');
-        data.addColumn('number', 'Jumlah');
-
-        let statusData = {}; // Object to store status data
-
-        $.each(jsonData, (i, jsonData) => {
-            let status = jsonData.status;
-            let jumlah = parseFloat($.trim(jsonData.jumlah));
-
-            // If the status already exists in the statusData object, add the quantity to it
-            if (statusData[status]) {
-                statusData[status] += jumlah;
-            } else { // If the status doesn't exist in the statusData object, initialize it with the initial quantity
-                statusData[status] = jumlah;
-            }
-        });
-
-        // Iterate through the statusData object to add data to the table
-        for (let status in statusData) {
-            data.addRow([status, statusData[status]]);
-        }
-
-        // Set chart options
-        var options = {
-            title: chart_main_title,
-            colors: ['green', 'red'],
-            chartArea: {
-                width: '80%',
-                height: '80%'
-            }
-        };
-
-        // Instantiate and draw the chart
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div3'));
-        chart.draw(data, options);
-
-        // Display the number of Open and Closed
-        var openCount = statusData['Open'] || 0;
-        var closedCount = statusData['Closed'] || 0;
-
-        $('#open_count').text(openCount);
-        $('#closed_count').text(closedCount);
-    }
-
-    function loadStatusPieChartData(id_proyek, title) {
-        const temp_title = title + ' ' + id_proyek;
-        $.ajax({
-            url: 'chart/fetch_data_status',
-            method: "POST",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                id_proyek: id_proyek
-            },
-            dataType: "JSON",
-            success: function(data) {
-                drawStatusPieChart(data, temp_title);
-            }
-        });
-        console.log(`Proyek: ${id_proyek}`);
-    }
-
-    $(document).ready(function() {
-        $('#id_proyek').change(function() {
-            var id_proyek = $(this).val();
-            if (id_proyek != '') {
-                loadStatusPieChartData(id_proyek, 'Status Pie Chart:');
-            }
-        });
-    });
-</script>
 
 <script type="text/javascript">
-    // Load the Visualization API and the corechart package.
-    google.charts.load('current', {
-        'packages': ['corechart']
-    });
+google.charts.load('current', {
+    'packages': ['corechart']
+});
 
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.charts.setOnLoadCallback(drawCurvasChart);
+google.charts.setOnLoadCallback(() => {
+    const chartData = [
+        // Isi chart_data Anda di sini
+    ];
 
-    // Callback that creates and populates a data table,
-    // instantiates the line chart, passes in the data, and
-    // draws it.
-    function drawCurvasChart(chart_data, chart_main_title) {
-    if (!chart_data || chart_data.length === 0) {
-        // Handle the case when chart_data is undefined or empty
+    const chartMainTitle = 'Judul Grafik Utama';
+
+    drawCurvasChart(chartData, chartMainTitle);
+});
+
+function drawCurvasChart(chartData, chartMainTitle) {
+    if (!chartData || chartData.length === 0) {
         console.error('No data available.');
         return;
     }
 
-    let jsonData = chart_data;
-
-    let data = new google.visualization.DataTable();
+    const data = new google.visualization.DataTable();
     data.addColumn('date', 'Tanggal');
     data.addColumn('number', 'Total Temuan');
     data.addColumn('number', 'Closed');
 
-    let totalCountData = {};
-    let closedData = {};
+    const totalCountData = {};
+    const closedData = {};
+    let totalTotalCount = 0;
+    let totalClosedCount = 0;
 
-    $.each(jsonData, (i, jsonData) => {
-        let tanggal = new Date(jsonData.created_at);
-        let totalCount = parseFloat(jsonData.totalCount);
-        let closedCount = parseFloat(jsonData.closedCount);
+    $.each(chartData, (i, dataRow) => {
+        const tanggal = new Date(dataRow.created_at);
+        const totalCount = parseFloat(dataRow.totalCount);
+        const closedCount = parseFloat(dataRow.closedCount);
 
         totalCountData[tanggal] = totalCount;
         closedData[tanggal] = closedCount;
+
+        totalTotalCount += totalCount;
+        totalClosedCount += closedCount;
     });
 
-    let combinedData = [];
+    const combinedData = [];
+    let accumulatedTotalCount = 0;
+    let accumulatedClosedCount = 0;
 
-    for (let tanggal in totalCountData) {
-        if (closedData[tanggal]) {
-            combinedData.push([new Date(tanggal), totalCountData[tanggal], closedData[tanggal]]);
-        } else {
-            combinedData.push([new Date(tanggal), totalCountData[tanggal], 0]);
-        }
-    }
+    for (const tanggal in totalCountData) {
+        const closedCount = closedData[tanggal] || 0;
+        const totalCount = totalCountData[tanggal];
 
-    for (let tanggal in closedData) {
-        if (!totalCountData[tanggal]) {
-            combinedData.push([new Date(tanggal), 0, closedData[tanggal]]);
-        }
+        accumulatedTotalCount += totalCount;
+        accumulatedClosedCount += closedCount;
+
+        combinedData.push([new Date(tanggal), accumulatedTotalCount, accumulatedClosedCount]);
     }
 
     // Sort the data by tanggal in ascending order
@@ -451,8 +351,8 @@
     data.addRows(combinedData);
 
     // Set chart options
-    var options = {
-        title: chart_main_title,
+    const options = {
+        title: chartMainTitle,
         hAxis: {
             title: "Tanggal",
             format: 'MMM yyyy',
@@ -461,7 +361,8 @@
             }
         },
         vAxis: {
-            title: "Output"
+            title: "Total Output",
+            minValue: 0 // Set nilai minimum pada vAxis
         },
         colors: ['red', 'green'],
         chartArea: {
@@ -471,37 +372,36 @@
     };
 
     // Instantiate and draw the chart
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div5'));
+    const chart = new google.visualization.LineChart(document.getElementById('chart_div5'));
     chart.draw(data, options);
 }
 
-
-
-    function loadCurvasChartData(id_proyek, title) {
-        const temp_title = title + ' ' + id_proyek;
-        $.ajax({
-            url: 'chart/fetch_data_curvas_tahun',
-            method: "POST",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                id_proyek: id_proyek
-            },
-            dataType: "JSON",
-            success: function(data) {
-                drawCurvasChart(data, temp_title);
-            }
-        });
-        console.log(`Proyek: ${id_proyek}`);
-    }
-
-    $(document).ready(function() {
-        $('#id_proyek').change(function() {
-            var id_proyek = $(this).val();
-            if (id_proyek != '') {
-                loadCurvasChartData(id_proyek, 'Curvas Chart:');
-            }
-        });
+function loadCurvasChartData(id_proyek, title) {
+    const temp_title = title + ' ' + id_proyek;
+    $.ajax({
+        url: 'chart/fetch_data_curvas_tahun',
+        method: "POST",
+        data: {
+            "_token": "{{ csrf_token() }}",
+            id_proyek: id_proyek
+        },
+        dataType: "JSON",
+        success: function(data) {
+            console.log(data); // Tambahkan baris ini
+            drawCurvasChart(data, temp_title);
+        }
     });
+    console.log(`Proyek: ${id_proyek}`);
+}
+
+$(document).ready(function() {
+    $('#id_proyek').change(function() {
+        var id_proyek = $(this).val();
+        if (id_proyek != '') {
+            loadCurvasChartData(id_proyek, 'Curvas Chart:');
+        }
+    });
+});
 </script>
 
 
@@ -853,7 +753,5 @@
         });
     });
 </script>
-
-
 
 @endpush

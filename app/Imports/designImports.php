@@ -19,13 +19,21 @@ class DesignImports implements ToModel, WithHeadingRow
                 'kode_design' => $row['kode_design'],
                 'nama_design' => $row['nama_design'],
                 'revisi' => $row['revisi'],
+                'id_refrensi' => $row['id_refrensi'],
                 'refrensi_design' => $row['refrensi_design'],
                 'tanggal_refrensi' => $this->transformDate($row['tanggal_refrensi']),
                 'tanggal_prediksi' => $this->transformDate($row['tanggal_prediksi']),
+                'tp_dd' => $row['tp_dd'],
+                'tp_mm' => $row['tp_mm'],
+                'tp_yy' => $row['tp_yy'],
                 'prediksi_hari' => $row['prediksi_hari'],
+                'prediksi_akhir'  => $this->transformDate($row['prediksi_akhir']),
+                'pa_dd' => $row['pa_dd'],
+                'pa_mm' => $row['pa_mm'],
+                'pa_yy' => $row['pa_yy'],
                 'bobot_rev' => $row['bobot_rev'],
-                'prediksi_akhir' => $row['prediksi_akhir'],
                 'status' => $row['status'],
+                'prosentase' => $row['prosentase'],
                 'size' => $row['size'],
                 'lembar' => $row['lembar'],
                 'konfigurasi' => $row['konfigurasi'],
@@ -34,7 +42,6 @@ class DesignImports implements ToModel, WithHeadingRow
                 'id_approve' => $row['id_approve'],
             ]);
         } catch (\Exception $e) {
-            // Tangani jika terjadi kesalahan konversi tanggal atau data lainnya
             return null;
         }
     }
@@ -49,7 +56,6 @@ class DesignImports implements ToModel, WithHeadingRow
         try {
             return Carbon::instance(Date::excelToDateTimeObject($value))->format($format);
         } catch (\Exception $e) {
-            // Jika konversi tanggal gagal, kembalikan null (kosong)
             return null;
         }
     }

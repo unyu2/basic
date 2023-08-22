@@ -20,7 +20,9 @@
                 <table class="table table-stiped table-bordered">
                     <thead>
                         <th width="5%">No</th>
-                        <th>Jabatan</th>
+                        <th>Ref ID</th>
+                        <th>Bagian</th>
+                        <th>Kode Unit</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
@@ -47,7 +49,9 @@
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'id_jabatan'},
                 {data: 'nama_jabatan'},
+                {data: 'kode_unit'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });
@@ -89,6 +93,7 @@
         $.get(url)
             .done((response) => {
                 $('#modal-form [name=nama_jabatan]').val(response.nama_jabatan);
+                $('#modal-form [name=kode_unit]').val(response.kode_unit);
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');
