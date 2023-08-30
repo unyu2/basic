@@ -19,7 +19,12 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li>
                 <a href="{{ route('dashboard') }}">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                    <i class="fa fa-dashboard"></i> <span>My Performance</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('dashboard_oil') }}">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard OIL</span>
                 </a>
             </li>
             <li>
@@ -425,6 +430,17 @@
             <li>
                 <a href="{{ route('proses.index') }}">
                     <i class="fa fa-download"></i> <span>Terima Barang</span>
+                </a>
+            </li>
+            <li class="header">DESIGN DRAWING</li>
+            <li>
+                <a href="{{ route('design.index') }}">
+                    <i class="fa fa-cube"></i> <span>Design Drawing</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('design_detail.index') }}">
+                    <i class="fa fa-cube"></i> <span>Release Design Drawing</span>
                 </a>
             </li>
         </ul>

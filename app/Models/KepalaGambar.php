@@ -17,4 +17,12 @@ class KepalaGambar extends Model
     {
         return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id_jabatan');
     }
+
+    public function designsByKodeUnit($kodeUnit)
+    {
+        return $this->hasMany(Design::class, 'id_kepala_gambar')
+            ->whereHas('jabatan', function ($query) use ($kodeUnit) {
+                $query->where('kode_unit', $kodeUnit);
+            });
+    }
 }

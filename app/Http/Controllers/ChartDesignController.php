@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Design;
 use App\Models\DesignDetail;
 use App\Models\Proyek;
@@ -17,33 +18,405 @@ class ChartDesignController extends Controller
             ->groupBy('id_proyek')
             ->orderBy('id_proyek', 'DESC')
             ->get();
-            
         return view('charts.chartsDesign', compact('fetch_id_proyek', 'proyek'));
     }
 
-//*------------------------------------------------------------------------------------/*
 
-    public function fetch_chart_data($id_proyek)
+//*-----------------------------------------OVERALL TECHNOLOGY NORMAL--------------------------------------------------/*
+
+public function fetch_data_overall(Request $request)
+{
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $id_proyek = $request->input('id_proyek');
+
+    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at");
+
+    if (empty($id_proyek)) {
+        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open);
+    } else {
+        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
+    }
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+
+    return response()->json($output);
+}
+
+//*--------------------------------------OVERALL TECHNOLOGY BOBOT----------------------------------------------/*
+
+public function fetch_data_overall_bobot(Request $request)
+{
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $id_proyek = $request->input('id_proyek');
+
+    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek");
+
+    if (empty($id_proyek)) {
+        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open);
+    } else {
+        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
+    }
+
+    $chart_data = $chart_data->get();
+    
+    // Inisialisasi counter
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
+
+        $jumlah = $size * $lembar * $bobot_rev;
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    // Mengembalikan data dalam format JSON
+    return response()->json($output);
+}
+
+//*-----------------------------------------ENGINEERING DEPARTMENT NORMAL--------------------------------------------------/*
+
+public function fetch_data_engineering(Request $request)
+{
+    // Mendapatkan daftar proyek dengan status "Open" dari tabel proyek
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $id_proyek = $request->input('id_proyek');
+
+    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at", "pemilik");
+
+    // Jika id_proyek kosong, ambil semua data dengan pemilik "Design" yang terkait dengan proyek "Open"
+    if (empty($id_proyek)) {
+        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Engineering');
+    } else {
+        // Jika id_proyek tidak kosong, ambil data berdasarkan proyek, pemilik "Design", dan proyek "Open"
+        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Engineering');
+    }
+
+    $chart_data = $chart_data->get();
+
+    // Inisialisasi array untuk menyimpan jumlah status
+    $statusData = [];
+
+    // Menghitung jumlah setiap status desain
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    // Mengubah data ke format yang sesuai untuk pie chart
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+
+    // Mengembalikan data dalam format JSON
+    return response()->json($output);
+}
+
+//*--------------------------------------ENGINEERING DEPARTMENT BOBOT----------------------------------------------/*
+
+public function fetch_data_engineering_bobot(Request $request)
+{
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $id_proyek = $request->input('id_proyek');
+
+    // Inisialisasi query builder
+    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik");
+
+    // Jika id_proyek kosong, ambil semua data dengan status "Open"
+    if (empty($id_proyek)) {
+        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Engineering');
+    } else {
+        // Jika id_proyek tidak kosong, ambil data berdasarkan proyek dan status "Open"
+        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Engineering');
+    }
+
+    // Ambil data dari model dengan filter yang telah ditentukan
+    $chart_data = $chart_data->get();
+    
+    // Inisialisasi counter
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    // Inisialisasi variabel total untuk masing-masing status
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    // Hitung jumlah status dan total berdasarkan perkalian "size", "lembar", dan "bobot_rev"
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
+
+        // Menghitung jumlah (size * lembar * bobot_rev)
+        $jumlah = $size * $lembar * $bobot_rev;
+
+        // Menambahkan jumlah ke total masing-masing status
+        $totalStatus[$status] += $jumlah;
+    }
+
+    // Menghitung total keseluruhan
+    $totalJumlah = array_sum($totalStatus);
+
+    // Mengubah data ke format yang sesuai untuk pie chart
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        // Menghitung prosentase jumlah terhadap total jumlah
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0; // Hindari pembagian oleh nol
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    // Mengembalikan data dalam format JSON
+    return response()->json($output);
+}
+
+
+//*-----------------------------------------DESIGN DEPARTMENT NORMAL--------------------------------------------------/*
+
+public function fetch_data_status(Request $request)
+{
+    // Mendapatkan daftar proyek dengan status "Open" dari tabel proyek
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $id_proyek = $request->input('id_proyek');
+
+    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at", "pemilik");
+
+    // Jika id_proyek kosong, ambil semua data dengan pemilik "Design" yang terkait dengan proyek "Open"
+    if (empty($id_proyek)) {
+        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Design');
+    } else {
+        // Jika id_proyek tidak kosong, ambil data berdasarkan proyek, pemilik "Design", dan proyek "Open"
+        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Design');
+    }
+
+    $chart_data = $chart_data->get();
+
+    // Inisialisasi array untuk menyimpan jumlah status
+    $statusData = [];
+
+    // Menghitung jumlah setiap status desain
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    // Mengubah data ke format yang sesuai untuk pie chart
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+
+    // Mengembalikan data dalam format JSON
+    return response()->json($output);
+}
+
+//*--------------------------------------DESIGN DEPARTMENT BOBOT----------------------------------------------/*
+
+public function fetch_data_status_bobot(Request $request)
+{
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $id_proyek = $request->input('id_proyek');
+
+    // Inisialisasi query builder
+    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik");
+
+    // Jika id_proyek kosong, ambil semua data dengan status "Open"
+    if (empty($id_proyek)) {
+        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Design');
+    } else {
+        // Jika id_proyek tidak kosong, ambil data berdasarkan proyek dan status "Open"
+        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Design');
+    }
+
+    // Ambil data dari model dengan filter yang telah ditentukan
+    $chart_data = $chart_data->get();
+    
+    // Inisialisasi counter
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    // Inisialisasi variabel total untuk masing-masing status
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    // Hitung jumlah status dan total berdasarkan perkalian "size", "lembar", dan "bobot_rev"
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
+
+        // Menghitung jumlah (size * lembar * bobot_rev)
+        $jumlah = $size * $lembar * $bobot_rev;
+
+        // Menambahkan jumlah ke total masing-masing status
+        $totalStatus[$status] += $jumlah;
+    }
+
+    // Menghitung total keseluruhan
+    $totalJumlah = array_sum($totalStatus);
+
+    // Mengubah data ke format yang sesuai untuk pie chart
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        // Menghitung prosentase jumlah terhadap total jumlah
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0; // Hindari pembagian oleh nol
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    // Mengembalikan data dalam format JSON
+    return response()->json($output);
+}
+
+//*-----------------------------------------NORMAL SELECTION DESIGN---------------------------------------------*/
+
+    public function fetch_chart_all_normal($id_proyek, $kode_unit)
     {
-        $data = Design::select("id_design", "id_proyek", "status", "created_at")
-            ->orderBy('id_proyek', 'ASC')
-            ->where('id_proyek', $id_proyek)
-            ->get();
+        $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+        $data = Design::select("id_design", "id_proyek", "status")
+            ->where('pemilik', 'Design') 
+            ->join('kepala_gambar', 'design.id_kepala_gambar', '=', 'kepala_gambar.id_kepala_gambar')
+            ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+            ->where('jabatan.kode_unit', $kode_unit); 
+
+        if (empty($id_proyek)) {
+            $data->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Design');
+        } else {
+            $data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Design');
+        }
 
         return $data;
     }
 
-// Fungsi untuk mengambil data status desain dan menghitung jumlahnya
-public function fetch_data_status(Request $request)
-{
-    if ($request->input('id_proyek')) {
-        // Mengambil data design berdasarkan proyek
-        $chart_data = $this->fetch_chart_data($request->input('id_proyek'));
+//*-----------------------------------------BOBOT SELECTION DESIGN---------------------------------------------*/
 
-        // Inisialisasi array untuk menyimpan jumlah status
+    public function fetch_chart_all_bobot($id_proyek, $kode_unit)
+    {
+        $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+        $data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik")
+        ->where('pemilik', 'Design')
+        ->join('kepala_gambar', 'design.id_kepala_gambar', '=', 'kepala_gambar.id_kepala_gambar')
+        ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+        ->where('jabatan.kode_unit', $kode_unit);
+
+        if (empty($id_proyek)) {
+            $data->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Design');
+        } else {
+            $data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open)->where('pemilik', 'Design');
+        }
+    
+        return $data;
+    }
+
+//*--------------------------------------------ELECTRICAL DESIGN-----------------------------------------------*/
+
+    public function fetch_data_eld(Request $request)
+    {
+        $id_proyek = $request->input('id_proyek');
+        $kode_unit = '312.EDE';
+
+        $chart_data = $this->fetch_chart_all_normal($id_proyek, $kode_unit);
+
+        $chart_data = $chart_data->get();
+
         $statusData = [];
 
-        // Menghitung jumlah setiap status desain
         foreach ($chart_data as $row) {
             $status = $row->status;
             if (isset($statusData[$status])) {
@@ -53,7 +426,6 @@ public function fetch_data_status(Request $request)
             }
         }
 
-        // Mengubah data ke format yang sesuai untuk pie chart
         $output = [];
         foreach ($statusData as $status => $jumlah) {
             $output[] = [
@@ -61,65 +433,52 @@ public function fetch_data_status(Request $request)
                 'jumlah' => $jumlah
             ];
         }
-
-        // Mengembalikan data dalam format JSON
         return response()->json($output);
     }
-}
 
-//*------------------------------------------------------------------------------------/*
-
-public function fetch_chart_data_bobot($id_proyek)
-{
-    $data = Design::select("id_design", "id_proyek", "status", "lembar", "size", "bobot_rev", "created_at")
-        ->orderBy('id_proyek', 'ASC')
-        ->where('id_proyek', $id_proyek)
-        ->get();
-
-    return $data;
-}
-
-public function fetch_data_status_bobot(Request $request)
-{
-    if ($request->has('id_proyek')) {
+  
+    public function fetch_data_eld_bobot(Request $request)
+    {
         $id_proyek = $request->input('id_proyek');
+        $kode_unit = '312.EDE';
 
-        // Ambil data dari model, gantilah dengan model dan kolom yang sesuai
-        $chart_data = Design::select("status", "size", "lembar", "bobot_rev")
-            ->where('id_proyek', $id_proyek)
-            ->get();
-
+        // Panggil fungsi untuk mengambil data chart berdasarkan proyek dengan status "Open"
+        $chart_data = $this->fetch_chart_all_bobot($id_proyek, $kode_unit);
+    
+        // Ambil data dari model dengan filter yang telah ditentukan
+        $chart_data = $chart_data->get();
+        
         // Inisialisasi counter
         $statusData = [
             'Open' => 0,
             'Release' => 0,
             'Proses Revisi' => 0,
         ];
-
+    
         // Inisialisasi variabel total untuk masing-masing status
         $totalStatus = [
             'Open' => 0,
             'Release' => 0,
             'Proses Revisi' => 0,
         ];
-
+    
         // Hitung jumlah status dan total berdasarkan perkalian "size", "lembar", dan "bobot_rev"
         foreach ($chart_data as $row) {
             $status = $row->status;
             $size = $row->size;
             $lembar = $row->lembar;
             $bobot_rev = $row->bobot_rev;
-
+    
             // Menghitung jumlah (size * lembar * bobot_rev)
             $jumlah = $size * $lembar * $bobot_rev;
-
+    
             // Menambahkan jumlah ke total masing-masing status
             $totalStatus[$status] += $jumlah;
         }
-
+    
         // Menghitung total keseluruhan
         $totalJumlah = array_sum($totalStatus);
-
+    
         // Mengubah data ke format yang sesuai untuk pie chart
         $output = [];
         foreach ($totalStatus as $status => $total) {
@@ -134,111 +493,595 @@ public function fetch_data_status_bobot(Request $request)
                 'prosentase' => $prosentase,
             ];
         }
-
+    
         // Mengembalikan data dalam format JSON
         return response()->json($output);
-    } else {
-        // Jika id_proyek tidak ada dalam request, kembalikan respon kosong
-        return response()->json([]);
     }
-}
 
-//*------------------------------------------------------------------------------------/*
+//*--------------------------------------------MECHANICAL AND INTERIOR DESIGN-----------------------------------------------*/
 
-public function fetch_chart_gantt($id_proyek)
+public function fetch_data_mid(Request $request)
 {
-    $data = Design::select("id_design", "nama_design", "refrensi_design", "id_proyek", "kode_design", "tanggal_prediksi", "prediksi_hari", "status", "created_at")
-        ->orderBy('id_proyek', 'ASC')
-        ->where('id_proyek', $id_proyek)
-        ->get();
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '312.MID';
 
-    return $data;
-}
+    $chart_data = $this->fetch_chart_all_normal($id_proyek, $kode_unit);
 
-public function fetch_data_gantt(Request $request)
-{
-    if ($request->input('id_proyek')) {
-        // Mengambil data design berdasarkan proyek
-        $chart_data = $this->fetch_chart_gantt($request->input('id_proyek'));
+    $chart_data = $chart_data->get();
 
-        // Inisialisasi array untuk menyimpan data Gantt Chart
-        $ganttData = [];
+    $statusData = [];
 
-        // Mengisi data Gantt Chart
-        foreach ($chart_data as $row) {
-            $nama_design = $row->nama_design;
-            $kode_design = $row->kode_design;
-            $refrensi_design = $row->refrensi_design;
-            $tanggal_prediksi = Carbon::parse($row->tanggal_prediksi)->format('Y-m-d');
-            $prediksi_hari = $row->prediksi_hari;
-        
-            // Menghitung tanggal prediksi akhir dengan menambahkan prediksi_hari ke tanggal_prediksi
-            $tanggal_prediksi_akhir = Carbon::parse($tanggal_prediksi)->addDays($prediksi_hari)->format('Y-m-d');
-        
-            $status = $row->status;
-
-            // Inisialisasi variabel $prosentase
-            $prosentase = 0;
-
-            // Mengubah nilai $prosentase sesuai dengan kolom "status"
-            if ($status === 'Release') {
-                $prosentase = 100; // Bila Release, prosentase 100%
-            } elseif ($status === 'Proses Revisi') {
-                $prosentase = 50; // Bila Proses Revisi, prosentase 50%
-            } else {
-                // Bila status tidak sesuai dengan Open, Release, atau Proses Revisi, maka tetap 0%
-                $prosentase = 0;
-            }
-
-            $ganttData[] = [
-                'task' => $nama_design,
-                'code' => $kode_design,
-                'startDate' => $tanggal_prediksi,
-                'endDate' => $tanggal_prediksi_akhir,
-                'duration' => $prediksi_hari,
-                'prosentase' => $prosentase,
-                'refrensi' => $refrensi_design,
-            ];
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
         }
-
-
-        // Mengembalikan data Gantt Chart dalam format JSON
-        return response()->json($ganttData);
     }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
 }
 
 
+public function fetch_data_mid_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '312.MID';
+
+    $chart_data = $this->fetch_chart_all_bobot($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
+
+        $jumlah = $size * $lembar * $bobot_rev;
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
 
 
+//*--------------------------------------------CARBODY DESIGN-----------------------------------------------*/
+
+public function fetch_data_ced(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '312.CED';
+
+    $chart_data = $this->fetch_chart_all_normal($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
 
 
+public function fetch_data_ced_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '312.CED';
+
+    $chart_data = $this->fetch_chart_all_bobot($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
+
+        $jumlah = $size * $lembar * $bobot_rev;
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
 
 
+//*--------------------------------------------BOGIE & WAGON DESIGN-----------------------------------------------*/
+
+public function fetch_data_bwd(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '312.BWD';
+
+    $chart_data = $this->fetch_chart_all_normal($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
 
 
+public function fetch_data_bwd_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '312.BWD';
+
+    $chart_data = $this->fetch_chart_all_bobot($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
+
+        $jumlah = $size * $lembar * $bobot_rev;
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
 
 
+//*--------------------------------------------PRODUCT ENGINEERING-----------------------------------------------*/
+
+public function fetch_data_pen(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '311.PEN';
+
+    $chart_data = $this->fetch_chart_all_normal($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
 
 
+public function fetch_data_pen_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '311.PEN';
+
+    $chart_data = $this->fetch_chart_all_bobot($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
+
+        $jumlah = $size * $lembar * $bobot_rev;
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
 
 
+//*--------------------------------------------QUALITY ENGINEERING-----------------------------------------------*/
+
+public function fetch_data_qen(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '311.QEN';
+
+    $chart_data = $this->fetch_chart_all_normal($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
 
 
+public function fetch_data_qen_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '311.QEN';
+
+    $chart_data = $this->fetch_chart_all_bobot($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
+
+        $jumlah = $size * $lembar * $bobot_rev;
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
+
+//*--------------------------------------------ELECTRICAL ENGINEERING SYSTEM-----------------------------------------------*/
+
+public function fetch_data_ees(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '311.EES';
+
+    $chart_data = $this->fetch_chart_all_normal($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
 
 
+public function fetch_data_ees_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '311.EES';
+
+    $chart_data = $this->fetch_chart_all_bobot($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
+
+        $jumlah = $size * $lembar * $bobot_rev;
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
+
+//*--------------------------------------------MECHANICAL ENGINEERING SYSTEM-----------------------------------------------*/
+
+public function fetch_data_mes(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '311.EES';
+
+    $chart_data = $this->fetch_chart_all_normal($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
 
 
+public function fetch_data_mes_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '311.MES';
 
+    $chart_data = $this->fetch_chart_all_bobot($id_proyek, $kode_unit);
 
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
 
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
 
+    foreach ($chart_data as $row) {
+        $status = $row->status;
+        $size = $row->size;
+        $lembar = $row->lembar;
+        $bobot_rev = $row->bobot_rev;
 
+        $jumlah = $size * $lembar * $bobot_rev;
 
+        $totalStatus[$status] += $jumlah;
+    }
 
+    $totalJumlah = array_sum($totalStatus);
 
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
 
-
-
+    return response()->json($output);
+}
 
 
 

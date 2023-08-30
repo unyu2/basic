@@ -11,13 +11,13 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-       <!--         <div class="form-group row hidden-form">
-                        <label for="id_design" class="col-lg-1 col-lg-offset-2 control-label">ID Design</label>
+                <div class="form-group row">
+                        <label for="prediksi_akhir" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
                             <div class="col-lg-6">
-                                <input type="text" name="id_design" id="id_design" class="form-control" required autofocus readonly>
+                                <input type="date" name="prediksi_akhir" id="prediksi_akhir" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
-                    </div> -->
+                    </div>
                 <div class="form-group row">
                         <label for="kode_design" class="col-lg-1 col-lg-offset-2 control-label">Kode Design</label>
                             <div class="col-lg-6">

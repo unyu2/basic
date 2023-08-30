@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Emu;
-use App\Models\Temuan;
-use App\Models\PermintaanDetail;
-use App\Models\PemesananDetail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+use App\Models\User;
+use App\Models\Design;
+use App\Models\DesignDetail;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -13,325 +15,189 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $barang_pr = PermintaanDetail::where ('id_proyek','123')->where('status2','PR')->count();
-        $barang_po = PermintaanDetail::where ('id_proyek','123')->where('status3','PO')->count();
-        $barang_request = PermintaanDetail::where ('id_proyek','123')->where('status','Request')->count();
-        $barang_diterima = PermintaanDetail::where ('id_proyek','123')->where('status','Diterima')->count();
-        
-        $temuan_all= Temuan::where('id_proyek','123')->count();
-        $temuan_closed= Temuan::where ('status','Closed')->where('id_proyek','123')->count();
-        $temuan_open= Temuan::where ('status','Open')->where('id_proyek','123')->count();
-        $temuan_closed_medium= Temuan::where ('status','Closed')->where('id_proyek','123')->where('level','Medium')->count();
-        $temuan_open_medium= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','Medium')->count();
-        $temuan_closed_high= Temuan::where ('status','Closed')->where('id_proyek','123')->where('level','High')->count();
-        $temuan_open_high= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->count();
-        $temuan_convert_c1= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','13')->count();
-        $temuan_convert_c2= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','14')->count();
-        $temuan_convert_c3= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','15')->count();
-        $temuan_convert_c4= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','16')->count();
-        $temuan_convert_c5= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','17')->count();
-        $temuan_convert_c6= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','18')->count();
-        $temuan_convert_c7= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','19')->count();
-        $temuan_convert_c8= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','20')->count();
-        $temuan_convert_c9= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','21')->count();
-        $temuan_convert_c10= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','22')->count();
-        $temuan_convert_c11= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','23')->count();
-        $temuan_convert_c12= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','24')->count();
-        $temuan_convert_c13= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','25')->count();
-        $temuan_convert_c14= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','26')->count();
-        $temuan_convert_c15= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','27')->count();
-        $temuan_convert_c16= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','28')->count();
-        $temuan_convert_c17= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','29')->count();
-        $temuan_convert_c18= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','30')->count();
-        $temuan_convert_c19= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','31')->count();
-        $temuan_convert_c20= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','32')->count();
-        $temuan_convert_c21= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','33')->count();
-        $temuan_convert_c22= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','34')->count();
-        $temuan_convert_c23= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','35')->count();
-        $temuan_convert_c24= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','36')->count();
-        $temuan_convert_c25= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','37')->count();
-        $temuan_convert_c26= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','38')->count();
-        $temuan_convert_c27= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','39')->count();
-        $temuan_convert_c28= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','40')->count();
-        $temuan_convert_c29= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','41')->count();
-        $temuan_convert_c30= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','42')->count();
-        $temuan_convert_c31= Temuan::where ('status','Open')->where('id_proyek','123')->where('level','High')->where('id_car','43')->count();
-        
+        $user = User::pluck('name');
+        $userId = auth()->user()->id;
 
 
-        if ($temuan_closed && $temuan_all != 0)
-        $temuan3 = ($temuan_closed + $temuan_closed_medium + ($temuan_closed_high * 2))  / ($temuan_all + $temuan_open_medium + $temuan_closed_medium + (($temuan_closed_high + $temuan_open_high) * 2)) * 100;
-        else
-        $temuan3 = 0;
+        $statusCounts = Design::whereIn('status', ['Release', 'Open', 'Proses Revisi'])
+        ->where(function ($query) use ($userId) {
+            $query->where('id_draft', $userId)
+                ->orWhere('id_check', $userId)
+                ->orWhere('id_approve', $userId);
+        })
+        ->selectRaw('status, count(*) as count')
+        ->groupBy('status')
+        ->get();
+
+        $job_closed = $statusCounts->firstWhere('status', 'Release')->count ?? 0;
+        $job_open = $statusCounts->firstWhere('status', 'Open')->count ?? 0;
+        $job_revisi = $statusCounts->firstWhere('status', 'Proses Revisi')->count ?? 0;
+
+        $all_open = $job_open + $job_revisi;
+        $open [] = $all_open;
 
 
-        if ($temuan_convert_c1 <1 ) {
-            $temuanc1 = "badge bg-green";
-        } elseif($temuan_convert_c1 >=1 ){
-            $temuanc1 = "badge bg-red";
-        } 
+        $statusCountsJam = Design::whereIn('status', ['Release', 'Open', 'Proses Revisi'])
+        ->where(function ($query) use ($userId) {
+            $query->where('id_draft', $userId)
+                ->orWhere('id_check', $userId)
+                ->orWhere('id_approve', $userId);
+        })
+        ->selectRaw('status, sum(size * lembar) as total')
+        ->groupBy('status')
+        ->get();
 
-        if ($temuan_convert_c2 <1 ) {
-            $temuanc2 = "badge bg-green";
-        } elseif($temuan_convert_c2 >=1 ){
-            $temuanc2 = "badge bg-red";
-        } 
+        $job_closed_jam = $statusCountsJam->firstWhere('status', 'Release')->total ?? 0;
+        $job_open_jam = $statusCountsJam->firstWhere('status', 'Open')->total ?? 0;
+        $job_revisi_jam = $statusCountsJam->firstWhere('status', 'Proses Revisi')->total ?? 0;
 
-        if ($temuan_convert_c3 <1 ) {
-            $temuanc3 = "badge bg-green";
-        } elseif($temuan_convert_c4 >=1 ){
-            $temuanc3 = "badge bg-red";
-        } 
-
-        if ($temuan_convert_c4 <1 ) {
-            $temuanc4 = "badge bg-green";
-        } elseif($temuan_convert_c4 >=1 ){
-            $temuanc4 = "badge bg-red";
-        } 
-
-        if ($temuan_convert_c5 <1 ) {
-            $temuanc5 = "badge bg-green";
-        } elseif($temuan_convert_c5 >=1 ){
-            $temuanc5 = "badge bg-red";
-        } 
-
-        if ($temuan_convert_c6 <1 ) {
-            $temuanc6 = "badge bg-green";
-        } elseif($temuan_convert_c6 >=1 ){
-            $temuanc6 = "badge bg-red";
-        } 
-
-        if ($temuan_convert_c7 <1 ) {
-            $temuanc7 = "badge bg-green";
-        } elseif($temuan_convert_c7 >=1 ){
-            $temuanc7 = "badge bg-red";
-        } 
-
-        if ($temuan_convert_c8 <1 ) {
-            $temuanc8 = "badge bg-green";
-        } elseif($temuan_convert_c8 >=1 ){
-            $temuanc8 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c9 <1 ) {
-            $temuanc9 = "badge bg-green";
-        } elseif($temuan_convert_c9 >=1 ){
-            $temuanc9 = "badge bg-red";
-        }
-        
-        if ($temuan_convert_c10 <1 ) {
-            $temuanc10 = "badge bg-green";
-        } elseif($temuan_convert_c10 >=1 ){
-            $temuanc10 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c11 <1 ) {
-            $temuanc11 = "badge bg-green";
-        } elseif($temuan_convert_c11 >=1 ){
-            $temuanc11 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c12 <1 ) {
-            $temuanc12 = "badge bg-green";
-        } elseif($temuan_convert_c12 >=1 ){
-            $temuanc12 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c13 <1 ) {
-            $temuanc13 = "badge bg-green";
-        } elseif($temuan_convert_c13 >=1 ){
-            $temuanc13 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c14 <1 ) {
-            $temuanc14 = "badge bg-green";
-        } elseif($temuan_convert_c14 >=1 ){
-            $temuanc14 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c15 <1 ) {
-            $temuanc15 = "badge bg-green";
-        } elseif($temuan_convert_c15 >=1 ){
-            $temuanc15 = "badge bg-red";
-        }
-        
-        if ($temuan_convert_c16 <1 ) {
-            $temuanc16 = "badge bg-green";
-        } elseif($temuan_convert_c16 >=1 ){
-            $temuanc16 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c17 <1 ) {
-            $temuanc17 = "badge bg-green";
-        } elseif($temuan_convert_c17 >=1 ){
-            $temuanc17 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c18 <1 ) {
-            $temuanc18 = "badge bg-green";
-        } elseif($temuan_convert_c18 >=1 ){
-            $temuanc18 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c19 <1 ) {
-            $temuanc19 = "badge bg-green";
-        } elseif($temuan_convert_c19 >=1 ){
-            $temuanc19 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c20 <1 ) {
-            $temuanc20 = "badge bg-green";
-        } elseif($temuan_convert_c20 >=1 ){
-            $temuanc20 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c21 <1 ) {
-            $temuanc21 = "badge bg-green";
-        } elseif($temuan_convert_c21 >=1 ){
-            $temuanc21 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c22 <1 ) {
-            $temuanc22 = "badge bg-green";
-        } elseif($temuan_convert_c22 >=1 ){
-            $temuanc22 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c23 <1 ) {
-            $temuanc23 = "badge bg-green";
-        } elseif($temuan_convert_c23 >=1 ){
-            $temuanc23 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c24 <1 ) {
-            $temuanc24 = "badge bg-green";
-        } elseif($temuan_convert_c24 >=1 ){
-            $temuanc24 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c25 <1 ) {
-            $temuanc25 = "badge bg-green";
-        } elseif($temuan_convert_c25 >=1 ){
-            $temuanc25 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c26 <1 ) {
-            $temuanc26 = "badge bg-green";
-        } elseif($temuan_convert_c26 >=1 ){
-            $temuanc26 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c27 <1 ) {
-            $temuanc27 = "badge bg-green";
-        } elseif($temuan_convert_c27 >=1 ){
-            $temuanc27 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c28 <1 ) {
-            $temuanc28 = "badge bg-green";
-        } elseif($temuan_convert_c28 >=1 ){
-            $temuanc28 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c29 <1 ) {
-            $temuanc29 = "badge bg-green";
-        } elseif($temuan_convert_c29 >=1 ){
-            $temuanc29 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c30 <1 ) {
-            $temuanc30 = "badge bg-green";
-        } elseif($temuan_convert_c30 >=1 ){
-            $temuanc30 = "badge bg-red";
-        }
-
-        if ($temuan_convert_c31 <1 ) {
-            $temuanc31 = "badge bg-green";
-        } elseif($temuan_convert_c31 >=1 ){
-            $temuanc31 = "badge bg-red";
-        }
+        $all_open_jam = $job_open_jam + $job_revisi_jam;
+        $open_jam [] = $all_open_jam;
 
         $tanggal_awal = date('Y-m-01');
         $tanggal_akhir = date('Y-m-d');
-        $range = [$tanggal_awal, $tanggal_akhir];
-        $ranges = date('y-m-d');
+        $range_bulan = [$tanggal_awal, $tanggal_akhir];
+
+        $hari_ini = date('y-m-d');
+        $bulan_awal = date('Y-01-d');
+        $bulan_akhir = date('Y-m-d');
+        $range_tahun = [$bulan_awal, $bulan_akhir];
 
         $data_tanggal = array();
-        $data_barang = array();
-        $temuans = array();
-        $temuans2 = array();
-        $temuans3 = array();
+        $data_release = array();
+        $data_release_jam = array();
+        $data_open = array();
+        $data_open_jam = array();
+        $data_target = array();
+
+        $accumulated_closed = array();
+        $accumulated_open = array();
+        $accumulated_target = array();
+
+        $jumlah_hari_kerja = 0;
+        $current_date = $tanggal_awal;
+        while (strtotime($current_date) <= strtotime($tanggal_akhir)) {
+            $dayOfWeek = date('N', strtotime($current_date));
+            if ($dayOfWeek < 6) { // Jika bukan Sabtu (6) atau Minggu (7)
+                $jumlah_hari_kerja++;
+            }
+            $current_date = date('Y-m-d', strtotime("+1 day", strtotime($current_date)));
+        }
 
         while (strtotime($tanggal_awal) <= strtotime($tanggal_akhir)) {
             $data_tanggal[] = (int) substr($tanggal_awal, 8, 2);
 
-    $temuan_closeds= Temuan::where ('status','Closed')->where('id_proyek','123')->where('created_at', 'LIKE', "%$tanggal_awal%")->count();
-    $temuan_opens= Temuan::where ('status','Open')->where('id_proyek','123')->where('created_at', 'LIKE', "%$tanggal_awal%")->count();
+            $dayOfWeek = date('N', strtotime($tanggal_awal));
+            $target = ($dayOfWeek >= 6) ? 0 : 8;
 
-    $temuan = $temuan_opens + $temuan_closeds;
-    $temuans [] += $temuan;
+ //Normal OUtput
+            $design_release = Design::where('status', 'Release')
+                ->where(function ($query) use ($userId) {
+                    $query->where('id_draft', $userId)
+                        ->orWhere('id_check', $userId)
+                        ->orWhere('id_approve', $userId);
+                })
+                ->where('created_at', 'LIKE', "%$tanggal_awal%")
+                ->count();
+            
+            $design_open = Design::where('status', 'Open')
+                ->where(function ($query) use ($userId) {
+                    $query->where('id_draft', $userId)
+                        ->orWhere('id_check', $userId)
+                        ->orWhere('id_approve', $userId);
+                })
+                ->where('created_at', 'LIKE', "%$tanggal_awal%")
+                ->count();
+            
+            $design_revisi = Design::where('status', 'Proses Revisi')
+                ->where(function ($query) use ($userId) {
+                    $query->where('id_draft', $userId)
+                        ->orWhere('id_check', $userId)
+                        ->orWhere('id_approve', $userId);
+                })
+                ->where('created_at', 'LIKE', "%$tanggal_awal%")
+                ->count();
 
-    $temuan2 = $temuan_closeds;
-    $temuans2 [] += $temuan2;
+            $open = $design_open + $design_revisi;
+            $data_open [] += $open;
+        
+            $release = $design_release;
+            $data_release [] += $release;
+            
+// Berdasarkan jam
+            $design_release_jam = Design::where('status', 'Release')
+            ->where(function ($query) use ($userId) {
+                $query->where('id_draft', $userId)
+                    ->orWhere('id_check', $userId)
+                    ->orWhere('id_approve', $userId);
+            })
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
+            ->sum(DB::raw('lembar * size'));
 
+            $design_open_jam = Design::where('status', 'Open')
+            ->where(function ($query) use ($userId) {
+                $query->where('id_draft', $userId)
+                    ->orWhere('id_check', $userId)
+                    ->orWhere('id_approve', $userId);
+            })
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
+            ->sum(DB::raw('lembar * size'));
 
-    $tanggal_awal = date('Y-m-d', strtotime("+1 day", strtotime($tanggal_awal)));
+            $design_revisi_jam = Design::where('status', 'Proses Revisi')
+            ->where(function ($query) use ($userId) {
+                $query->where('id_draft', $userId)
+                    ->orWhere('id_check', $userId)
+                    ->orWhere('id_approve', $userId);
+            })
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
+            ->sum(DB::raw('lembar * size'));
+
+            $open_jam = $design_open_jam + $design_revisi_jam;
+            $data_open_jam [] += $open_jam;
+        
+            $release_jam = $design_release_jam / $jumlah_hari_kerja;
+            $data_release_jam[] = $release_jam;
+
+            $targets = $target;
+            $data_target[] = $targets;
+
+            $accumulated_closed += $data_release;
+            $accumulated_open += $data_open;
+            $accumulated_target += $data_target;
+        
+            $data_closed_curva[] = $accumulated_closed;
+            $data_open_curva[] = $accumulated_open;
+            $data_target_curva[] = $accumulated_target;
+
+            $tanggal_awal = date('Y-m-d', strtotime("+1 day", strtotime($tanggal_awal)));
         }
 
-    $tanggal_awal = date('Y-m-01');
+        $tanggal_awal = date('Y-m-01');
 
-    if (auth()->user()) {
-            return view('admin.dashboard', compact(
-            'temuans',
-            'temuans2',
-            'temuan3',
-            'temuanc1',
-            'temuanc2',
-            'temuanc3',
-            'temuanc4',
-            'temuanc5',
-            'temuanc6',
-            'temuanc7',
-            'temuanc8',
-            'temuanc9',
-            'temuanc10',
-            'temuanc11',
-            'temuanc12',
-            'temuanc13',
-            'temuanc14',
-            'temuanc15',
-            'temuanc16',
-            'temuanc17',
-            'temuanc18',
-            'temuanc19',
-            'temuanc20',
-            'temuanc21',
-            'temuanc22',
-            'temuanc23',
-            'temuanc24',
-            'temuanc25',
-            'temuanc26',
-            'temuanc27',
-            'temuanc28',
-            'temuanc29',
-            'temuanc30',
-            'temuanc31',            
-            'temuan_all',
-            'temuan_open',
-            'temuan_closed',
-            'temuan_open_medium',
-            'temuan_closed_medium',   
-            'tanggal_awal', 
-            'tanggal_akhir', 
-            'range',
-            'ranges',
-            'data_tanggal',
-            'data_barang',
-            'barang_po',
-            'barang_pr',
-            'barang_request',
-            'barang_diterima',));
-            }
+        if (auth()->user()->level == 2 || auth()->user()->level == 1 || auth()->user()->level == 9 || auth()->user()->level == 11) {
+            return view('admin.dashboard', compact( 
+                'data_target', 
+                'data_open',
+                'data_open_jam',
+                'data_release',
+                'data_release_jam',
+                'data_closed_curva',
+                'data_open_curva',
+                'data_target_curva',
+                'open',
+                'all_open',
+                'all_open_jam',
+                'job_closed',
+                'job_closed_jam',
+                'job_open',
+                'tanggal_awal', 
+                'tanggal_akhir', 
+                'data_tanggal',
+                'user',));
+        }
+
+  //      if (auth()->user()->level == 1) {
+ //           return view('admin.dashboard');
+ //       }
     }
-
 }

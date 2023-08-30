@@ -1,7 +1,7 @@
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Version</b>*PMO Integrated System. *Modul QA & QC. *Stage 1 Of 5.
+    *Technology Digital Platform.<b> Version *V.1 </b>
     </div>
-    <strong>Copyright &copy; {{ date('Y') }}.<a href="/">Unicod Automation</a>.</strong> All rights
+    <strong>Copyright &copy; {{ date('Y') }}.<a href="/"> Technology Process Management & RAMS X Unicod Automation</a>.</strong> All rights
     reserved.
 </footer>

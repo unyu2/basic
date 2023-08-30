@@ -17,8 +17,10 @@ class CreateDesignDetailTable extends Migration
             $table->increments('id_design_detail');
             $table->unsignedInteger('id_design');
             $table->foreign('id_design')->references('id_design')->on('design')->onDelete('restrict')->onUpdate('restrict');
+            $table->string('kode_design');
             $table->string('revisi');
-
+            $table->string('status');
+            $table->string('prediksi_akhir');
             $table->timestamps();
         });
     }

@@ -18,4 +18,9 @@ class DesignDetail extends Model
         return $this->belongsTo(Design::class, 'id_design', 'id_design');
     }
 
+    public static function cek($id_design)
+    {
+        return self::where('id_design', $id_design)->first();
+    }
+
 }

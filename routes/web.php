@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\{
-    DashboardController, Dashboard2Controller, Dashboard3Controller, Dashboard4Controller, Dashboard5Controller,
+    DashboardOilController, DashboardController, Dashboard2Controller, Dashboard3Controller, Dashboard4Controller, Dashboard5Controller,
     Dashboard6Controller, Dashboard7Controller, Dashboard8Controller, Dashboard9Controller, Dashboard10Controller,
     Dashboard11Controller, Dashboard12Controller, Dashboard13Controller, Dashboard14Controller, Dashboard15Controller,
     Dashboard16Controller, Dashboard17Controller, Dashboard18Controller, Dashboard19Controller, Dashboard20Controller,
@@ -90,8 +92,6 @@ use App\Http\Controllers\{
     SupplierController,
     UserController,
 };
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -107,7 +107,10 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
+Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
+
+    Route::get('/dashboard_oil', [DashboardOilController::class, 'index'])->name('dashboard_oil');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard2', [Dashboard2Controller::class, 'index'])->name('dashboard2');
     Route::get('/dashboard3', [Dashboard3Controller::class, 'index'])->name('dashboard3');
@@ -223,23 +226,23 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
         Route::get('design/pilihData/{id}', [DesignController::class, 'pilihData'])->name('design.pilihData');
         Route::get('design/pilihRevisi/{id}', [DesignController::class, 'pilihRevisi'])->name('design.pilihRevisi');
         Route::post('/design/storeRevisi', [DesignController::class, 'storeRevisi'])->name('design.storeRevisi');
+
+        Route::post('/design/stores', [DesignController::class, 'stores'])->name('design.stores');
+
+
         Route::post('/design/delete-selected', [DesignController::class, 'deleteSelected'])->name('design.delete_selected');
         Route::post('/design/exportSelected', [DesignController::class, 'exportSelected'])->name('design.exportSelected');
         Route::post('/design/cetakPdf', [DesignController::class, 'cetakPdf'])->name('design.cetakPdf');
         Route::resource('/design', DesignController::class);
 
-
-     //   Route::get('/design_detail/showRef', [DesignDetailController::class, 'showRef'])->name('design_detail.showRef');
-
-        Route::get('/design_detail/export', [DesignDetailController::class, 'exportExcel'])->name('design_detail.export');
         Route::get('/design_detail/dataModal', [DesignDetailController::class, 'dataModal'])->name('design_detail.dataModal');
         Route::get('/design_detail/data', [DesignDetailController::class, 'data'])->name('design_detail.data');
         Route::get('design_detail/pilihData/{id}', [DesignDetailController::class, 'pilihData'])->name('design_detail.pilihData');
         Route::put('/design_detail/{id}', [DesignDetailController::class, 'updatex'])->name('design_detail.updatex');
-        Route::post('/design_detail', [DesignDetailController::class, 'store'])->name('design_detail.store');
-     //   Route::post('/design_detail/storeModal', [DesignDetailController::class, 'storeModal'])->name('design_detail.storeModal');
+        Route::post('/design_detail/import', [DesignDetailController::class, 'importExcel'])->name('design_detail.import');
+  //      Route::post('/design_detail/store', [DesignDetailController::class, 'store'])->name('design_detail.store');
+  //      Route::post('/design_detail/stores', [DesignController::class, 'stores'])->name('design_detail.stores');
         Route::post('/design_detail/delete-selected', [DesignDetailController::class, 'deleteSelected'])->name('design_detail.delete_selected');
-        Route::post('/design_detail/cetak-barcode', [DesignDetailController::class, 'cetakBarcode'])->name('design_detail.cetak_barcode');
         Route::resource('/design_detail', DesignDetailController::class);
 
 
@@ -276,18 +279,42 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
         Route::post('chart/fetch_data_permintaan', [ChartController::class, 'fetch_data_permintaan']);
 
         Route::get('/charts/chartsDesign', [ChartDesignController::class, 'index'])->name('chartsDesign');
+        Route::post('/charts/chartDesign/fetch_data_overall', [ChartDesignController::class, 'fetch_data_overall']);
+        Route::post('/charts/chartDesign/fetch_data_overall_bobot', [ChartDesignController::class, 'fetch_data_overall_bobot']);
         Route::post('/charts/chartDesign/fetch_data_status', [ChartDesignController::class, 'fetch_data_status']);
-
-        Route::post('/charts/chartDesign/fetch_data_gantt', [ChartDesignController::class, 'fetch_data_gantt']);
-
         Route::post('/charts/chartDesign/fetch_data_status_bobot', [ChartDesignController::class, 'fetch_data_status_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_engineering', [ChartDesignController::class, 'fetch_data_engineering']);
+        Route::post('/charts/chartDesign/fetch_data_engineering_bobot', [ChartDesignController::class, 'fetch_data_engineering_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_eld', [ChartDesignController::class, 'fetch_data_eld']);
+        Route::post('/charts/chartDesign/fetch_data_eld_bobot', [ChartDesignController::class, 'fetch_data_eld_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_mid', [ChartDesignController::class, 'fetch_data_mid']);
+        Route::post('/charts/chartDesign/fetch_data_mid_bobot', [ChartDesignController::class, 'fetch_data_mid_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_cbd', [ChartDesignController::class, 'fetch_data_cbd']);
+        Route::post('/charts/chartDesign/fetch_data_cbd_bobot', [ChartDesignController::class, 'fetch_data_cbd_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_bwd', [ChartDesignController::class, 'fetch_data_bwd']);
+        Route::post('/charts/chartDesign/fetch_data_bwd_bobot', [ChartDesignController::class, 'fetch_data_bwd_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_pen', [ChartDesignController::class, 'fetch_data_pen']);
+        Route::post('/charts/chartDesign/fetch_data_pen_bobot', [ChartDesignController::class, 'fetch_data_pen_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_qen', [ChartDesignController::class, 'fetch_data_qen']);
+        Route::post('/charts/chartDesign/fetch_data_qen_bobot', [ChartDesignController::class, 'fetch_data_qen_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_mes', [ChartDesignController::class, 'fetch_data_mes']);
+        Route::post('/charts/chartDesign/fetch_data_mes_bobot', [ChartDesignController::class, 'fetch_data_mes_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_qes', [ChartDesignController::class, 'fetch_data_qes']);
+        Route::post('/charts/chartDesign/fetch_data_qes_bobot', [ChartDesignController::class, 'fetch_data_qes_bobot']);
+
         Route::post('/charts/chartDesign/fetch_data_curvaS', [ChartDesignController::class, 'fetch_data_curvaS']);
 
+
+
         Route::get('/charts/chartsJadwal', [ChartJadwalController::class, 'index'])->name('chartsJadwal');
-
-
-
-
+        Route::get('/charts/chartsMes', [ChartJadwalController::class, 'chartMes'])->name('chartsMes');
+        Route::get('/charts/chartsEes', [ChartJadwalController::class, 'chartEes'])->name('chartsEes');
+        Route::get('/charts/chartsQen', [ChartJadwalController::class, 'chartQen'])->name('chartsQen');
+        Route::get('/charts/chartsPre', [ChartJadwalController::class, 'chartPre'])->name('chartsPre');
+        Route::get('/charts/chartsEld', [ChartJadwalController::class, 'chartEld'])->name('chartsEld');
+        Route::get('/charts/chartsMid', [ChartJadwalController::class, 'chartMid'])->name('chartsMid');
+        Route::get('/charts/chartsCbd', [ChartJadwalController::class, 'chartCbd'])->name('chartsCbd');
+        Route::get('/charts/chartsBwd', [ChartJadwalController::class, 'chartBwd'])->name('chartsBwd');
 
         Route::get('/sistem/data', [SistemController::class, 'data'])->name('sistem.data');
         Route::resource('/sistem', SistemController::class);

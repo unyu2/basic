@@ -18,6 +18,21 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group row">
+                        <label for="nama_design" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
+                        <div class="col-lg-6">
+                            <input name="nama_design" id="nama_design" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="kode_design" class="col-lg-2 col-lg-offset-1 control-label">Kode Design</label> 
+                        <div class="col-lg-6">
+                            <input name="kode_design" id="kode_design" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                     <label for="id_proyek" class="col-lg-2 col-lg-offset-1 control-label">Proyek</label>
                         <div class="col-lg-6">
                             <select type="text" name="id_proyek" id="id_proyek" class="form-control" required autofocus>
@@ -44,22 +59,7 @@
                     <div class="form-group row hidden-form ">
                         <label for="bobot_rev" class="col-lg-2 col-lg-offset-1 control-label">Bobot Revisi</label> 
                         <div class="col-lg-6">
-                        <input type="text" value="3" placeholder="3" name="bobot_rev" id="bobot_rev" class="form-control" autofocus>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                <div class="form-group row">
-                        <label for="nama_design" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
-                        <div class="col-lg-6">
-                            <input name="nama_design" id="nama_design" class="form-control" required autofocus>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="kode_design" class="col-lg-2 col-lg-offset-1 control-label">Kode Design</label> 
-                        <div class="col-lg-6">
-                            <input name="kode_design" id="kode_design" class="form-control" required autofocus>
+                        <input type="text" name="bobot_rev" id="bobot_rev" class="form-control" autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -142,110 +142,6 @@
                         </div>
                     </div>
 
-                    
-         <!--           <br>
-                    <a> <b><center>-- Pilih Konfigurasi Kereta Yang Digunakan Dalam Drawing --</center></b></a>
-                    </br>
-                   <div class="form-group row">
-                        <label for="konf_emu" class="col-lg-1 col-lg-offset-1 control-label">EMU</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_emu as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_emu[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_dmu" class="col-lg-1 control-label">DMU</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_dmu as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_dmu[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_light" class="col-lg-1 control-label">Light / Tram</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_light as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_light[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="konf_coach" class="col-lg-1 col-lg-offset-1 control-label">Coach</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_coach as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_coach[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_wagon" class="col-lg-1 control-label">Wagon</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_wagon as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_wagon[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_other" class="col-lg-1 control-label">Other</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_other as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_other[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div> -->
-
-                       <br>
-                        <a> <b><center> !!!!! DATA UNTUK SCHEDULE !!!!! DATA UNTUK SCHEDULE !!!!!</center></b></a>
-                        <br>
-
-                   <div class="form-group row">
-                        <label for="tanggal_prediksi" class="col-lg-2 col-lg-offset-1 control-label datepicker">Prediksi Tanggal (Start)</label> 
-                        <div class="col-lg-6 datepicker">
-                            <input type="date" name="tanggal_prediksi" id="tanggal_prediksi" class="form-control datepicker">
-                            <span style="color: green;">Dilakukan pengisian bila tidak memiliki (First Document) Refrensi Gambar Design.</span>
-                            <span style="color: green;">Kosongkan Bila Telah Mengisi Refrensi.</span>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                     <div class="form-group row">
-                        <label for="refrensi_design" class="col-lg-2 col-lg-offset-1 control-label">Refrensi Jadwal Design (Bila Ada)</label> 
-                        <div class="col-lg-2">
-                        <button onclick="addRef()" type="button" class="btn btn-info">Pilih Refrensi</button>
-                        </div>
-                        <div class="col-lg-4">
-                            <input name="refrensi_design" id="refrensi_design" class="form-control">
-                            <input type="date" name="tanggal_refrensi" id="tanggal_refrensi" class="form-control hidden-form">
-
-
-                            <span class="help-block with-errors"></span>
-                            <span style="color: green;">Gunakan Refrensi Document (field ini) Bila Prediksi Tanggal Start Tidak Bisa Ditentukan.</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="prediksi_hari" class="col-lg-2 col-lg-offset-1 control-label">Prediksi (Hari)</label> 
-                        <div class="col-lg-6">
-                            <input type="number" name="prediksi_hari" id="prediksi_hari" class="form-control" required autofocus>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
 <!---------------------------------------------------------------------------------------------------------------------------------------- -->
                     
                 </div>

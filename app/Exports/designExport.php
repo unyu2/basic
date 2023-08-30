@@ -58,6 +58,7 @@ class designExport implements FromCollection, WithHeadings, WithMapping
             $row->proyek->nama_proyek,
             $row->kode_design,
             $row->nama_design,
+            $row->pemilik,
             $row->revisi,
             $row->id_refrensi,
             $row->refrensi_design,

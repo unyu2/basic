@@ -35,6 +35,7 @@
             <div class="box-header with-border">
             <div class="container-fluid">
 
+            @if (auth()->user()->level == 1)
             <div class="box-header">
                 <div class="input-group input-group-sm">
                     <form action="{{ route('design.import') }}" method="post" enctype="multipart/form-data">
@@ -47,10 +48,11 @@
                     </form>
                 </div>
             </div>
+            @endif
 
             <div class="box-header">
                 <div class="btn-group">
-                    <button onclick="tambahBaru('{{ route('design.store') }}')" class="btn btn-success btn-flat"><i class="fa fa-plus-circle"></i>Tambah Data Baru</button>
+                    <button onclick="tambahBaru('{{ route('design.stores') }}')" class="btn btn-success btn-flat"><i class="fa fa-plus-circle"></i>Tambah Data Baru</button>
                     <button onclick="addForm('{{ route('design.store') }}')" class="btn btn-warning btn-flat"><i class="fa fa-plus-circle"></i>Buat & Edit Schedule</button>
                     <button onclick="deleteSelected('{{ route('design.delete_selected') }}')" class="btn btn-danger btn-flat"><i class="fa fa-trash"></i> Hapus Masal</button>
                     <a href="{{ route('design.export') }}" class="btn btn bg-navy btn-flat"><i class="fa fa-file-excel-o"></i> Export Excel</a>
@@ -127,6 +129,7 @@
 <script>
     let table;
     let tableModal;
+    let tableModal2;
     let tableDetail;
 
     $(function () {
@@ -502,10 +505,6 @@
                 ]
             });
     });
-
-    function addExcel() {
-        $('#modal-form1').modal('show');
-    }
 
     
 //-------------------------------------------------------------------------------------

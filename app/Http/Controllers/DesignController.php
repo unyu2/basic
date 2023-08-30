@@ -249,75 +249,14 @@ class DesignController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-{
-    // Mencari data dengan kode yang sama
-    $existingDesign = Design::where('kode_design', $request->kode_design)->first();
+    {
 
-    // Jika ada data dengan kode yang sama, hapus data tersebut
-    if ($existingDesign) {
-        $existingDesign->delete();
     }
-
-    // Buat dan simpan data baru
-    $design = Design::create($request->all());
-
-    // Mengisi kolom kode_design
-    $design->kode_design = $request->kode_design;
-
-    if ($request->filled('tanggal_refrensi')) {
-        $design->tanggal_prediksi = $request->tanggal_refrensi;
-    } else {
-        $design->tanggal_prediksi = $request->tanggal_prediksi;
-    }
-
-    // Menghitung prediksi akhir
-    $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
-    $design->pa_yy = $design->prediksi_akhir->format('Y');
-    $design->pa_mm = $design->prediksi_akhir->format('m');
-    $design->pa_dd = $design->prediksi_akhir->format('d');
-
-    // Memecah tanggal_prediksi menjadi tiga bagian
-    list($year, $month, $day) = explode('-', $design->tanggal_prediksi);
-    $design->tp_yy = $year;
-    $design->tp_mm = $month;
-    $design->tp_dd = $day;
-
-    $design->save();
-
-    return response()->json('Data berhasil disimpan', 200);
-}
-
-
-
 
 
     public function stores(Request $request)
     {
-        // Mencari data dengan kode yang sama
-        $existingDesign = Design::where('kode_design', $request->kode_design)->first();
-    
-        // Jika ada data dengan kode yang sama, hapus data tersebut
-        if ($existingDesign) {
-            $existingDesign->delete();
-        }
-    
-        // Buat dan simpan data baru
-        $design = Design::create($request->all());
-     //   $design->id_refrensi = $design->id_design;
-        $design->kode_design = $request->kode_design;
-    
-        if ($request->filled('tanggal_refrensi')) {
-            $design->tanggal_prediksi = $request->tanggal_refrensi;
-        } else {
-           $design->tanggal_prediksi = $request->tanggal_prediksi;
-        }
-    
-        $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
 
-    
-        $design->save();
-    
-        return response()->json('Data berhasil disimpan', 200);
     }
 
     public function storeRevisi(Request $request)
@@ -359,8 +298,7 @@ class DesignController extends Controller
 
     public function update(Request $request, $id)
     {
-        $design = Design::find($id);
-        return response()->json('Data berhasil disimpan', 200);
+
     }
     
     

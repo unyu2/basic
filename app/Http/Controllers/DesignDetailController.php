@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Events\DesignRevisiUpdated;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\designDetailImports; 
 
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -49,6 +48,7 @@ class DesignDetailController extends Controller
         $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
         $drafter = User::where('bagian', $bagianUser)->where('level', '2')->pluck('name', 'id');
         $design = Design::All();
+        $designDetail = DesignDetail::All();
         
     
         $proyek = Proyek::where('status', 'open')->pluck('nama_proyek' , 'id_proyek');
@@ -63,7 +63,7 @@ class DesignDetailController extends Controller
     
         return view('design_detail.index', compact('design', 'kepala', 'subsistem', 'approver', 'drafter', 'proyek',
         'konfigurasi', 'konfigurasi_dmu', 'konfigurasi_emu', 'konfigurasi_light', 'konfigurasi_coach', 'konfigurasi_wagon', 'konfigurasi_other',
-        'approver', 'drafter'
+        'approver', 'drafter', 'designDetail'
        ));
     }
 
@@ -71,7 +71,8 @@ class DesignDetailController extends Controller
     public function data()
     {
         $design = Design::leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', 'design.id_kepala_gambar')
-            ->select('design.*', 'nama')
+            ->leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
+            ->select('design.*', 'nama', 'nama_proyek')
             ->orderBy('id_design', 'DESC')
             ->get();
 
@@ -83,11 +84,12 @@ class DesignDetailController extends Controller
                     <input type="checkbox" name="id_design[]" value="'. $design->id_design .'">
                 ';
             })
+            ->editColumn('id_proyek', function ($design) {
+                return $design->nama_proyek ?? '';
+            })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
-                $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
                 $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release</i></button>';        
-                $buttons .= '<button type="button" onclick="deleteData(`'. route('design_detail.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
                 $buttons .= '</div>';
         
                 return $buttons;
@@ -98,8 +100,8 @@ class DesignDetailController extends Controller
 
     public function dataModal()
     {
-        $design = Design::leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', 'design.id_kepala_gambar')
-            ->select('design.*', 'nama')
+        $design = DesignDetail::leftJoin('design', 'design.id_design', 'design_detail.id_design')
+            ->select('design_detail.*', 'nama_design')
             ->get();
 
         return datatables()
@@ -107,12 +109,15 @@ class DesignDetailController extends Controller
             ->addIndexColumn()
             ->addColumn('select_all', function ($design) {
                 return '
-                    <input type="checkbox" name="id_design[]" value="'. $design->id_design .'">
+                    <input type="checkbox" name="id_design_detail[]" value="'. $design->id_design_detail .'">
                 ';
+            })
+            ->editColumn('id_design', function ($design) {
+                return $design->nama_design ?? '';
             })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';                   
-                $buttons .= '<button type="button" onclick="pilihDesign(`'. route('design.pilihData', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat">Pilih</button>';
+                $buttons .= '<button type="button" onclick="deleteData(`'. route('design_detail.destroy', $design->id_design_detail) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
                 $buttons .= '</div>';
         
                 return $buttons;
@@ -121,86 +126,27 @@ class DesignDetailController extends Controller
             ->make(true);
     }
 
-    public function modalRef()
-    {
-        $design = Design::select('nama_design', 'id_design');
-        return view ('design.dwg', compact('design'));
-    }
-
-    public function pilihData($id)
-    {
-        $design = Design::find($id);
-        return response()->json($design);
-
-    }
-
-    public function tampilEdit($id)
-    {
-
-        $design = Design::find($id);
-
-        $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar');
-        $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
-        $userLoggedIn = Auth::user(); 
-        $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '2')->pluck('name', 'id');
-        $proyek = Proyek::where('status', 'open')->pluck('nama_proyek', 'id_proyek');
-        $konfigurasi = Konfigurasi::all()->pluck('nama_konfigurasi','id_konfigurasi');
-
-        return view('design.form1', compact('design', 'kepala', 'subsistem', 'approver', 'drafter', 'proyek',
-        'konfigurasi'));
-    }
-
-    public function storeModal(Request $request)
-    {
-        $design = Design::create($request->all());
-        $revisi->id_design = $design->id_design;
-        $revisi->id_revisi_design = $id;
-        $revisi->revisi = $design->revisi;
-        $revisi->save();
-
-        return response()->json(['message' => 'Data berhasil diupdate']);
-    }
-
-
 
         /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function store()
     {
+        $design_detail = DesignDetail::create($request->all());
 
-        $design = DesignDetail::findOrFail($request->id_design);
-        $design->save();
-
-        return response()->json(['message' => 'Data berhasil diupdate']);
-
-    }
-
-
-
-    public function store(Request $request)
-    {
-        $design = Design::create($request->all());
-    
-        // Cek apakah tanggal_refrensi diisi atau tidak
-        if ($request->filled('tanggal_refrensi')) {
-            $design->tanggal_prediksi = $request->tanggal_refrensi;
-        } else {
-            $design->tanggal_prediksi = $request->tanggal_prediksi;
-        }
-        $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
-
-        $design->save();
-    
         return response()->json('Data berhasil disimpan', 200);
     }
-
-
 
     /**
      * Display the specified resource.
@@ -209,13 +155,6 @@ class DesignDetailController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        $design = Design::find($id);
-
-        return response()->json($design);
-    }
-
-    public function showRef($id)
     {
         $design = Design::find($id);
 
@@ -233,50 +172,37 @@ class DesignDetailController extends Controller
 
   
     public function update(Request $request, $id)
+    {
+
+    }
+
+
+    public function updatex(Request $request, $id)
         {
             $design = Design::find($id);
-
-            // Cek apakah tanggal_refrensi diisi atau tidak
-            if ($request->filled('tanggal_refrensi')) {
-                $design->tanggal_prediksi = $request->tanggal_refrensi;
-            } else {
-                $design->tanggal_prediksi = $request->tanggal_prediksi;
-            }
-
-            $design->save();
-        
-
-            return response()->json(['message' => 'Data berhasil diupdate']);
-            
-        }
-    
-
-        public function updatex(Request $request, $id)
-        {
-            $design = Design::find($id);
+            $design->id_design =$request->id_design;
             $design->kode_design =$request->kode_design;
             $design->nama_design =$request->nama_design;
             $design->revisi = $request->revisi;
             $design->status = $request->status;
-            $design->save();
+            $design->prediksi_akhir = $request->prediksi_akhir;
+            $design->update();
         
-            $designDetail = new DesignDetail();
-            $designDetail->id_design = $design->id_design;
-            $designDetail->kode_design = $design->kode_design;
-            $designDetail->nama_design = $design->nama_design;
-            $designDetail->revisi = $design->revisi;
-            $designDetail->save();
+            $detail = new DesignDetail();
+            $detail->id_design = $design->id_design;
+            $detail->kode_design = $design->kode_design;
+            $detail->revisi = $design->revisi;
+            $detail->status = $design->status;
+            $detail->prediksi_akhir = $design->prediksi_akhir;
+            $detail->save();
     
-            return response()->json(['message' => 'Data telah diperbarui dan disimpan di design_detail']);
+            return response()->json(['message' => 'Data berhasil diupdate']);
         }
 
 
     public function tambah(Request $request, $id)
     {
-        $design = Design::find($id);
-        $design->tambah($request->all());
 
-        return response()->json('Data berhasil disimpan', 200);
     }
 
     /**
@@ -287,41 +213,24 @@ class DesignDetailController extends Controller
      */
     public function destroy($id)
     {
-        $design = Design::find($id);
+        $design = DesignDetail::find($id);
         $design->delete();
 
         return response(null, 204);
     }
 
 
-    public function deleteSelected(Request $request)
-    {
-        foreach ($request->id_design as $id) {
-        $design = Design::find($id);
-        $design->delete();
-        }
-
-        return response(null, 204);
-    }
-
-    public function cetakBarcode(Request $request)
-    {
-        $datadesign = array();
-        foreach ($request->id_design as $id) {
-            $design = Design::find($id);
-            $datadesign[] = $design;
-        }
-
-        $no  = 1;
-        $pdf = PDF::loadView('design.barcode', compact('datadesign', 'no'));
-        $pdf->setPaper('a4', 'landscape');
-        return $pdf->stream('design.pdf');
-    }
-
-    public function exportExcel()
+        public function importExcel(Request $request)
         {
-            $design = Design::all();
-            return Excel::download(new DesignExport($design), 'design.xlsx');
+            try {
+                $file = $request->file('file'); 
+                Excel::import(new designDetailImports, $file);
+        
+                return redirect()->route('design_detail.index')->with('success', 'Import data berhasil.');
+            } catch (\Exception $e) {
+                return redirect()->route('design_detail.index')->with('error', 'Import data gagal: ' . $e->getMessage() . ' Line: ' . $e->getLine());
+            }
         }
+    
 }
 
