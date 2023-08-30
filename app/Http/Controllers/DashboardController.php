@@ -86,9 +86,66 @@ class DashboardController extends Controller
 
         while (strtotime($tanggal_awal) <= strtotime($tanggal_akhir)) {
             $data_tanggal[] = (int) substr($tanggal_awal, 8, 2);
-
+        
             $dayOfWeek = date('N', strtotime($tanggal_awal));
-            $target = ($dayOfWeek >= 6) ? 0 : 8;
+            
+            // Periksa apakah hari ini adalah hari kerja atau akhir pekan
+            if ($dayOfWeek >= 6) {
+                // Jika hari Sabtu (6) atau Minggu (7), tambahkan 0 ke semua data
+                $target = 0;
+                $release_jam = 0;
+            } else {
+                // Jika hari kerja (Senin-Jumat), lakukan perhitungan seperti biasa
+                $target = 8;
+           
+
+            // Berdasarkan jam
+            $design_release_jam = Design::where('status', 'Release')
+            ->where(function ($query) use ($userId) {
+                $query->where('id_draft', $userId)
+                    ->orWhere('id_check', $userId)
+                    ->orWhere('id_approve', $userId);
+            })
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
+            ->sum(DB::raw('lembar * size'));
+
+            $design_open_jam = Design::where('status', 'Open')
+            ->where(function ($query) use ($userId) {
+                $query->where('id_draft', $userId)
+                    ->orWhere('id_check', $userId)
+                    ->orWhere('id_approve', $userId);
+            })
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
+            ->sum(DB::raw('lembar * size'));
+
+            $design_revisi_jam = Design::where('status', 'Proses Revisi')
+            ->where(function ($query) use ($userId) {
+                $query->where('id_draft', $userId)
+                    ->orWhere('id_check', $userId)
+                    ->orWhere('id_approve', $userId);
+            })
+            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
+            ->sum(DB::raw('lembar * size'));
+
+            $release_jam = ($jumlah_hari_kerja > 0) ? ($design_release_jam / $jumlah_hari_kerja) : 0;
+
+        }
+
+            $open_jam = $design_open_jam + $design_revisi_jam;
+            $data_open_jam [] += $open_jam;
+        
+            $data_release_jam[] = $release_jam;
+
+            $targets = $target;
+            $data_target[] = $targets;
+
+            $accumulated_closed += $data_release;
+            $accumulated_open += $data_open;
+            $accumulated_target += $data_target;
+        
+            $data_closed_curva[] = $accumulated_closed;
+            $data_open_curva[] = $accumulated_open;
+            $data_target_curva[] = $accumulated_target;
 
  //Normal OUtput
             $design_release = Design::where('status', 'Release')
@@ -123,54 +180,10 @@ class DashboardController extends Controller
         
             $release = $design_release;
             $data_release [] += $release;
-            
-// Berdasarkan jam
-            $design_release_jam = Design::where('status', 'Release')
-            ->where(function ($query) use ($userId) {
-                $query->where('id_draft', $userId)
-                    ->orWhere('id_check', $userId)
-                    ->orWhere('id_approve', $userId);
-            })
-            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
-            ->sum(DB::raw('lembar * size'));
-
-            $design_open_jam = Design::where('status', 'Open')
-            ->where(function ($query) use ($userId) {
-                $query->where('id_draft', $userId)
-                    ->orWhere('id_check', $userId)
-                    ->orWhere('id_approve', $userId);
-            })
-            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
-            ->sum(DB::raw('lembar * size'));
-
-            $design_revisi_jam = Design::where('status', 'Proses Revisi')
-            ->where(function ($query) use ($userId) {
-                $query->where('id_draft', $userId)
-                    ->orWhere('id_check', $userId)
-                    ->orWhere('id_approve', $userId);
-            })
-            ->whereBetween('created_at', [$tanggal_awal, $tanggal_akhir])
-            ->sum(DB::raw('lembar * size'));
-
-            $open_jam = $design_open_jam + $design_revisi_jam;
-            $data_open_jam [] += $open_jam;
-        
-            $release_jam = $design_release_jam / $jumlah_hari_kerja;
-            $data_release_jam[] = $release_jam;
-
-            $targets = $target;
-            $data_target[] = $targets;
-
-            $accumulated_closed += $data_release;
-            $accumulated_open += $data_open;
-            $accumulated_target += $data_target;
-        
-            $data_closed_curva[] = $accumulated_closed;
-            $data_open_curva[] = $accumulated_open;
-            $data_target_curva[] = $accumulated_target;
 
             $tanggal_awal = date('Y-m-d', strtotime("+1 day", strtotime($tanggal_awal)));
         }
+        
 
         $tanggal_awal = date('Y-m-01');
 
