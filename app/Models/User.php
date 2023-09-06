@@ -23,11 +23,9 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $table = 'users';
+    protected $primaryKey = 'id';
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -66,12 +64,12 @@ class User extends Authenticatable
 
     public function jabatan()
     {
-        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'bagian');
+        return $this->belongsTo(Jabatan::class, 'bagian', 'id_jabatan');
     }
 
     public function level()
     {
-        return $this->belongsTo(Level::class, 'id_level', 'level');
+        return $this->belongsTo(Level::class, 'level', 'id_level');
     }
 
     public function design()

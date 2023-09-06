@@ -13,11 +13,6 @@ class Pinjam extends Model
     protected $primaryKey = 'id_pinjam';
     protected $guarded = [];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'id', 'id_user');
-    }
-
     public function barang()
     {
         return $this->belongsTo(Barang::class, 'id_barang', 'id_barang');

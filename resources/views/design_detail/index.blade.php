@@ -93,6 +93,7 @@
 
 @includeIf('design_detail.form')
 @includeIf('design_detail.form3')
+@includeIf('design_detail.form4')
 @includeIf('design_detail.dwg')
 @endsection
 
@@ -225,6 +226,9 @@
             $('#modal-form3 [name=bobot_rev]').val(response.bobot_rev);
             $('#modal-form3 [name=size]').val(response.size);
             $('#modal-form3 [name=lembar]').val(response.lembar);
+
+            $('#modal-form3 [name=duplicate_status]').val(response.duplicate_status);
+            $('#modal-form3 [name=time_release_rev0]').val(response.time_release_rev0);
         })
         .fail((errors) => {
             console.error('Gagal mengambil data:', errors);
@@ -257,6 +261,66 @@ $('#modal-form3').validator().on('submit', function (e) {
 
     
 //-------------------------------------------------------------------------------------
+
+
+function editForm4(url) {
+    $('#modal-form4').modal('show');
+    $('#modal-form4 .modal-title').text('Release Design Drawing');
+
+    $('#modal-form4 form')[0].reset();
+    $('#modal-form4 form').attr('action', url);
+    $('#modal-form4 [name=_method]').val('put');
+    $('#modal-form4 [name=nama_design]').focus();
+
+    console.log('Mengirim permintaan GET ke URL: ' + url);
+
+
+    $.get(url)
+        .done((response) => {
+            console.log('Response dari permintaan GET:', response);
+            $('#modal-form4 [name=id_design]').val(response.id_design);
+            $('#modal-form4 [name=nama_design]').val(response.nama_design);
+            $('#modal-form4 [name=kode_design]').val(response.kode_design);
+            $('#modal-form4 [name=revisi]').val(response.revisi);
+            $('#modal-form4 [name=prediksi_akhir]').val(response.prediksi_akhir);
+
+            $('#modal-form4 [name=id_draft]').val(response.id_draft);
+            $('#modal-form4 [name=id_check]').val(response.id_check);
+            $('#modal-form4 [name=id_approve]').val(response.id_approve);
+            $('#modal-form4 [name=jenis]').val(response.jenis);
+            $('#modal-form4 [name=pemilik]').val(response.pemilik);
+            $('#modal-form4 [name=bobot_rev]').val(response.bobot_rev);
+            $('#modal-form4 [name=size]').val(response.size);
+            $('#modal-form4 [name=lembar]').val(response.lembar);
+        })
+        .fail((errors) => {
+            console.error('Gagal mengambil data:', errors);
+
+            alert('Tidak dapat menampilkan data');
+            return;
+        });
+    }
+
+
+$('#modal-form4').validator().on('submit', function (e) {
+    if (!e.preventDefault()) {
+        console.log('Mengirim permintaan POST ke URL: ' + $('#modal-form4 form').attr('action'));
+
+        $.post($('#modal-form4 form').attr('action'), $('#modal-form4 form').serialize())
+            .done((response) => {
+                console.log('Response dari permintaan POST:', response);
+
+                $('#modal-form4').modal('hide');
+                table.ajax.reload();
+            })
+            .fail((errors) => {
+                console.error('Gagal menyimpan data:', errors);
+
+                alert('Tidak dapat menyimpan data | Periksa kembali :)');
+                return;
+            });
+    }
+});
 
 
 </script>

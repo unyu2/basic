@@ -25,6 +25,9 @@ class userExport implements FromCollection, WithHeadings, WithMapping
             'level',
             'bagian',
             'status_karyawan',
+            'kompetensi',
+            'training',
+            'sertifikasi',
         ];
     }
 
@@ -39,6 +42,9 @@ class userExport implements FromCollection, WithHeadings, WithMapping
             $row->level,
             $row->bagian,
             $row->status_karyawan,
+            $row->kompetensi,
+            $row->training,
+            $row->sertifikasi,
         ];
     }
 }

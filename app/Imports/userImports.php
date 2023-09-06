@@ -13,16 +13,18 @@ class UserImports implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         try {
-            return new KepalaGambar([
+            return new User([
                 'id' => $row['id'],
                 'name' => $row['name'],
                 'email' => $row['email'],
-                'email_verified_at' => $this->transformDate($row['email_verified_at']),
                 'password' => $row['password'],
                 'level' => $row['level'],
                 'nip' => $row['nip'],
                 'bagian' => $row['bagian'],
                 'status_karyawan' => $row['status_karyawan'],
+                'kompetensi' => $row['kompetensi'],
+                'training' => $row['training'],
+                'sertifikasi' => $row['sertifikasi'],
             ]);
         } catch (\Exception $e) {
             // Tangani jika terjadi kesalahan konversi tanggal atau data lainnya

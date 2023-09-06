@@ -14,13 +14,52 @@ class ChartJadwalController extends Controller
 {
     public function index()
     {
+        
         $proyek = Proyek::where('status', 'Open')->pluck('nama_proyek', 'id_proyek');
     
+        $engineerings = ['MES', 'EES', 'QEN', 'PEN'];
+        $countEngineering = [];
+    
+        foreach ($engineerings as $engineering) {
+            $countEng = Design::whereIn('id_proyek', $proyek->keys())
+                ->whereIn('id_kepala_gambar', function ($query) use ($engineering) {
+                    $query->select('kepala_gambar.id_kepala_gambar')
+                        ->from('kepala_gambar')
+                        ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                        ->where('jenis', 'Doc')
+                        ->where('status', 'Open')
+                        ->where('jabatan.kode_unit', '311.' . $engineering);
+                })
+                ->count();
+    
+            $countEngineering[$engineering] = $countEng;
+        }
+    
+        $designs = ['BWD', 'CED', 'MID', 'EDE'];
+        $countDesign = [];
+    
+        foreach ($designs as $design) {
+            $countDes = Design::whereIn('id_proyek', $proyek->keys())
+                ->whereIn('id_kepala_gambar', function ($query) use ($design) {
+                    $query->select('kepala_gambar.id_kepala_gambar')
+                        ->from('kepala_gambar')
+                        ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                        ->where('jenis', 'Doc')
+                        ->where('status', 'Open')
+                        ->where('jabatan.kode_unit', '312.' . $design);
+                })
+                ->count();
+    
+            $countDesign[$design] = $countDes;
+        }
+
         $design = Design::where('jenis', 'Doc')->whereIn('id_proyek', $proyek->keys())->get();
     
-        return view('charts.chartsJadwal', compact('design', 'proyek'));
+        return view('charts.chartsJadwal', compact('design', 'proyek', 'countEngineering', 'countDesign'));
     }
+    
 
+    
     public function chartMes()
     {
         $proyek = Proyek::where('status', 'Open')->pluck('nama_proyek', 'id_proyek');

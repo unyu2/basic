@@ -46,6 +46,7 @@ class CreateDesignTable extends Migration
             $table->integer('bobot_rev')->nullable();
 
             $table->string('status')->nullable();
+            $table->string('duplicate_status')->nullable();
             $table->integer('prosentase')->nullable();
             $table->string('size')->nullable();
             $table->integer('lembar')->nullable();
@@ -55,6 +56,8 @@ class CreateDesignTable extends Migration
             $table->integer('id_draft')->nullable();
             $table->integer('id_check')->nullable();
             $table->integer('id_approve')->nullable();
+            
+            $table->date('time_release_rev0')->nullable();
 
             $table->timestamps();
         });

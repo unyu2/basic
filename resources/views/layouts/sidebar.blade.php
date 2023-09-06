@@ -38,6 +38,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('chartsCurva') }}">
+                    <i class="fa fa-cube"></i> <span>Chart S-Curve</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('chartsJadwal') }}">
                     <i class="fa fa-cube"></i> <span>Chart Jadwal</span>
                 </a>

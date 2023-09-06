@@ -43,6 +43,7 @@ use App\Http\Controllers\{
     ChartController,
     ChartDesignController,
     ChartJadwalController,
+    ChartCurvaController,
     DwgController,
     DesignController,
     DinasController,
@@ -240,6 +241,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('/design_detail/data', [DesignDetailController::class, 'data'])->name('design_detail.data');
         Route::get('design_detail/pilihData/{id}', [DesignDetailController::class, 'pilihData'])->name('design_detail.pilihData');
         Route::put('/design_detail/{id}', [DesignDetailController::class, 'updatex'])->name('design_detail.updatex');
+        Route::put('/design_detail/{id}/update', [DesignDetailController::class, 'update'])->name('design_detail.update');
         Route::post('/design_detail/import', [DesignDetailController::class, 'importExcel'])->name('design_detail.import');
         Route::post('/design_detail/delete-selected', [DesignDetailController::class, 'deleteSelected'])->name('design_detail.delete_selected');
         Route::resource('/design_detail', DesignDetailController::class);
@@ -301,7 +303,12 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::post('/charts/chartDesign/fetch_data_qes', [ChartDesignController::class, 'fetch_data_qes']);
         Route::post('/charts/chartDesign/fetch_data_qes_bobot', [ChartDesignController::class, 'fetch_data_qes_bobot']);
 
-        Route::post('/charts/chartDesign/fetch_data_curvaS', [ChartDesignController::class, 'fetch_data_curvaS']);
+        Route::get('/charts/chartsCurva', [ChartCurvaController::class, 'index'])->name('chartsCurva');
+        Route::post('/charts/chartCurva/fetch_data_curvaS_sample_dua', [ChartCurvaController::class, 'fetch_data_curvaS_sample_dua']);
+        Route::post('/charts/chartCurva/fetch_data_curvaS_sample', [ChartCurvaController::class, 'fetch_data_curvaS_sample']);
+        Route::post('/charts/chartCurva/fetch_data_combined', [ChartCurvaController::class, 'fetch_data_combined']);
+
+        Route::post('/charts/chartCurva/getSData', [ChartCurvaController::class, 'getSData']);
 
         Route::get('/charts/chartsJadwal', [ChartJadwalController::class, 'index'])->name('chartsJadwal');
         Route::get('/charts/chartsMes', [ChartJadwalController::class, 'chartMes'])->name('chartsMes');

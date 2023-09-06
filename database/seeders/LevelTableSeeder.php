@@ -17,15 +17,15 @@ class LevelTableSeeder extends Seeder
         DB::table('level')->insert([
             [
                 'id_level' => '2',
-                'nama_level' => 'Staff QaQc',
+                'nama_level' => 'Staff Tekno',
             ],
             [
                 'id_level' => '3',
-                'nama_level' => 'Manager QaQc',
+                'nama_level' => 'Manager Tekno',
             ],
             [
                 'id_level' => '4',
-                'nama_level' => 'Senior Manager QaQc',
+                'nama_level' => 'Senior Manager Tekno',
             ],
             [
                 'id_level' => '5',
@@ -41,7 +41,7 @@ class LevelTableSeeder extends Seeder
             ],
             [
                 'id_level' => '8',
-                'nama_level' => 'Supervisor',
+                'nama_level' => 'Supervisor QaQc',
             ],
             [
                 'id_level' => '9',
@@ -53,23 +53,19 @@ class LevelTableSeeder extends Seeder
             ],
             [
                 'id_level' => '11',
-                'nama_level' => 'Staff Reka',
+                'nama_level' => 'Staff QaQc',
             ],
             [
                 'id_level' => '12',
-                'nama_level' => 'Manager Reka',
+                'nama_level' => 'Manager QaQc',
             ],
             [
                 'id_level' => '13',
-                'nama_level' => 'Staff Teknologi',
+                'nama_level' => 'Spesialis Tekno',
             ],
             [
                 'id_level' => '14',
-                'nama_level' => 'Manager Teknologi',
-            ],
-            [
-                'id_level' => '15',
-                'nama_level' => 'Senior Manager Teknologi',
+                'nama_level' => 'Supervisor Tekno',
             ],
         ]);
     }

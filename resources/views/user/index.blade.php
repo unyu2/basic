@@ -9,6 +9,18 @@
     <li class="active">Daftar User</li>
 @endsection
 
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 @section('content')
 <div class="row">
     <div class="col-lg-12">
@@ -30,8 +42,8 @@
                 </div>
             </div>
             @endif
-                <button onclick="addForm('{{ route('user.store') }}')" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Tambah</button>
-                <a href="{{ route('user.export') }}" class="btn btn-primary btn-xs btn-flat"><i class="fa fa-file-excel"></i> Export Excel</a>
+                <button onclick="addForm('{{ route('user.store') }}')" class="btn btn-success btn btn-flat"><i class="fa fa-plus-circle"></i> Tambah</button>
+                <a href="{{ route('user.export') }}" class="btn btn-primary btn btn-flat"><i class="fa fa-file-excel"></i> Export Excel</a>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-stiped table-bordered">
@@ -40,6 +52,10 @@
                         <th>Refrensi ID</th>
                         <th>Nama</th>
                         <th>Email</th>
+                        <th>Bagian</th>
+                        <th>Kompetensi</th>
+                        <th>Sertifikasi</th>
+                        <th>Training</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
@@ -69,6 +85,10 @@
                 {data: 'id'},
                 {data: 'name'},
                 {data: 'email'},
+                {data: 'bagian'},
+                {data: 'kompetensi'},
+                {data: 'sertifikasi'},
+                {data: 'training'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });
@@ -118,6 +138,12 @@
                 $('#modal-form [name=nip]').val(response.nip);
                 $('#modal-form [name=bagian]').val(response.bagian);
                 $('#modal-form [name=level]').val(response.level);
+                $('#modal-form [name=kompetensi]').val(response.kompetensi);
+                $('#modal-form [name=sertifikasi]').val(response.sertifikasi);
+                $('#modal-form [name=training]').val(response.training);
+                $('#modal-form [name=status_karyawan]').val(response.status_karyawan);
+
+
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');

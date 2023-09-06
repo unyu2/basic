@@ -965,93 +965,95 @@ $(document).ready(function() {
     }
 
     function drawCurvasChart(chart_data, chart_main_title) {
-        if (!chart_data || chart_data.length === 0) {
-            // Handle the case when chart_data is undefined or empty
-            console.error('No data available.');
-            return;
-        }
-
-        let jsonData = chart_data;
-
-        let data = new google.visualization.DataTable();
-        data.addColumn('date', 'Tanggal');
-        data.addColumn('number', 'Total Release');
-        data.addColumn('number', 'Total Revisi');
-        data.addColumn('number', 'Total Prediksi');
-
-        let totalReleaseData = {};
-        let totalRevisiData = {};
-        let totalPrediksiData = {};
-
-        $.each(jsonData, (i, jsonData) => {
-            let tanggal = new Date(jsonData.created_at);
-            let totalRelease = parseFloat(jsonData.totalCountRelease);
-            let totalRevisi = parseFloat(jsonData.totalCountRevisi);
-            let totalPrediksi = parseFloat(jsonData.totalCountPrediksi);
-
-            totalReleaseData[tanggal] = totalRelease;
-            totalRevisiData[tanggal] = totalRevisi;
-            totalPrediksiData[tanggal] = totalPrediksi;
-        });
-
-        let combinedData = [];
-
-        for (let tanggal in totalReleaseData) {
-            let totalRelease = totalReleaseData[tanggal];
-            let totalRevisi = totalRevisiData[tanggal];
-            let totalPrediksi = totalPrediksiData[tanggal] || 0;
-
-            combinedData.push([new Date(tanggal), totalRelease, totalRevisi, totalPrediksi]);
-        }
-
-        // Sort the data by tanggal in ascending order
-        combinedData.sort((a, b) => a[0] - b[0]);
-
-        // Add the combined data to the DataTable
-        data.addRows(combinedData);
-
-        // Set chart options
-        var options = {
-            title: chart_main_title,
-            hAxis: {
-                title: "Tanggal",
-                format: 'MMM yyyy',
-                viewWindow: {
-                    min: new Date(2020, 0, 1) // Set the minimum date on the horizontal axis
-                }
-            },
-            vAxis: {
-                title: "Output"
-            },
-            colors: ['red', 'green', 'blue'],
-            chartArea: {
-                width: '80%',
-                height: '80%'
-            }
-        };
-
-        // Instantiate and draw the chart
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div3'));
-        chart.draw(data, options);
+    if (!chart_data || chart_data.length === 0) {
+        // Handle the case when chart_data is undefined or empty
+        console.error('No data available.');
+        return;
     }
 
-    function loadCurvasChartData(id_proyek, title) {
-        const temp_title = title + ' ' + id_proyek;
-        $.ajax({
-            url: '/charts/chartDesign/fetch_data_curvaS',
-            method: "POST",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                id_proyek: id_proyek
-            },
-            dataType: "JSON",
-            success: function(data) {
-                console.log(data); // Tambahkan baris ini
-                drawCurvasChart(data, temp_title);
-            }
-        });
-        console.log(`Proyek: ${id_proyek}`);
+    let jsonData = chart_data;
+
+    let data = new google.visualization.DataTable();
+    data.addColumn('date', 'Tanggal');
+    data.addColumn('number', 'Total Target');
+    data.addColumn('number', 'Total Realisasi');
+
+    let totalTargetData = {};
+    let totalRealisasiData = {};
+
+    $.each(jsonData, (i, jsonData) => {
+        let tanggal = new Date(jsonData.prediksi_akhir);
+        let totalTarget = parseFloat(jsonData.garis_target);
+        let totalRealisasi = parseFloat(jsonData.garis_realisasi);
+
+        totalTargetData[tanggal] = totalTarget;
+        totalRealisasiData[tanggal] = totalRealisasi;
+    });
+
+    let combinedData = [];
+
+    for (let tanggal in totalTargetData) {
+        let totalTarget = totalTargetData[tanggal];
+        let totalRealisasi = totalRealisasiData[tanggal];
+
+        combinedData.push([new Date(tanggal), totalTarget, totalRealisasi]);
     }
+
+    // Sort the data by tanggal in ascending order
+    combinedData.sort((a, b) => a[0] - b[0]);
+
+    // Add the combined data to the DataTable
+    data.addRows(combinedData);
+
+    // Set chart options
+    var options = {
+        title: chart_main_title,
+        hAxis: {
+            title: "Tanggal",
+            format: 'MMM yyyy',
+            viewWindow: {
+                min: new Date(2023, 0, 1) // Set the minimum date on the horizontal axis
+            }
+        },
+        vAxis: {
+            title: "Output"
+        },
+        series: {
+            0: { color: 'red', strokeColor: 'red' }, // Garis target dengan warna merah
+            1: { color: 'green', strokeColor: 'green' }, // Garis realisasi dengan warna hijau
+        },
+        chartArea: {
+            width: '80%',
+            height: '80%'
+        }
+    };
+
+    // Instantiate and draw the chart
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div3'));
+    chart.draw(data, options);
+}
+
+
+function loadCurvasChartData(id_proyek, title) {
+    const temp_title = title + ' ' + id_proyek;
+    $.ajax({
+        url: '/charts/chartDesign/fetch_data_curvaS',
+        method: "POST",
+        data: {
+            "_token": "{{ csrf_token() }}",
+            id_proyek: id_proyek
+        },
+        dataType: "JSON"
+    })
+    .done(function(data) {
+        console.log(data); // Tampilkan data yang berhasil dimuat
+        drawCurvasChart(data, temp_title);
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error("AJAX request failed:", textStatus, errorThrown); // Tampilkan pesan error jika ada kesalahan
+    });
+    console.log(`Proyek: ${id_proyek}`);
+}
 </script>
 
 

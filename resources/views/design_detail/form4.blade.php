@@ -4,7 +4,7 @@
     }
 </style>
 
-<div class="modal fade" id="modal-form3" tabindex="-1" role="dialog" aria-labelledby="modal-form3">
+<div class="modal fade" id="modal-form4" tabindex="-1" role="dialog" aria-labelledby="modal-form4">
     <div class="modal-dialog modal-lg" role="document">
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data" data-toggle="validator">
             @csrf
@@ -74,17 +74,17 @@
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
-                <div class="form-group row hidden-form">
+                <div class="form-group row">
                         <label for="duplicate_status" class="col-lg-1 col-lg-offset-2 control-label">Duplicate Status</label>
                             <div class="col-lg-6">
-                                <input  name="duplicate_status" id="duplicate_status" class="form-control" required autofocus readonly>
+                                <input value="Release" placeholder="Release"  name="duplicate_status" id="duplicate_status" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
-                <div class="form-group row hidden-form">
+                <div class="form-group row">
                         <label for="time_release_rev0" class="col-lg-1 col-lg-offset-2 control-label">Time release Rev.0</label>
                             <div class="col-lg-6">
-                                <input name="time_release_rev0" id="time_release_rev0" class="form-control" required autofocus readonly>
+                                <input value="{{now()}}"  name="time_release_rev0" id="time_release_rev0" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
@@ -138,7 +138,7 @@
                     
                 </div>
                 <div class="modal-footer">
-                    <button onclick="redirectTo" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Release Dokumen</button>
+                    <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Release Dokumen</button>
                     <button type="button" class="btn btn-sm btn-flat btn-warning" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Batal</button>
                 </div>
             </div>

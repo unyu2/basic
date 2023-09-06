@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Jabatan;
 use App\Models\Level;
 use App\Exports\userExport;
-use App\Exports\userImports;
+use App\Imports\userImports;
 
 
 class UserController extends Controller
@@ -31,11 +31,20 @@ class UserController extends Controller
 
     public function data()
     {
-        $user = User::isNotAdmin()->orderBy('id', 'desc')->get();
+  //      $user = User::isNotAdmin()->orderBy('id', 'desc')->get();
+  $user = User::leftJoin('jabatan', 'users.bagian', '=', 'jabatan.id_jabatan')
+  ->leftJoin('level', 'users.level', '=', 'level.id_level')
+  ->select('users.*', 'nama_level', 'nama_jabatan')
+  ->isNotAdmin()
+  ->orderBy('users.id', 'desc')
+  ->get();
 
         return datatables()
             ->of($user)
             ->addIndexColumn()
+            ->editColumn('bagian', function ($user) {
+                return $user->jabatan->nama_jabatan ?? '';
+            })
             ->addColumn('aksi', function ($user) {
                 return '
                 <div class="btn-group">
@@ -71,6 +80,9 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->level = $request->level;
+        $user->kompetensi = $request->kompetensi;
+        $user->sertifikasi = $request->sertifikasi;
+        $user->training = $request->training;
         $user->nip = $request->nip;
         $user->bagian = $request->bagian;
         $user->status_karyawan = $request->status_karyawan;
@@ -117,6 +129,9 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->bagian = $request->bagian;
+        $user->kompetensi = $request->kompetensi;
+        $user->sertifikasi = $request->sertifikasi;
+        $user->training = $request->training;
         $user->level = $request->level;
         $user->nip = $request->nip;
         if ($request->has('password') && $request->password != "") 
@@ -178,24 +193,20 @@ class UserController extends Controller
     public function importExcel(Request $request)
     {
         try {
-            $file = $request->file('file'); // Ambil file Excel dari request
+            $file = $request->file('file');
+                Excel::import(new userImports, $file);
     
-            // Pastikan Anda sudah membuat class Import yang sesuai dengan skema impor Anda
-            Excel::import(new userImports, $file);
-    
-            // Redirect ke halaman index dengan pesan sukses
-            return redirect()->route('design.index')->with('success', 'Import data berhasil.');
+            return redirect()->route('user.index')->with('success', 'Import data berhasil.');
         } catch (\Exception $e) {
-            // Tampilkan pesan error yang lebih rinci
-            return redirect()->route('design.index')->with('error', 'Import data gagal: ' . $e->getMessage() . ' Line: ' . $e->getLine());
+            return redirect()->route('user.index')->with('error', 'Import data gagal: ' . $e->getMessage() . ' Line: ' . $e->getLine());
         }
     }
 
     public function exportExcel()
     {
-        $user = User::leftJoin('jabatan', 'jabatan.id_jabatan', '=', 'users.bagian')
-        ->leftjoin('level', 'level.id_level', '=', 'users.level')
-        ->select('users.*', 'jabatan.nama_jabatan', 'level.nama_level')
+        $user = User::leftJoin('jabatan', 'users.bagian', '=', 'jabatan.id_jabatan')
+        ->leftJoin('level', 'users.level', '=', 'level.id_level')
+        ->select('users.*', 'nama_level', 'nama_jabatan')
         ->get();
         return Excel::download(new userExport($user), 'Data_User.xlsx');
     }

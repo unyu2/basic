@@ -89,6 +89,7 @@ class DesignDetailController extends Controller
             })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
+                $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev.0</i></button>';        
                 $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release</i></button>';        
                 $buttons .= '</div>';
         
@@ -173,9 +174,48 @@ class DesignDetailController extends Controller
   
     public function update(Request $request, $id)
     {
+        $design = Design::find($id);
+        $design->id_design =$request->id_design;
+        $design->kode_design =$request->kode_design;
+        $design->nama_design =$request->nama_design;
+        $design->revisi = $request->revisi;
+        $design->status = $request->status;
+        $design->duplicate_status = $request->duplicate_status;
+        $design->prediksi_akhir = $request->prediksi_akhir;
 
+        $design->id_draft = $request->id_draft;
+        $design->id_check = $request->id_check;
+        $design->id_approve = $request->id_approve;
+        $design->jenis = $request->jenis;
+        $design->pemilik = $request->pemilik;
+        $design->bobot_rev = $request->bobot_rev;
+        $design->size = $request->size;
+        $design->lembar = $request->lembar;
+
+        $design->time_release_rev0 = $request->time_release_rev0;
+
+        $design->save();
+    
+        $detail = new DesignDetail();
+        $detail->id_design = $design->id_design;
+        $detail->kode_design = $design->kode_design;
+        $detail->revisi = $design->revisi;
+        $detail->status = $design->status;
+        $detail->prediksi_akhir = $design->prediksi_akhir;
+
+        $detail->id_draft = $design->id_draft;
+        $detail->id_check = $design->id_check;
+        $detail->id_approve = $design->id_approve;
+        $detail->jenis = $design->jenis;
+        $detail->pemilik = $design->pemilik;
+        $detail->bobot_rev = $design->bobot_rev;
+        $detail->size = $design->size;
+        $detail->lembar = $design->lembar;
+
+        $detail->save();
+
+        return response()->json(['message' => 'Data berhasil diupdate']);
     }
-
 
     public function updatex(Request $request, $id)
         {

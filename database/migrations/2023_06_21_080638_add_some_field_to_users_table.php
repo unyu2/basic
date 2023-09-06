@@ -29,7 +29,15 @@ class AddSomeFieldToUsersTable extends Migration
             $table->string('status_karyawan')
                   ->nullable()
                   ->after('bagian');
-                  
+            $table->string('kompetensi')
+                  ->nullable()
+                  ->after('status_karyawan');
+            $table->string('sertifikasi')
+                  ->nullable()
+                  ->after('kompetensi');
+            $table->string('training')
+                  ->nullable()
+                  ->after('sertifikasi');
         });
     }
 

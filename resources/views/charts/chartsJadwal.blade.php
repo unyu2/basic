@@ -10,11 +10,14 @@ Overall Design & Engineering Schedule
 @endsection
 
 <style>
-.custom-btn {
-    font-size: 10em; /* Ukuran teks 4 kali lipat */
-    padding: 200px 400px; /* Atur padding sesuai kebutuhan */
-    /* Tambahan gaya sesuai preferensi Anda */
-}
+    .custom-btn {
+        font-size: 10em;
+        padding: 200px 400px;
+    }
+
+    .black-text {
+        color: #000000;
+    }
 </style>
 
 @section('content')
@@ -30,7 +33,7 @@ Overall Design & Engineering Schedule
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-teal">
                         <div class="inner">
-                            <h3>150</h3>
+                            <h3 class="black-text">{{ $countEngineering['MES'] }} Task Open</h3>
                             <p>Mechanical Engineering System</p>
                         </div>
                         <div class="icon inner">
@@ -42,7 +45,7 @@ Overall Design & Engineering Schedule
                 <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-purple">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3 class="black-text">{{ $countEngineering['EES'] }} Task Open</h3>
                         <p>	Electrical Engineering System</p>
                     </div>
                     <div class="icon inner">
@@ -54,7 +57,7 @@ Overall Design & Engineering Schedule
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-orange">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3 class="black-text">{{ $countEngineering['QEN'] }} Task Open</h3>
                         <p>Quality Engineering</p>
                     </div>
                     <div class="icon inner">
@@ -66,7 +69,7 @@ Overall Design & Engineering Schedule
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-maroon">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3 class="black-text">{{ $countEngineering['PEN'] }} Task Open</h3>
                         <p>Product Engineering</p>
                     </div>
                     <div class="icon inner">
@@ -82,7 +85,7 @@ Overall Design & Engineering Schedule
                 <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3 class="black-text">{{ $countDesign['EDE'] }} Task Open</h3>
                         <p>	Electrical Design</p>
                     </div>
                     <div class="icon inner">
@@ -94,7 +97,7 @@ Overall Design & Engineering Schedule
                 <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-gray">
                     <div class="inner">
-                        <h3>150</h3>
+                    <h3 class="black-text">{{ $countDesign['MID'] }} Task Open</h3>
                         <p>	Mechanical & Interior Design</p>
                     </div>
                     <div class="icon inner">
@@ -106,7 +109,7 @@ Overall Design & Engineering Schedule
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-primary">
                     <div class="inner">
-                        <h3>150</h3>
+                    <h3 class="black-text">{{ $countDesign['CED'] }} Task Open</h3>
                         <p>	Carbody Design</p>
                     </div>
                     <div class="icon inner">
@@ -118,7 +121,7 @@ Overall Design & Engineering Schedule
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>150</h3>
+                    <h3 class="black-text">{{ $countDesign['BWD'] }} Task Open</h3>
                         <p>	Bogie & Wagon Design</p>
                     </div>
                     <div class="icon inner">
