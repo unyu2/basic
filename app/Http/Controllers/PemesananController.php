@@ -21,8 +21,9 @@ class PemesananController extends Controller
 
     public function data()
     {
-        $pemesanan = Pemesanan::leftJoin('member', 'member.id_member', 'pemesanan.id_member')
+        $pemesanan = Member::leftJoin('member', 'member.id_member', 'pemesanan.id_member')
         ->select('pemesanan.*', 'nama')
+        ->orderBy()
         ->get();
 
         return datatables()
@@ -41,8 +42,7 @@ class PemesananController extends Controller
                 return tanggal_indonesia($pemesanan->created_at, false);
             })
             ->addColumn('kode_member', function ($pemesanan) {
-                $member = $pemesanan->member->kode_member ?? '';
-                return '<span class="label label-success">'. $member .'</spa>';
+                return $pemesanan->member->kode_member ?? '';
             })
             ->editColumn('diskon', function ($pemesanan) {
                 return $pemesanan->diskon . '%';

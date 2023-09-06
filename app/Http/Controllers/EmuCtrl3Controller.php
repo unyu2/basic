@@ -22,9 +22,9 @@ class EmuCtrl3Controller extends Controller
     {
        $dmu = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
        ->select('dmu.*', 'nama_subpengujian', 'nama_dmu')
-      ->get();
+       ->get();
 
-      $emu = Emu::orderBy('id_emu', 'asc')->get();
+       $emu = Emu::orderBy('id_emu', 'asc')->get();
 
         return view('emu_ctrl3.index', compact('dmu', 'emu'));
     }
@@ -32,12 +32,12 @@ class EmuCtrl3Controller extends Controller
     public function data()
     {
         $emu = Emu::leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
-            ->select('emu.*', 'nama_dmu')
+            ->leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
+            ->leftJoin('proyek', 'proyek.id_proyek', 'dmu.id_proyek')
+            ->leftJoin('users', 'users.id', 'emu.id_user')
+            ->select('emu.*', 'nama_dmu', 'nama_subpengujian', 'nama_proyek', 'name')
+            ->orderBy('created_at', 'desc')
             ->get();
-            $emuss = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
-            ->select('dmu.*', 'nama_subpengujian')
-            ->get();
-            $emus = Emu::with('user')->orderBy('id_emu', 'asc')->get();
 
         return datatables()
             ->of($emu)
@@ -56,12 +56,12 @@ class EmuCtrl3Controller extends Controller
             ->addColumn('nama_proyek', function ($emu) {
                 return  $emu->nama_proyek ;
             })
-            ->addColumn('id_subpengujian', function ($emuss) {
-                $emu = $emuss->subpengujian->nama_subpengujian ?? '';
+            ->addColumn('id_subpengujian', function ($emu) {
+                $emu = $emu->subpengujian->nama_subpengujian ?? '';
                 return $emu;
             })
-            ->editColumn('id_user', function ($emus) {
-                return $emus->user->name ?? '';
+            ->editColumn('id_user', function ($emu) {
+                return $emu->user->name ?? '';
             })
             ->addColumn('id_dmu', function ($emu) {
                 return  $emu->nama_dmu;
@@ -114,16 +114,13 @@ class EmuCtrl3Controller extends Controller
      */
     public function show($id)
     {
-        
         $dmu = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
         ->select('dmu.*', 'nama_subpengujian', 'nama_dmu', 'a1')
-       ->get();
+        ->get();
+
         $emu = Emu::with('dmu')->where('id_emu', $id)->find($id);
 
-
- 
-
-      return response()->json($emu);
+        return response()->json($emu);
     }
 
     /**
@@ -146,13 +143,12 @@ class EmuCtrl3Controller extends Controller
      */
     public function update(Request $request, $id)
     {
-        //$emu = Emu::find($id);
         $emu = Emu::with('dmu')->where('id_emu', $id)->find($id);
 
         $emu->update($request->all());
         $emu->id_users = null;
-        return response()->json('Data berhasil disimpan', 200);
 
+        return response()->json('Data berhasil disimpan', 200);
     }
 
     /**

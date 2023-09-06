@@ -25,6 +25,7 @@ class SubsistemController extends Controller
     {
         $subsistem = Subsistem::leftJoin('sistem', 'sistem.id_sistem', 'subsistem.id_sistem')
             ->select('subsistem.*', 'nama_sistem')
+            ->orderBy('nama_subsistem', 'ASC')
             ->get();
 
         return datatables()

@@ -18,95 +18,79 @@ class EmuController extends Controller
 {
     public function index()
     {
+        $emuss = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
+        ->select('dmu.*', 'nama_subpengujian', 'nama_dmu')
+        ->get();
 
-  $emuss = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
-  ->select('dmu.*', 'nama_subpengujian', 'nama_dmu')
-  ->get();
-
-  $emus = Emu::leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
-  ->select('emu.*', 'nama_dmu')
-  ->get();
-
-  $x1 = Proyek::all()->pluck('nama_proyek','id_proyek');
-  $x2 = Produk::all()->pluck('komat','id_produk');
-  $x3 = Car::all()->pluck('nama_car','id_car');
-
-  $r1= Dmu::where('id_subpengujian','4')->get();
-  $r2= Dmu::where('id_subpengujian','5')->get();
-  $r3= Dmu::where('id_subpengujian','6')->get();
-  $r4= Dmu::where('id_subpengujian','7')->get();
-  $r5= Dmu::where('id_subpengujian','8')->get();
-  $r6= Dmu::where('id_subpengujian','9')->get();
-  $r7= Dmu::where('id_subpengujian','10')->get();
-
-        return view('emu.index', compact('emuss','x1','x2','emus', 'x3', 'r1','r2','r3','r4','r5','r6','r7'));
-    }
-
-
-
-    
-    public function data()
-    {
         $emus = Emu::leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
         ->select('emu.*', 'nama_dmu')
         ->get();
-        $emuss = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
-        ->select('dmu.*', 'nama_subpengujian')
-        ->get();
-        $emusss = Dmu::leftJoin('proyek', 'proyek.id_proyek', 'dmu.id_proyek')
-        ->select('dmu.*', 'nama_proyek')
-        ->get();
 
-        $subpengujian = Subpengujian::orderBy('id_subpengujian', 'desc')->get();
-        $subpengujians = Subpengujian::all()->pluck('nama_subpengujian', 'id_dmu');
+        $x1 = Proyek::all()->pluck('nama_proyek','id_proyek');
+        $x2 = Produk::all()->pluck('komat','id_produk');
+        $x3 = Car::all()->pluck('nama_car','id_car');
 
-        $emu = Emu::orderBy('id_emu', 'desc')->get();
-        $dmu = Dmu::orderBy('id_dmu')->get();
+        $r1= Dmu::where('id_subpengujian','4')->get();
+        $r2= Dmu::where('id_subpengujian','5')->get();
+        $r3= Dmu::where('id_subpengujian','6')->get();
+        $r4= Dmu::where('id_subpengujian','7')->get();
+        $r5= Dmu::where('id_subpengujian','8')->get();
+        $r6= Dmu::where('id_subpengujian','9')->get();
+        $r7= Dmu::where('id_subpengujian','10')->get();
 
+        return view('emu.index', compact('emuss','x1','x2','emus', 'x3', 'r1','r2','r3','r4','r5','r6','r7'));
+    }
+    
+    public function data()
+    {
+        $emus = Emu::leftJoin('dmu', 'dmu.id_dmu', '=', 'emu.id_dmu')
+            ->leftJoin('subpengujian', 'subpengujian.id_subpengujian', '=', 'dmu.id_subpengujian')
+            ->leftJoin('proyek', 'proyek.id_proyek', '=', 'dmu.id_proyek')
+            ->select('emu.*', 'nama_dmu', 'nama_subpengujian', 'nama_proyek')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
         return datatables()
-            ->of($emu)
+            ->of($emus)
             ->addIndexColumn()
-            ->addColumn('total_item', function ($emu) {
-                return format_uang($emu->total_item);
+            ->addColumn('total_item', function ($emus) {
+                return format_uang($emus->total_item);
             })
-            ->addColumn('total_harga', function ($emu) {
-                return 'Rp. '. format_uang($emu->total_harga);
+            ->addColumn('total_harga', function ($emus) {
+                return 'Rp. ' . format_uang($emus->total_harga);
             })
-            ->addColumn('bayar', function ($emu) {
-                return 'Rp. '. format_uang($emu->bayar);
+            ->addColumn('bayar', function ($emus) {
+                return 'Rp. ' . format_uang($emus->bayar);
             })
-            ->addColumn('id_proyek', function ($emusss) {
-                $dmu = $emusss->proyek->nama_proyek ?? '';
-                return $dmu;
+            ->addColumn('id_proyek', function ($emus) {
+                return $emus->nama_proyek ?? '';
             })
             ->addColumn('nama_dmu', function ($emus) {
-                $dmu = $emus->dmu->nama_dmu ?? '';
-                return $dmu;
+                return $emus->nama_dmu ?? '';
             })
             ->addColumn('id_dmu', function ($emus) {
-                $dmu = $emus->dmu->nama_subpengujian ?? '';
-                return $dmu;
+                return $emus->nama_subpengujian ?? '';
             })
-            ->addColumn('id_subpengujian', function ($emuss) {
-                $dmu = $emuss->subpengujian->nama_subpengujian ?? '';
-                return $dmu;
+            ->addColumn('id_subpengujian', function ($emus) {
+                return $emus->nama_subpengujian ?? '';
             })
-            ->addColumn('tanggal', function ($emu) {
-                return tanggal_indonesia($emu->created_at, false);
+            ->addColumn('tanggal', function ($emus) {
+                return tanggal_indonesia($emus->created_at, false);
             })
-            ->editColumn('diskon', function ($emu) {
-                return $emu->diskon . '%';
+            ->editColumn('diskon', function ($emus) {
+                return $emus->diskon . '%';
             })
-            ->addColumn('aksi', function ($emu) {
+            ->addColumn('aksi', function ($emus) {
                 return '
-                <div class="btn-group">
-                    <button onclick="showDetail(`'. route('emu.show', $emu->id_emu) .'`)" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Lihat Komponen Rusak</button>
-                </div>
+                    <div class="btn-group">
+                        <button onclick="showDetail(`' . route('emu.show', $emus->id_emu) . '`)" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Lihat Komponen Rusak</button>
+                    </div>
                 ';
             })
             ->rawColumns(['aksi'])
             ->make(true);
     }
+    
 
     public function show($id)
     {

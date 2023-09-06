@@ -25,6 +25,7 @@ class PartController extends Controller
     {
         $part = Part::leftJoin('produk', 'produk.id_produk', 'part.id_produk')
             ->select('part.*', 'nama_produk')
+            ->orderBy('nama_part', 'DESC')
             ->get();
 
         return datatables()

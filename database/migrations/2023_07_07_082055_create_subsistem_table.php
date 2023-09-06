@@ -17,8 +17,8 @@ class CreateSubsistemTable extends Migration
             $table->increments('id_subsistem');
             $table->unsignedInteger('id_sistem');
             $table->foreign('id_sistem')->references('id_sistem')->on('sistem')->onDelete('restrict')->onUpdate('restrict');
-            $table->string('kode_sistem')->unique();
-            $table->string('nama_sistem')->unique();
+            $table->string('kode_subsistem')->unique();
+            $table->string('nama_subsistem')->unique();
             $table->integer('bobot');
             $table->timestamps();
         });

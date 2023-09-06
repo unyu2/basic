@@ -37,19 +37,17 @@ class DmuController extends Controller
     public function data()
     {
 
-        $user = Auth::user();
-
-            $dmu = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
-                ->where('dmu.id_user', $user->id)
-                ->select('dmu.*', 'nama_subpengujian')
-                ->get();
-             $user = Dmu::leftJoin('users', 'users.id', 'dmu.id_user')
-            ->select('dmu.*', 'name')
+        $userId = auth()->user()->id;
+        $userBagian = auth()->user()->bagian;
+    
+        $dmu = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
+            ->join('users', 'dmu.id_user', '=', 'users.id')
+            ->join('proyek', 'dmu.id_proyek', '=', 'proyek.id_proyek')
+            ->select('dmu.*', 'nama_subpengujian', 'nama_proyek', 'name')
+            ->where('dmu.id_user', $userId)
+            ->where('users.bagian', $userBagian)
+            ->orderBy('dmu.created_at', 'desc')
             ->get();
-            $proyek = Dmu::leftJoin('proyek', 'proyek.id_proyek', 'dmu.id_proyek')
-            ->select('dmu.*', 'nama_proyek')
-            ->get();
-            $emus = Dmu::with('user')->orderBy('id_dmu', 'asc')->get();
 
         return datatables()
             ->of($dmu)
@@ -62,11 +60,11 @@ class DmuController extends Controller
             ->addColumn('kode_dmu', function ($dmu) {
                 return '<span class="label label-success">'. $dmu->kode_dmu .'</span>';
             })
-            ->editColumn('id_user', function ($emus) {
-                return $emus->users->name ?? '';
+            ->editColumn('id_user', function ($dmu) {
+                return $dmu->users->name ?? '';
             })
-            ->editColumn('id_proyek', function ($proyek) {
-                return $proyek->proyek->nama_proyek ?? '';
+            ->editColumn('id_proyek', function ($dmu) {
+                return $dmu->proyek->nama_proyek ?? '';
             })
             ->addColumn('aksi', function ($dmu) {
                 $buttons = '<div class="btn-group">';
@@ -739,31 +737,11 @@ class DmuController extends Controller
         $dmu->created_at=$request->created_at;
         $dmu->updated_at=$request->updated_at;
 
-/** 
-        $dmu->foto1=$request->foto1;
-$dmu->foto2=$request->foto2;
-$dmu->foto3=$request->foto3;
-$dmu->foto=$request->foto;
-$dmu->foto4=$request->foto4;
-$dmu->foto5=$request->foto5;
-$dmu->foto6=$request->foto6;
-$dmu->foto7=$request->foto7;
-$dmu->foto8=$request->foto8;
-$dmu->foto9=$request->foto9;
-$dmu->foto10=$request->foto10;
-$dmu->foto11=$request->foto11;
-$dmu->foto12=$request->foto12;
-$dmu->foto13=$request->foto13;
-$dmu->foto14=$request->foto14;
-*/
-
 
         if ($request->hasFile('foto1')) {
             $file = $request->file('foto1');
             $nama = 'f1-' . date('YmdHis') . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('img'), $nama); // Move the file to the public/img directory
-        //    $dmu->foto1 = "/img/$nama"; // Save the path in the database
-       //     $dmu->save();
+            $file->move(public_path('img'), $nama);
             $request['foto1'] = "/img/$nama";
 
 
@@ -775,8 +753,6 @@ $dmu->foto14=$request->foto14;
             $file->move(public_path('/img'), $nama);
 
             $request['foto2'] = "/img/$nama";
-     //       $dmu->foto2 = "/img/$nama"; // Save the path in the database
-      //      $dmu->save();
         }
 
         if ($request->hasFile('foto3')) {
@@ -874,18 +850,16 @@ $dmu->foto14=$request->foto14;
         
             $request['foto14'] = "/img/$nama";
         }
- 
 
- //       $dmu->save();
-//[--------------------------------------------------------------------------------------------------------------]
-          $dmu = Dmu::create($request->all());
-          $dmu->save();
+        $dmu = Dmu::create($request->all());
+        $dmu->save();
+
         return redirect()->route('dmu.index');
     }
     
     public function showNew()
     {
-        // return Setting::first();
+      
     }
     
 
@@ -911,39 +885,38 @@ $dmu->foto14=$request->foto14;
      * @return \Illuminate\Http\Response
      */
     public function updates(Request $request, $id)
-{
-    $dmu = Dmu::find($id);
+    {
+        $dmu = Dmu::find($id);
 
-    if (!$dmu) {
-        return response()->json('Data DMU tidak ditemukan', 404);
+        if (!$dmu) {
+            return response()->json('Data DMU tidak ditemukan', 404);
+        }
+
+        $nilairev = $dmu->revisi;
+
+        // Definisikan urutan revisi
+        $urutanRevisi = ['Rev.0', 'Rev.A', 'Rev.B', 'Rev.C', 'Rev.D', 'Rev.E', 'Rev.F', 'Rev.G', 'Rev.H', 'Rev.I', 'Rev.J'];
+
+        // Cari indeks revisi saat ini
+        $indeksRevisi = array_search($nilairev, $urutanRevisi);
+
+        // Perbarui revisi sesuai dengan indeks berikutnya
+        $indeksRevisi++;
+
+        // Jika sudah melebihi jumlah revisi yang didefinisikan, kembalikan ke 'Rev.0'
+        if ($indeksRevisi >= count($urutanRevisi)) {
+            $indeksRevisi = 0;
+        }
+
+        // Tentukan revisi yang baru
+        $inputrev = $urutanRevisi[$indeksRevisi];
+
+        // Perbarui revisi di dalam database
+        $dmu->revisi = $inputrev;
+        $dmu->save();
+
+        return view('dmu.index', compact('dmu'));
     }
-
-    // Ambil revisi saat ini dari database
-    $nilairev = $dmu->revisi;
-
-    // Definisikan urutan revisi
-    $urutanRevisi = ['Rev.0', 'Rev.A', 'Rev.B', 'Rev.C', 'Rev.D', 'Rev.E', 'Rev.F', 'Rev.G', 'Rev.H', 'Rev.I', 'Rev.J'];
-
-    // Cari indeks revisi saat ini
-    $indeksRevisi = array_search($nilairev, $urutanRevisi);
-
-    // Perbarui revisi sesuai dengan indeks berikutnya
-    $indeksRevisi++;
-
-    // Jika sudah melebihi jumlah revisi yang didefinisikan, kembalikan ke 'Rev.0'
-    if ($indeksRevisi >= count($urutanRevisi)) {
-        $indeksRevisi = 0;
-    }
-
-    // Tentukan revisi yang baru
-    $inputrev = $urutanRevisi[$indeksRevisi];
-
-    // Perbarui revisi di dalam database
-    $dmu->revisi = $inputrev;
-    $dmu->save();
-
-    return view('dmu.index', compact('dmu'));
-}
 
     public function timpaFoto($fotoLamaPath, $fileBaru)
     {
@@ -1004,48 +977,46 @@ $dmu->foto14=$request->foto14;
      * @return \Illuminate\Http\Response
      */
     public function updatex(Request $request, $id)
-{
+    {
 
-    $dmu = Dmu::find($id);
+        $dmu = Dmu::find($id);
 
-    $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
-    
-    // Cek apakah data Dmu dengan id yang diberikan ditemukan
-    if ($dmu) {
-        $nilairev = $dmu->revisi;
-    
-        if ($nilairev === 'Rev.0') {
-            $inputrev = 'Rev.A';
-        } elseif ($nilairev === 'Rev.A') {
-            $inputrev = 'Rev.B';
-        } elseif ($nilairev === 'Rev.B') {
-            $inputrev = 'Rev.C';
-        } elseif ($nilairev === 'Rev.C') {
-            $inputrev = 'Rev.D';
-        } elseif ($nilairev === 'Rev.D') {
-            $inputrev = 'Rev.E';
-        } elseif ($nilairev === 'Rev.E') {
-            $inputrev = 'Rev.F';
-        } elseif ($nilairev === 'Rev.F') {
-            $inputrev = 'Rev.G';
-        } elseif ($nilairev === 'Rev.G') {
-            $inputrev = 'Rev.H';
-        } elseif ($nilairev === 'Rev.H') {
-            $inputrev = 'Rev.I';
-        } elseif ($nilairev === 'Rev.I') {
-            $inputrev = 'Rev.J';
-        } else {
-            $inputrev = '0';
-        }
+        $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
+        
+        // Cek apakah data Dmu dengan id yang diberikan ditemukan
+        if ($dmu) {
+            $nilairev = $dmu->revisi;
+        
+            if ($nilairev === 'Rev.0') {
+                $inputrev = 'Rev.A';
+            } elseif ($nilairev === 'Rev.A') {
+                $inputrev = 'Rev.B';
+            } elseif ($nilairev === 'Rev.B') {
+                $inputrev = 'Rev.C';
+            } elseif ($nilairev === 'Rev.C') {
+                $inputrev = 'Rev.D';
+            } elseif ($nilairev === 'Rev.D') {
+                $inputrev = 'Rev.E';
+            } elseif ($nilairev === 'Rev.E') {
+                $inputrev = 'Rev.F';
+            } elseif ($nilairev === 'Rev.F') {
+                $inputrev = 'Rev.G';
+            } elseif ($nilairev === 'Rev.G') {
+                $inputrev = 'Rev.H';
+            } elseif ($nilairev === 'Rev.H') {
+                $inputrev = 'Rev.I';
+            } elseif ($nilairev === 'Rev.I') {
+                $inputrev = 'Rev.J';
+            } else {
+                $inputrev = '0';
+            }
 
-        $dmu->revisi = $inputrev;
-        $dmu->update($request->all());
-       
-    return redirect()->route('dmu.index',compact('subsistem'))->with('success', 'Data berhasil disimpan');
-    } 
-}
-
-    
+            $dmu->revisi = $inputrev;
+            $dmu->update($request->all());
+        
+        return redirect()->route('dmu.index',compact('subsistem'))->with('success', 'Data berhasil disimpan');
+        } 
+    }
 
     public function tambah(Request $request, $id)
     {

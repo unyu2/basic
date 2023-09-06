@@ -18,11 +18,10 @@ class PermintaanController extends Controller
     }
     public function data()
     {
-        $pembelians = Permintaan::leftJoin('proyek', 'proyek.id_proyek', 'permintaan.id_proyek')
+        $permintaan = Permintaan::leftJoin('proyek', 'proyek.id_proyek', 'permintaan.id_proyek')
         ->select('permintaan.*', 'nama_proyek')
+        ->orderBy('id_permintaan', 'desc')
         ->get();
-        $permintaan = Permintaan::orderBy('id_permintaan', 'desc')->get();
-    //  $proyek = Proyek::orderBy('id_proyek')->get();
 
         return datatables()
             ->of($permintaan)
@@ -36,9 +35,8 @@ class PermintaanController extends Controller
             ->addColumn('bayar', function ($permintaan) {
                 return 'Rp. '. format_uang($permintaan->bayar);
             })
-            ->addColumn('nama_proyek', function ($pembelians) {
-                $proyek = $pembelians->proyek->nama_proyek ?? '';
-                return $proyek;
+            ->addColumn('nama_proyek', function ($permintaan) {
+                return $permintaan->proyek->nama_proyek ?? '';
             })
             ->addColumn('tanggal', function ($permintaan) {
                 return tanggal_indonesia($permintaan->created_at, false);

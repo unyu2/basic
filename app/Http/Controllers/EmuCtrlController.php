@@ -32,41 +32,42 @@ class EmuCtrlController extends Controller
        ->select('dmu.*', 'nama_subpengujian', 'nama_dmu')
        ->get();
 
- $nilairev='Rev.0';
- if ($nilairev === 'Rev.0') {
-   $inputrev = 'Rev.A';
-} elseif ($nilairev === 'Rev.A') {
-   $inputrev = 'Rev.B';
-} elseif ($nilairev === 'Rev.B') {
-   $inputrev = 'Rev.C';
-} elseif ($nilairev === 'Rev.C') {
-   $inputrev = 'Rev.D';
-} elseif ($nilairev === 'Rev.D') {
-   $inputrev = 'Rev.E';
-} elseif ($nilairev === 'Rev.E') {
-   $inputrev = 'Rev.F';
-} elseif ($nilairev === 'Rev.F') {
-   $inputrev = 'Rev.G';
-} elseif ($nilairev === 'Rev.G') {
-   $inputrev = 'rev.H';
-} elseif ($nilairev === 'Rev.H') {
-   $inputrev = 'Rev.I';
-} elseif ($nilairev === 'Rev.I') {
-   $inputrev = 'Rev.J';
-} else {
-   $inputrev = '0';
-}
-$nilairev = $inputrev;
+        $nilairev='Rev.0';
+        if ($nilairev === 'Rev.0') {
+        $inputrev = 'Rev.A';
+        } elseif ($nilairev === 'Rev.A') {
+        $inputrev = 'Rev.B';
+        } elseif ($nilairev === 'Rev.B') {
+        $inputrev = 'Rev.C';
+        } elseif ($nilairev === 'Rev.C') {
+        $inputrev = 'Rev.D';
+        } elseif ($nilairev === 'Rev.D') {
+        $inputrev = 'Rev.E';
+        } elseif ($nilairev === 'Rev.E') {
+        $inputrev = 'Rev.F';
+        } elseif ($nilairev === 'Rev.F') {
+        $inputrev = 'Rev.G';
+        } elseif ($nilairev === 'Rev.G') {
+        $inputrev = 'rev.H';
+        } elseif ($nilairev === 'Rev.H') {
+        $inputrev = 'Rev.I';
+        } elseif ($nilairev === 'Rev.I') {
+        $inputrev = 'Rev.J';
+        } else {
+        $inputrev = '0';
+        }
+        
+        $nilairev = $inputrev;
 
-$nilaiapv ='waiting';
-if ($nilaiapv === 'waiting') {
-   $inputapv = 'Approved';
-} elseif ($nilaiapv === 'Approved') {
-   $inputapv = 'waiting';
-} else {
-   $inputapv = '0';
-}
-$nilaiapv = $inputapv;
+        $nilaiapv ='waiting';
+        if ($nilaiapv === 'waiting') {
+        $inputapv = 'Approved';
+        } elseif ($nilaiapv === 'Approved') {
+        $inputapv = 'waiting';
+        } else {
+        $inputapv = '0';
+        }
+        $nilaiapv = $inputapv;
 
         return view('emu_ctrl.index', compact('dmu', 'emu', 'nilairev', 'nilaiapv', 'dmus', 'emus'));
     }
@@ -74,15 +75,12 @@ $nilaiapv = $inputapv;
     public function data()
     {
         $emu = Emu::leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
-            ->select('emu.*', 'nama_dmu')
+            ->leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
+            ->leftJoin('proyek', 'proyek.id_proyek', 'dmu.id_proyek')
+            ->leftJoin('users', 'users.id', 'emu.id_user')
+            ->select('emu.*', 'nama_dmu', 'nama_subpengujian', 'nama_proyek', 'name')
+            ->orderBy('created_at', 'desc')
             ->get();
-            $emuss = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
-            ->select('dmu.*', 'nama_subpengujian')
-            ->get();
-            $emusss = Dmu::leftJoin('proyek', 'proyek.id_proyek', 'dmu.id_proyek')
-            ->select('dmu.*', 'nama_proyek')
-            ->get();
-            $emus = Emu::with('user')->orderBy('id_emu', 'asc')->get();
 
         return datatables()
             ->of($emu)
@@ -101,16 +99,14 @@ $nilaiapv = $inputapv;
             ->addColumn('nama_proyek', function ($emu) {
                 return  $emu->nama_proyek ;
             })
-            ->addColumn('id_proyek', function ($emusss) {
-                $dmu = $emusss->proyek->nama_proyek ?? '';
-                return $dmu;
+            ->addColumn('id_proyek', function ($emu) {
+                return  $emu->proyek->nama_proyek ?? '';
             })
-            ->addColumn('id_subpengujian', function ($emuss) {
-                $emu = $emuss->subpengujian->nama_subpengujian ?? '';
-                return $emu;
+            ->addColumn('id_subpengujian', function ($emu) {
+                return $emu->subpengujian->nama_subpengujian ?? '';
             })
-            ->editColumn('id_user', function ($emus) {
-                return $emus->user->name ?? '';
+            ->editColumn('id_user', function ($emu) {
+                return $emu->user->name ?? '';
             })
             ->addColumn('id_dmu', function ($emu) {
                 return  $emu->nama_dmu;

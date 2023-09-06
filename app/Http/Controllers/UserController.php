@@ -31,13 +31,12 @@ class UserController extends Controller
 
     public function data()
     {
-  //      $user = User::isNotAdmin()->orderBy('id', 'desc')->get();
-  $user = User::leftJoin('jabatan', 'users.bagian', '=', 'jabatan.id_jabatan')
-  ->leftJoin('level', 'users.level', '=', 'level.id_level')
-  ->select('users.*', 'nama_level', 'nama_jabatan')
-  ->isNotAdmin()
-  ->orderBy('users.id', 'desc')
-  ->get();
+        $user = User::leftJoin('jabatan', 'users.bagian', '=', 'jabatan.id_jabatan')
+        ->leftJoin('level', 'users.level', '=', 'level.id_level')
+        ->select('users.*', 'nama_level', 'nama_jabatan')
+        ->isNotAdmin()
+        ->orderBy('users.id', 'desc')
+        ->get();
 
         return datatables()
             ->of($user)

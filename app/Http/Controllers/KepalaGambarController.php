@@ -26,7 +26,6 @@ class KepalaGambarController extends Controller
 
     public function data()
     {
-   //     $kepala = KepalaGambar::orderBy('id_kepala_gambar', 'desc')->get();
         $kepala = KepalaGambar::leftJoin('jabatan', 'jabatan.id_jabatan', 'kepala_gambar.id_jabatan')
         ->select('kepala_gambar.*', 'nama_jabatan')
         ->orderBy('id_jabatan', 'DESC')

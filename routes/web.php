@@ -110,7 +110,6 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
-
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard_oil', [DashboardOilController::class, 'index'])->name('dashboard_oil');
     Route::get('/dashboard2', [Dashboard2Controller::class, 'index'])->name('dashboard2');
@@ -208,10 +207,9 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
     Route::get('/dashboard32x1', [Dashboard32x1Controller::class, 'index'])->name('dashboard32x1');
     Route::get('/dashboard32x2', [Dashboard32x2Controller::class, 'index'])->name('dashboard32x2');          
     Route::get('/page_pengujian', [PagePengujianController::class, 'index'])->name('page_pengujian');
-    
+
     
     Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
-
         Route::get('/dinas/data', [DinasController::class, 'data'])->name('dinas.data');
         Route::get('/dinas/dataModal', [DinasController::class, 'dataModal'])->name('dinas.dataModal');
         Route::get('dinas/pilihUser/{id}', [DinasController::class, 'pilihUser'])->name('dinas.pilihUser');
@@ -433,7 +431,6 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::post('/emu_ctrl3/cetak-barcode', [EmuCtrl3Controller::class, 'cetakBarcode'])->name('emu_ctrl3.cetak_barcode');
         Route::resource('/emu_ctrl3', EmuCtrl3Controller::class);
         
-        
         Route::get('/emu_ctrl2/data', [EmuCtrl2Controller::class, 'data'])->name('emu_ctrl2.data');
         Route::post('/emu_ctrl2/delete-selected', [EmuCtrl2Controller::class, 'deleteSelected'])->name('emu_ctrl2.delete_selected');
         Route::post('/emu_ctrl2/cetak-barcode', [EmuCtrl2Controller::class, 'cetakBarcode'])->name('emu_ctrl2.cetak_barcode');
@@ -448,11 +445,9 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('/pendaftaran/{id}/create', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
         Route::resource('/pendaftaran', PendaftaranController::class);
 
-
         Route::get('/pendaftaran_detail/{id}/data', [PendaftaranDetailController::class, 'data'])->name('pendaftaran_detail.data');
         Route::get('/pendaftaran_detail/loadform/{diskon}/{total}', [PendaftaranDetailController::class, 'loadForm'])->name('pendaftaran_detail.load_form');
         Route::resource('/pendaftaran_detail', PendaftaranDetailController::class);
-
 
         Route::get('/permintaan/data', [PermintaanController::class, 'data'])->name('permintaan.data');
         Route::get('/permintaan/{id}/create', [PermintaanController::class, 'create'])->name('permintaan.create');
@@ -463,8 +458,6 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('/permintaan_detail/loadform/{diskon}/{total}', [PermintaanDetailController::class, 'loadForm'])->name('permintaan_detail.load_form');
         Route::resource('/permintaan_detail', PermintaanDetailController::class)
             ->except('create', 'show', 'edit');
-
-
 
         Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
         Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');

@@ -41,19 +41,12 @@ class DmuapvController extends Controller
     
         $dmu = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
             ->join('users', 'dmu.id_user', '=', 'users.id')
-            ->select('dmu.*', 'nama_subpengujian')
+            ->join('proyek', 'dmu.id_proyek', '=', 'proyek.id_proyek')
+            ->select('dmu.*', 'nama_subpengujian', 'nama_proyek', 'name')
             ->where('dmu.id_user', $userId)
             ->where('users.bagian', $userBagian)
-            ->orderBy('dmu.created_at', 'desc') // Mengurutkan data berdasarkan kolom 'created_at' secara descending
+            ->orderBy('dmu.created_at', 'desc')
             ->get();
-
-             $user = Dmu::leftJoin('users', 'users.id', 'dmu.id_user')
-            ->select('dmu.*', 'name')
-            ->get();
-            $proyek = Dmu::leftJoin('proyek', 'proyek.id_proyek', 'dmu.id_proyek')
-            ->select('dmu.*', 'nama_proyek')
-            ->get();
-            $emus = Dmu::with('user')->orderBy('id_dmu', 'asc')->get();
 
         return datatables()
             ->of($dmu)
@@ -69,11 +62,11 @@ class DmuapvController extends Controller
             ->addColumn('created_at', function ($dmu) {
                 return tanggal_indonesia($dmu->created_at, false);
             })
-            ->editColumn('id_user', function ($emus) {
-                return $emus->users->name ?? '';
+            ->editColumn('id_user', function ($dmu) {
+                return $dmu->users->name ?? '';
             })
-            ->editColumn('id_proyek', function ($proyek) {
-                return $proyek->proyek->nama_proyek ?? '';
+            ->editColumn('id_proyek', function ($dmu) {
+                return $dmu->proyek->nama_proyek ?? '';
             })
             ->addColumn('aksi', function ($dmu) {
                 return '

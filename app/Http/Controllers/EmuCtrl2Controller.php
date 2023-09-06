@@ -23,9 +23,9 @@ class EmuCtrl2Controller extends Controller
     {
        $dmu = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
        ->select('dmu.*', 'nama_subpengujian', 'nama_dmu')
-      ->get();
+       ->get();
 
-      $emu = Emu::orderBy('id_emu', 'asc')->get();
+        $emu = Emu::orderBy('id_emu', 'asc')->get();
 
         return view('emu_ctrl2.index', compact('dmu', 'emu'));
     }
@@ -38,7 +38,7 @@ class EmuCtrl2Controller extends Controller
             ->leftJoin('proyek', 'proyek.id_proyek', 'dmu.id_proyek')
             ->leftJoin('users', 'users.id', 'emu.id_user')
             ->select('emu.*', 'nama_dmu', 'nama_subpengujian', 'nama_proyek', 'name')
-            ->orderBy('id_emu', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
     
         return datatables()
@@ -179,7 +179,6 @@ class EmuCtrl2Controller extends Controller
 
     public function cetakBarcode(Request $request)
     {
-       
         $dataemu = array();
 
         foreach ($request->id_emu as $id) {

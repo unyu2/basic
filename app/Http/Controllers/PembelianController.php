@@ -18,11 +18,10 @@ class PembelianController extends Controller
     }
     public function data()
     {
-        $pembelians = Pembelian::leftJoin('supplier', 'supplier.id_supplier', 'pembelian.id_supplier')
+        $pembelian = Pembelian::leftJoin('supplier', 'supplier.id_supplier', 'pembelian.id_supplier')
         ->select('pembelian.*', 'nama')
+        ->orderBy('nama_supplier', 'desc')
         ->get();
-    $pembelian = Pembelian::orderBy('id_pembelian', 'desc')->get();
-    //  $supplier = Supplier::orderBy('id_supplier')->get();
 
         return datatables()
             ->of($pembelian)
@@ -36,9 +35,8 @@ class PembelianController extends Controller
             ->addColumn('bayar', function ($pembelian) {
                 return 'Rp. '. format_uang($pembelian->bayar);
             })
-            ->addColumn('nama', function ($pembelians) {
-                $supplier = $pembelians->supplier->nama ?? '';
-                return $supplier;
+            ->addColumn('nama', function ($pembelian) {
+                return $pembelian->supplier->nama ?? '';
             })
             ->addColumn('tanggal', function ($pembelian) {
                 return tanggal_indonesia($pembelian->created_at, false);

@@ -23,10 +23,8 @@ class ProsesController extends Controller
     {
         $proses = Proses::leftJoin('produk', 'produk.id_produk', 'pemesanan_detail.id_produk')
         ->select('pemesanan_detail.*', 'nama_produk', 'komat')
+        ->orderBy('id_pemesanan', 'ASC')
         ->get();
-   //     $proseses = Proses::leftJoin('pemesanan', 'pemesanan.id_pemesanan', 'pemesanan_detail.id_pemesanan')
-  //      ->select('pemesanan_detail.*', 'surat', 'eta')
-  //      ->get();
 
         return datatables()
             ->of($proses)
@@ -36,8 +34,8 @@ class ProsesController extends Controller
                     <input type="checkbox" name="id_pemesanan_detail[]" value="'. $proses->id_pemesanan_detail .'">
                 ';
             })
-            ->addColumn('created_at', function ($pemesanan_detail) {
-                return tanggal_indonesia($pemesanan_detail->created_at, false);
+            ->addColumn('created_at', function ($proses) {
+                return tanggal_indonesia($proses->created_at, false);
             })
             ->addColumn('jumlah', function ($proses) {
                 return $proses->jumlah;
