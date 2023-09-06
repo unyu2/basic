@@ -127,7 +127,7 @@
                         <div class="col-lg-2">
                             <select type="text" name="id_approve" id="id_approve" class="form-control" required autofocus>
                             <option></option>
-                            @foreach ($approver as $key => $item)
+                            @foreach ($drafter as $key => $item)
                                      <option value="{{ $key }}" >{{ $item }}</option>
                                 @endforeach
                             </select>

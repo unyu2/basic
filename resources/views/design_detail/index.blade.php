@@ -216,6 +216,15 @@
             $('#modal-form3 [name=kode_design]').val(response.kode_design);
             $('#modal-form3 [name=revisi]').val(response.revisi);
             $('#modal-form3 [name=prediksi_akhir]').val(response.prediksi_akhir);
+
+            $('#modal-form3 [name=id_draft]').val(response.id_draft);
+            $('#modal-form3 [name=id_check]').val(response.id_check);
+            $('#modal-form3 [name=id_approve]').val(response.id_approve);
+            $('#modal-form3 [name=jenis]').val(response.jenis);
+            $('#modal-form3 [name=pemilik]').val(response.pemilik);
+            $('#modal-form3 [name=bobot_rev]').val(response.bobot_rev);
+            $('#modal-form3 [name=size]').val(response.size);
+            $('#modal-form3 [name=lembar]').val(response.lembar);
         })
         .fail((errors) => {
             console.error('Gagal mengambil data:', errors);

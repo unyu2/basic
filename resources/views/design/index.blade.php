@@ -60,10 +60,11 @@
                     <button onclick="cetakPdf('{{ route('design.cetakPdf') }}')" class="btn btn bg-maroon btn-flat"><i class="fa fa-trash"></i> PDF</button>
                 </div>          
             </div>
+            @if (auth()->user()->level == 2 || auth()->user()->level == 3 || auth()->user()->level == 4 )
             <div class="box-body table-responsive">
                 <form action="" method="post" class="form-design">
                     @csrf
-                    <table class="table table-stiped table-bordered">
+                    <table id="table0" class="table table-stiped table-bordered">
                         <thead>
                             <th width="5%">
                                 <input type="checkbox" name="select_all" id="select_all">
@@ -81,11 +82,36 @@
                     </table>
                 </form>
             </div>
+            @endif
+
+            @if (auth()->user()->level == 1)
+            <div class="box-body table-responsive">
+                <form action="" method="post" class="form-design">
+                    @csrf
+                    <table id="tableAdmin" class="table table-stiped table-bordered">
+                        <thead>
+                            <th width="5%">
+                                <input type="checkbox" name="select_all" id="select_all">
+                            </th>
+                            <th width="5%">No</th>
+                            <th>No Dwg</th>
+                            <th>Nama</th>
+                            <th>Proyek</th>
+                            <th>Revisi</th>
+                            <th>Kesesuaian Jadwal</th>
+                            <th>Status</th>
+
+                            <th width="15%"><i class="fa fa-cog"></i></th>
+                        </thead>
+                    </table>
+                </form>
+            </div>
+            @endif
             
             <div class="box-body table-responsive">
                 <form action="" method="post" class="form-design hidden-form">
                     @csrf
-                    <table class="tableModal table-stiped table-bordered">
+                    <table id="table1" class="tableModal table-stiped table-bordered">
                         <thead>
                             <th width="5%">No</th>
                             <th>No Dwg</th>
@@ -111,7 +137,6 @@
                     </table>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
@@ -128,12 +153,15 @@
 @push('scripts')
 <script>
     let table;
-    let tableModal;
+    let tableAdmin;
+    let table1;
+    let table0;
     let tableModal2;
+    let tableModal3;
     let tableDetail;
 
     $(function () {
-        table = $('.table').DataTable({
+        table = $('#table0').DataTable({
             responsive: true,
             processing: true,
             serverSide: true,
@@ -159,14 +187,40 @@
         });
     });
 
-
     function redirectTo(url) {
     window.location = "{{ route('design.index') }}";
     }
 
+    $(function () {
+        table = $('#tableAdmin').DataTable({
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: '{{ route('design.dataAdmin') }}',
+            },
+            columns: [
+                {data: 'select_all', searchable: false, sortable: false},
+                {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'kode_design'},
+                {data: 'nama_design'},
+                {data: 'id_proyek'},
+                {data: 'revisi'},
+                {data: 'kondisi'},
+                {data: 'status'},
+                {data: 'aksi', searchable: false, sortable: false},
+                ]
+            });
+
+        $('[name=select_all]').on('click', function () {
+            $(':checkbox').prop('checked', this.checked);
+        });
+    });
+
 
     $(function () {
-            tableModal = $('.tableModal').DataTable({
+            table = $('.tableModal').DataTable({
                 responsive: true,
                 processing: true,
                 serverSide: true,
@@ -249,6 +303,23 @@
         $('#modal-form3 [name=nama_design]').focus();
     }
 
+        $(document).ready(function() {
+        $('#modal-form3').validator().on('submit', function(e) {
+            e.preventDefault(); 
+            console.log('Mengirim permintaan AJAX...');
+            $.post($('#modal-form3 form').attr('action'), $('#modal-form3 form').serialize())
+                .done(function(response) {
+                    $('#modal-form3').modal('hide');
+                    table.ajax.reload();
+                })
+                .fail(function(errors) {
+                    console.log('Permintaan AJAX gagal:', errors);
+                    alert('Tidak dapat menyimpan data | Periksa kembali :)');
+                });
+        });
+    });
+
+
     function addBaru() {
         $('#modal-dwg2').modal('show');
     }
@@ -289,22 +360,6 @@
     });
 }
 
-    $(document).ready(function() {
-        $('#modal-form3').validator().on('submit', function(e) {
-            e.preventDefault(); // Menghentikan default form submission
-
-            $.post($('#modal-form3 form').attr('action'), $('#modal-form3 form').serialize())
-                .done(function(response) {
-                    $('#modal-form3').modal('hide');
-                    table.ajax.reload();
-                })
-                .fail(function(errors) {
-                    alert('Tidak dapat menyimpan data | Periksa kembali :)');
-                });
-        });
-    });
-
-
     function addForm(url) {
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Buat & Edit Schedule Dokumen');
@@ -316,13 +371,13 @@
     }
 
     function editForm(url) {
-    $('#modal-form').modal('show');
-    $('#modal-form .modal-title').text('Release Your Design Drawing');
+        $('#modal-form').modal('show');
+        $('#modal-form .modal-title').text('Release Your Design Drawing');
 
-    $('#modal-form form')[0].reset();
-    $('#modal-form form').attr('action', url);
-    $('#modal-form [name=_method]').val('put');
-    $('#modal-form [name=nama_design]').focus();
+        $('#modal-form form')[0].reset();
+        $('#modal-form form').attr('action', url);
+        $('#modal-form [name=_method]').val('put');
+        $('#modal-form [name=nama_design]').focus();
 
         $.get(url)
             .done((response) => {
@@ -335,26 +390,26 @@
                 alert('Tidak dapat menampilkan data');
                 return;
             });
-    }
+        }
 
-    $('#modal-form').validator().on('submit', function (e) {
-            if (! e.preventDefault()) {
-                $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
-                    .done((response) => {
-                        $('#modal-form').modal('hide');
-                        table.ajax.reload();
-                    })
-                    .fail((errors) => {
-                        alert('Tidak dapat menyimpan data | Periksa kembali :)');
-                        return;
+        $('#modal-form').validator().on('submit', function (e) {
+                if (! e.preventDefault()) {
+                    $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
+                        .done((response) => {
+                            $('#modal-form').modal('hide');
+                            table.ajax.reload();
+                        })
+                        .fail((errors) => {
+                            alert('Tidak dapat menyimpan data | Periksa kembali :)');
+                            return;
                     });
-            }
-        });
+                }
+            });
 
 
     function editForm2(url) {
         $('#modal-form2').modal('show');
-        $('#modal-form2 .modal-title').text('Revisi Formulir Check Sheet Untuk design / EMU');
+        $('#modal-form2 .modal-title').text('Tingkatkan Revisi Doc');
 
         $('#modal-form2 form')[0].reset();
         $('#modal-form2 form').attr('action', url);
@@ -366,6 +421,8 @@
                 $('#modal-form2 [name=nama_design]').val(response.nama_design);
                 $('#modal-form2 [name=kode_design]').val(response.kode_design);
                 $('#modal-form2 [name=revisi]').val(response.revisi);
+                $('#modal-form2 [name=bobot_rev]').val(response.bobot_rev);
+
  
             })
             .fail((errors) => {

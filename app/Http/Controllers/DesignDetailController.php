@@ -186,6 +186,16 @@ class DesignDetailController extends Controller
             $design->revisi = $request->revisi;
             $design->status = $request->status;
             $design->prediksi_akhir = $request->prediksi_akhir;
+
+            $design->id_draft = $request->id_draft;
+            $design->id_check = $request->id_check;
+            $design->id_approve = $request->id_approve;
+            $design->jenis = $request->jenis;
+            $design->pemilik = $request->pemilik;
+            $design->bobot_rev = $request->bobot_rev;
+            $design->size = $request->size;
+            $design->lembar = $request->lembar;
+
             $design->update();
         
             $detail = new DesignDetail();
@@ -194,6 +204,16 @@ class DesignDetailController extends Controller
             $detail->revisi = $design->revisi;
             $detail->status = $design->status;
             $detail->prediksi_akhir = $design->prediksi_akhir;
+
+            $detail->id_draft = $design->id_draft;
+            $detail->id_check = $design->id_check;
+            $detail->id_approve = $design->id_approve;
+            $detail->jenis = $design->jenis;
+            $detail->pemilik = $design->pemilik;
+            $detail->bobot_rev = $design->bobot_rev;
+            $detail->size = $design->size;
+            $detail->lembar = $design->lembar;
+
             $detail->save();
     
             return response()->json(['message' => 'Data berhasil diupdate']);

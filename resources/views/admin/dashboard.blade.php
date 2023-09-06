@@ -129,16 +129,6 @@ $(function() {
                 data: {{ json_encode($data_target) }}
             },
             {
-                label: 'Open',
-                fillColor: 'rgba(255, 0, 0, 0.5)', // Merah
-                strokeColor: 'rgba(255, 0, 0, 0.8)', // Merah
-                pointColor: 'rgba(255, 0, 0, 1)', // Merah
-                pointStrokeColor: '#00a65a',
-                pointHighlightFill: '#fff',
-                pointHighlightStroke: 'rgba(60,141,188,1)',
-                data: {{ json_encode($data_open) }}
-            },
-            {
                 label: 'Release',
                 fillColor: 'rgba(0, 128, 0, 0.5)', // Hijau
                 strokeColor: 'rgba(0, 128, 0, 0.8)', // Hijau
@@ -146,7 +136,7 @@ $(function() {
                 pointStrokeColor: '#3b8bba',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
-                data: {{ json_encode($data_release_jam) }}
+                data: {{ json_encode($data_release_jam_overall) }}
             }
         ]
     };
@@ -168,8 +158,9 @@ $(function() {
   function drawChart() {
     var data = google.visualization.arrayToDataTable([
       ["Status", "Count", { role: "style" }], // Tambahkan kolom style
-      ["Open", {{ json_encode($all_open) }}, "red"], // Berikan warna merah
-      ["Closed", {{ json_encode($job_closed) }}, "green"], // Berikan warna hijau
+      ["Open", {{ json_encode($job_open) }}, "red"], // Berikan warna merah
+      ["Release", {{ json_encode($job_closed) }}, "green"], // Berikan warna hijau
+      ["Proses Revisi", {{ json_encode($job_revisi) }}, "orange"], // Berikan warna Hitam
     ]);
 
     var options = {
@@ -178,6 +169,7 @@ $(function() {
       slices: {
         0: { color: "red" }, // Atur warna merah untuk "Open"
         1: { color: "green" }, // Atur warna hijau untuk "Closed"
+        2: { color: "orange" }, // Atur warna hijau untuk "Proses Revisi"
       },
     };
 
@@ -196,17 +188,19 @@ $(function() {
 
   function drawChartJam() {
     var data = google.visualization.arrayToDataTable([
-      ["Status", "Count", { role: "style" }], // Tambahkan kolom style
-      ["Open", {{ json_encode($all_open_jam) }}, "red"], // Berikan warna merah
-      ["Closed", {{ json_encode($job_closed_jam) }}, "green"], // Berikan warna hijau
+      ["Status", "Count", { role: "style" }],
+      ["Open", {{ $all_open_jam[0] }}, "red"],
+      ["Release", {{ $all_closed_jam[0] }}, "green"],
+      ["Proses Revisi", {{ $all_revisi_jam[0] }}, "orange"],
     ]);
 
     var options = {
       title: "Dalam Satuan Jam",
       is3D: true,
       slices: {
-        0: { color: "red" }, // Atur warna merah untuk "Open"
-        1: { color: "green" }, // Atur warna hijau untuk "Closed"
+        0: { color: "red" },
+        1: { color: "green" },
+        2: { color: "orange" },
       },
     };
 
@@ -217,6 +211,8 @@ $(function() {
     chart.draw(data, options);
   }
 </script>
+
+
 
 <script>
 $(function() {

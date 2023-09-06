@@ -26,6 +26,7 @@ class CreateDesignTable extends Migration
 
             $table->string('revisi')->nullable();
             $table->string('pemilik')->nullable();
+            $table->string('jenis')->nullable();
 
             $table->integer('id_refrensi')->nullable();
             $table->string('refrensi_design')->nullable();

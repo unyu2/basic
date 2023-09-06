@@ -13,6 +13,8 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="box">
+
+        @if (auth()->user()->level == 1)
         <div class="box-header">
                 <div class="input-group input-group-sm">
                     <form action="{{ route('kepala_gambar.import') }}" method="post" enctype="multipart/form-data">
@@ -25,6 +27,7 @@
                     </form>
                 </div>
             </div>
+        @endif
             <div class="box-header with-border">
                 <button onclick="addForm('{{ route('kepala_gambar.store') }}')" class="btn btn-success btn-flat"><i class="fa fa-plus-circle"></i> Tambah Data Kepala Gambar</button>
             </div>

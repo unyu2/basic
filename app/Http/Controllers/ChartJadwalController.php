@@ -16,7 +16,7 @@ class ChartJadwalController extends Controller
     {
         $proyek = Proyek::where('status', 'Open')->pluck('nama_proyek', 'id_proyek');
     
-        $design = Design::whereIn('id_proyek', $proyek->keys())->get();
+        $design = Design::where('jenis', 'Doc')->whereIn('id_proyek', $proyek->keys())->get();
     
         return view('charts.chartsJadwal', compact('design', 'proyek'));
     }
@@ -30,6 +30,7 @@ class ChartJadwalController extends Controller
                 $query->select('kepala_gambar.id_kepala_gambar')
                     ->from('kepala_gambar')
                     ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                    ->where('jenis', 'Doc')
                     ->where('jabatan.kode_unit', '311.MES');
             })
             ->get();
@@ -46,6 +47,7 @@ class ChartJadwalController extends Controller
                 $query->select('kepala_gambar.id_kepala_gambar')
                     ->from('kepala_gambar')
                     ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                    ->where('jenis', 'Doc')
                     ->where('jabatan.kode_unit', '311.EES');
             })
             ->get();
@@ -62,6 +64,7 @@ class ChartJadwalController extends Controller
                 $query->select('kepala_gambar.id_kepala_gambar')
                     ->from('kepala_gambar')
                     ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                    ->where('jenis', 'Doc')
                     ->where('jabatan.kode_unit', '311.QEN');
             })
             ->get();
@@ -78,6 +81,7 @@ class ChartJadwalController extends Controller
                 $query->select('kepala_gambar.id_kepala_gambar')
                     ->from('kepala_gambar')
                     ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                    ->where('jenis', 'Doc')
                     ->where('jabatan.kode_unit', '311.PEN');
             })
             ->get();
@@ -94,6 +98,7 @@ class ChartJadwalController extends Controller
                 $query->select('kepala_gambar.id_kepala_gambar')
                     ->from('kepala_gambar')
                     ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                    ->where('jenis', 'Doc')
                     ->where('jabatan.kode_unit', '312.CED');
             })
             ->get();
@@ -110,6 +115,7 @@ class ChartJadwalController extends Controller
                 $query->select('kepala_gambar.id_kepala_gambar')
                     ->from('kepala_gambar')
                     ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                    ->where('jenis', 'Doc')
                     ->where('jabatan.kode_unit', '312.BWD');
             })
             ->get();
@@ -126,6 +132,7 @@ class ChartJadwalController extends Controller
                 $query->select('kepala_gambar.id_kepala_gambar')
                     ->from('kepala_gambar')
                     ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                    ->where('jenis', 'Doc')
                     ->where('jabatan.kode_unit', '312.EDE');
             })
             ->get();
@@ -142,6 +149,7 @@ class ChartJadwalController extends Controller
                 $query->select('kepala_gambar.id_kepala_gambar')
                     ->from('kepala_gambar')
                     ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
+                    ->where('jenis', 'Doc')
                     ->where('jabatan.kode_unit', '312.MID');
             })
             ->get();

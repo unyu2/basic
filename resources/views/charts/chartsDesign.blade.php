@@ -768,8 +768,8 @@ $(document).ready(function() {
             options.slices[0] = { color: 'red' }; // Jika seluruh data adalah "Open", set warna menjadi hijau
         } else {
             options.slices[0] = { color: 'red' }; // Warna untuk segmen "Open"
-            options.slices[1] = { color: 'orange' }; // Warna untuk segmen "Release"
-            options.slices[2] = { color: 'green' }; // Warna untuk segmen "Proses Revisi"
+            options.slices[1] = { color: 'green' }; // Warna untuk segmen "Release"
+            options.slices[2] = { color: 'orange' }; // Warna untuk segmen "Proses Revisi"
         }
 
         // Instantiate and draw the chart

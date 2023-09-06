@@ -30,7 +30,7 @@ public function fetch_data_overall(Request $request)
 
     $id_proyek = $request->input('id_proyek');
 
-    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at");
+    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at")->where('jenis', 'Doc');
 
     if (empty($id_proyek)) {
         $chart_data->whereIn('id_proyek', $proyek_dengan_status_open);
@@ -70,7 +70,7 @@ public function fetch_data_overall_bobot(Request $request)
 
     $id_proyek = $request->input('id_proyek');
 
-    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek");
+    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek")->where('jenis', 'Doc');
 
     if (empty($id_proyek)) {
         $chart_data->whereIn('id_proyek', $proyek_dengan_status_open);
@@ -132,7 +132,7 @@ public function fetch_data_engineering(Request $request)
 
     $id_proyek = $request->input('id_proyek');
 
-    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at", "pemilik");
+    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at", "pemilik")->where('jenis', 'Doc');
 
     // Jika id_proyek kosong, ambil semua data dengan pemilik "Design" yang terkait dengan proyek "Open"
     if (empty($id_proyek)) {
@@ -179,7 +179,7 @@ public function fetch_data_engineering_bobot(Request $request)
     $id_proyek = $request->input('id_proyek');
 
     // Inisialisasi query builder
-    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik");
+    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik")->where('jenis', 'Doc');
 
     // Jika id_proyek kosong, ambil semua data dengan status "Open"
     if (empty($id_proyek)) {
@@ -252,7 +252,7 @@ public function fetch_data_status(Request $request)
 
     $id_proyek = $request->input('id_proyek');
 
-    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at", "pemilik");
+    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at", "pemilik")->where('jenis', 'Doc');
 
     // Jika id_proyek kosong, ambil semua data dengan pemilik "Design" yang terkait dengan proyek "Open"
     if (empty($id_proyek)) {
@@ -299,7 +299,7 @@ public function fetch_data_status_bobot(Request $request)
     $id_proyek = $request->input('id_proyek');
 
     // Inisialisasi query builder
-    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik");
+    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik")->where('jenis', 'Doc');
 
     // Jika id_proyek kosong, ambil semua data dengan status "Open"
     if (empty($id_proyek)) {
@@ -369,6 +369,7 @@ public function fetch_data_status_bobot(Request $request)
         $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
 
         $data = Design::select("id_design", "id_proyek", "status")
+            ->where('jenis', 'Doc')
             ->where('pemilik', 'Design') 
             ->join('kepala_gambar', 'design.id_kepala_gambar', '=', 'kepala_gambar.id_kepala_gambar')
             ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')
@@ -390,6 +391,7 @@ public function fetch_data_status_bobot(Request $request)
         $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
 
         $data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik")
+        ->where('jenis', 'Doc')
         ->where('pemilik', 'Design')
         ->join('kepala_gambar', 'design.id_kepala_gambar', '=', 'kepala_gambar.id_kepala_gambar')
         ->join('jabatan', 'kepala_gambar.id_jabatan', '=', 'jabatan.id_jabatan')

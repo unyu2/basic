@@ -40,20 +40,12 @@ class DesignController extends Controller
         $userLoggedIn = Auth::user(); 
         $bagianUser = $userLoggedIn->bagian;
         $levelUser = $userLoggedIn->level;
-    
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '2')->pluck('name', 'id');
 
         $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar');
         $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
     
-        $userLoggedIn = Auth::user(); 
-        $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
-    
         $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '2')->pluck('name', 'id');
-        
+        $drafter = User::where('bagian', $bagianUser)->where('level', '3')->pluck('name', 'id');
     
         $proyek = Proyek::where('status', 'open')->pluck('nama_proyek' , 'id_proyek');
 
@@ -67,7 +59,7 @@ class DesignController extends Controller
     
         return view('design.index', compact('design', 'kepala', 'subsistem', 'approver', 'drafter', 'proyek',
         'konfigurasi', 'konfigurasi_dmu', 'konfigurasi_emu', 'konfigurasi_light', 'konfigurasi_coach', 'konfigurasi_wagon', 'konfigurasi_other',
-        'approver', 'drafter'
+        'approver'
        ));
     }
 
@@ -75,8 +67,74 @@ class DesignController extends Controller
     public function data()
     {
 
+        $userId = auth()->user()->id;
+
         $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
-            ->select('design.*', 'nama_proyek')
+        ->leftJoin('users as check_user', 'check_user.id', '=', 'design.id_check')
+        ->leftJoin('users as approve_user', 'approve_user.id', '=', 'design.id_approve')
+        ->leftJoin('users as draft_user', 'draft_user.id', '=', 'design.id_draft')
+            ->select('design.*', 'nama_proyek','proyek.status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+            ->where('proyek.status', 'Open')
+            ->where('jenis', 'Doc')
+            ->where(function ($query) use ($userId) {
+                $query->where('design.id_draft', $userId)
+                      ->orWhere('design.id_check', $userId)
+                      ->orWhere('design.id_approve', $userId);
+            })
+            ->orderBy('id_design', 'DESC')
+            ->get();
+
+        return datatables()
+            ->of($design)
+            ->addIndexColumn()
+            ->addColumn('select_all', function ($design) {
+                return '
+                    <input type="checkbox" name="id_design[]" value="'. $design->id_design .'">
+                ';
+            })
+            ->editColumn('id_proyek', function ($design) {
+                return $design->nama_proyek ?? '';
+            })
+            ->addColumn('kondisi', function ($design) {
+                if ($design->status !== 'Release') {
+                    $tanggalPrediksi = new DateTime($design->tanggal_prediksi);
+                    $today = new DateTime();
+                    $interval = $tanggalPrediksi->diff($today);
+                    $selisihHari = $interval->days;
+            
+                    if ($tanggalPrediksi > $today) {
+                        return $selisihHari . ' Hari';
+                    } else {
+                        return '-' . $selisihHari . ' Hari';
+                    }
+                } else {
+                    return ''; // Return empty string for 'Release' status
+                }
+            })
+            ->addColumn('aksi', function ($design) {
+                $buttons = '<div class="btn-group">';
+                if ($design->status !== 'Release') {
+                $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
+                $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                }
+                $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>';        
+                $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
+                $buttons .= '</div>';
+                return $buttons;
+            })
+            ->rawColumns(['aksi', 'id_design', 'select_all'])
+            ->make(true);
+    }
+
+    public function dataAdmin()
+    {
+
+        $userId = auth()->user()->id;
+
+        $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
+            ->select('design.*', 'nama_proyek','proyek.status')
+            ->where('proyek.status', 'Open')
+            ->where('jenis', 'Doc')
             ->orderBy('id_design', 'DESC')
             ->get();
 
@@ -106,9 +164,11 @@ class DesignController extends Controller
             })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
+                if ($design->status !== 'Release') {
                 $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
-                $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>';        
                 $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                }
+                $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>';        
                 $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
                 $buttons .= '</div>';
                 return $buttons;
@@ -177,7 +237,6 @@ class DesignController extends Controller
             ->make(true);
     }
 
-
     public function dataDetail(Request $request)
     {
 
@@ -241,7 +300,6 @@ class DesignController extends Controller
 
     }
 
-
         /**
      * Store a newly created resource in storage.
      *
@@ -250,14 +308,70 @@ class DesignController extends Controller
      */
     public function store(Request $request)
     {
+    $existingDesign = Design::where('kode_design', $request->kode_design)->first();
 
+    if ($existingDesign) {
+        $existingDesign->delete();
     }
 
+    $design = Design::create($request->all());
 
-    public function stores(Request $request)
-    {
+    $design->kode_design = $request->kode_design;
 
+    if ($request->filled('tanggal_refrensi')) {
+        $design->tanggal_prediksi = $request->tanggal_refrensi;
+    } else {
+        $design->tanggal_prediksi = $request->tanggal_prediksi;
     }
+
+    $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
+    $design->pa_yy = $design->prediksi_akhir->format('Y');
+    $design->pa_mm = $design->prediksi_akhir->format('m');
+    $design->pa_dd = $design->prediksi_akhir->format('d');
+
+    list($year, $month, $day) = explode('-', $design->tanggal_prediksi);
+    $design->tp_yy = $year;
+    $design->tp_mm = $month;
+    $design->tp_dd = $day;
+
+    $design->save();
+
+    return response()->json('Data berhasil disimpan', 200);
+}
+
+public function stores(Request $request)
+{
+
+        Design::where('kode_design', $request->kode_design)->delete();
+
+        $design = new Design($request->all());
+        $design->pemilik = 'Design';
+        $design->prosentase = '0';
+        $design->bobot_rev = '3';
+        $design->rev_for_curva = 'Rev.0';
+        $design->jenis = 'Doc';
+
+        $design->lembar = $request->lembar;
+        $design->size = $request->size;
+        $design->prediksi_hari = $design->lembar * $design->size / 8; //tipe integer
+
+        $design->tanggal_prediksi = \Carbon\Carbon::now()->format('Y-m-d');
+        $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari)->format('Y-m-d'); //tipe date
+
+        list($year, $month, $day) = explode('-', $design->prediksi_akhir);
+        $design->pa_yy = $year;
+        $design->pa_mm = $month;
+        $design->pa_dd = $day;
+
+        list($year, $month, $day) = explode('-', $design->tanggal_prediksi);
+        $design->tp_yy = $year;
+        $design->tp_mm = $month;
+        $design->tp_dd = $day;
+
+        $design->save();
+
+        return response()->json('Data berhasil disimpan', 200);
+}
 
     public function storeRevisi(Request $request)
     {
@@ -286,8 +400,6 @@ class DesignController extends Controller
         return response()->json('Data berhasil disimpan', 200);
     }
       
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -298,9 +410,9 @@ class DesignController extends Controller
 
     public function update(Request $request, $id)
     {
-
+        $design = Design::find($id);
+        return response()->json('Data berhasil disimpan', 200);
     }
-    
     
     public function updatex(Request $request, $id)
     {
@@ -366,10 +478,12 @@ class DesignController extends Controller
                 }
         
                 $design->revisi = $inputrev;
+
+            $design->bobot_rev = $request->bobot_rev;
             
             $design->update($request->all());
         
-            return response()->json(['nama_design' => $design->nama_design]);
+            return response()->json('Data berhasil disimpan', 200);
         }
     }
 

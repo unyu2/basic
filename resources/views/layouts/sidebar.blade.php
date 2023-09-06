@@ -13,8 +13,8 @@
             </div>
         </div>
         
-        <!-- /.search form -->
-        <!-- sidebar menu: : style can be found in sidebar.less -->
+<!-------------------------------------------Side Bar For Administartor ----------------------------------------------->
+
         @if (auth()->user()->level == 1)
         <ul class="sidebar-menu" data-widget="tree">
             <li>
@@ -75,7 +75,7 @@
             </li>
             <li>
                 <a href="{{ route('jabatan.index') }}">
-                    <i class="fa fa-cube"></i> <span>Jabatan</span>
+                    <i class="fa fa-cube"></i> <span>Bagian</span>
                 </a>
             </li>
             <li>
@@ -100,7 +100,7 @@
             </li>
             <li>
                 <a href="{{ route('member.index') }}">
-                    <i class="fa fa-cube"></i> <span>Team</span>
+                    <i class="fa fa-cube"></i> <span>Team Kerja</span>
                 </a>
             </li>
             <li>
@@ -119,11 +119,16 @@
                     <i class="fa fa-cube"></i> <span>Release Design Drawing</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('dinas.index') }}">
+                    <i class="fa fa-cube"></i> <span>Data Dinas</span>
+                </a>
+            </li>
 
             <li class="header">INSPEKSI</li>
             <li>
                 <a href="{{ route('full_calender') }}" target="_blank">
-                    <i class="fa fa-dashboard"></i> <span>Schedule</span>
+                    <i class="fa fa-dashboard"></i> <span>Agenda Proyek</span>
                 </a>
             </li>
             <li>
@@ -226,12 +231,129 @@
         </ul>
         @endif
 
+<!-------------------------------------------Side Bar For Teknologi ----------------------------------------------->
 
-        @if (auth()->user()->level == 3)
+        @if (auth()->user()->level == 2  || auth()->user()->level == 3 || auth()->user()->level == 4)
         <ul class="sidebar-menu" data-widget="tree">
             <li>
                 <a href="{{ route('dashboard') }}">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                    <i class="fa fa-dashboard"></i> <span>My Performance</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('chartsDesign') }}">
+                    <i class="fa fa-cube"></i> <span>Chart Design</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('chartsJadwal') }}">
+                    <i class="fa fa-cube"></i> <span>Chart Jadwal</span>
+                </a>
+            </li>
+            <li class="header">MASTER</li>
+            <li>
+                <a href="{{ route('kepala_gambar.index') }}">
+                    <i class="fa fa-cube"></i> <span>Kepala Gambar</span>
+                </a>
+            </li>
+            <li class="header">DESIGN DRAWING</li>
+            <li>
+                <a href="{{ route('design.index') }}">
+                    <i class="fa fa-cube"></i> <span>Design Drawing</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('design_detail.index') }}">
+                    <i class="fa fa-cube"></i> <span>Release Design Drawing</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('dinas.index') }}">
+                    <i class="fa fa-cube"></i> <span>Data Dinas</span>
+                </a>
+            </li>
+        </ul>
+        @endif
+
+<!--------------------------------------------------Side Bar For Exsternal Sourche IMSS, IMST Dll ------------------------------------------------------>
+
+        @if (auth()->user()->level == 6)
+        <ul class="sidebar-menu" data-widget="tree">
+        <li>
+                <a href="{{ route('dashboard_oil') }}">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard OIL</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('charts') }}">
+                    <i class="fa fa-cube"></i> <span>Chart OIL</span>
+                </a>
+            </li>
+            <li class="header">INSPEKSI & TEMUAN</li>
+            <li>
+                <a href="{{ route('emu.index') }}">
+                    <i class="fa fa-cubes"></i> <span>Start Inspeksi Emu/DMU</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('temuan.index') }}">
+                    <i class="fa fa-cubes"></i> <span>Daftarkan Temuan</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('full_calender') }}" target="_blank">
+                    <i class="fa fa-dashboard"></i> <span>Agenda Proyek</span>
+                </a>
+            </li>
+        </ul>
+        @endif
+
+<!--------------------------------------------------Side Bar For Pengadaan ------------------------------------------------------>
+
+
+        @if (auth()->user()->level == 7)
+        <ul class="sidebar-menu" data-widget="tree">
+        <li>
+                <a href="{{ route('dashboard_oil') }}">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard OIL</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('charts') }}">
+                    <i class="fa fa-cube"></i> <span>Chart OIL</span>
+                </a>
+            </li>
+        <li class="header">PENGIRIMAN BARANG</li>
+            <li>
+                <a href="{{ route('minta.index') }}">
+                    <i class="fa fa-cart-arrow-down"></i> <span>Terima Permintaan</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('transaksi_pemesanan.baru') }}">
+                    <i class="fa fa-truck"></i> <span>Kirim Barang</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('pemesanan.index') }}">
+                    <i class="fa fa-upload"></i> <span>Data Out Barang</span>
+                </a>
+            </li>
+        </ul>
+        @endif
+
+<!--------------------------------------------------Side Bar For Manager QaQc ------------------------------------------------------>
+
+        @if (auth()->user()->level == 12 || auth()->user()->level == 11)
+        <ul class="sidebar-menu" data-widget="tree">
+            <li>
+                <a href="{{ route('dashboard_oil') }}">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard OIL</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('charts') }}">
+                    <i class="fa fa-cube"></i> <span>Chart OIL</span>
                 </a>
             </li>
             <li class="header">MASTER</li>
@@ -256,13 +378,8 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('proyek.index') }}">
-                    <i class="fa fa-cube"></i> <span>Proyek</span>
-                </a>
-            </li>
-            <li>
                 <a href="{{ route('member.index') }}">
-                    <i class="fa fa-cube"></i> <span>Team</span>
+                    <i class="fa fa-cube"></i> <span>Team kerja</span>
                 </a>
             </li>
             <li>
@@ -273,7 +390,7 @@
             <li class="header">INSPEKSI</li>
             <li>
                 <a href="{{ route('full_calender') }}" target="_blank">
-                    <i class="fa fa-dashboard"></i> <span>Schedule</span>
+                    <i class="fa fa-dashboard"></i> <span>Agenda Proyek</span>
                 </a>
             </li>
             <li>
@@ -298,12 +415,12 @@
             </li>
             <li>
                 <a href="{{ route('temuan.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Daftarkan Temuan</span>
+                    <i class="fa fa-cubes"></i> <span>Daftarkan Temuan (OIL)</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('temuan2.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Tindak Lanjut Temuan</span>
+                    <i class="fa fa-cubes"></i> <span>Tindak Lanjut Temuan (OIL)</span>
                 </a>
             </li>
             <li>
@@ -360,142 +477,6 @@
         </ul>
         @endif
 
-
-        @if (auth()->user()->level == 2)
-        <ul class="sidebar-menu" data-widget="tree">
-            <li>
-                <a href="{{ route('dashboard') }}">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="header">MASTER</li>
-            <li>
-                <a href="{{ route('kategori.index') }}">
-                    <i class="fa fa-cube"></i> <span>Kategori Komponen</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('produk.index') }}">
-                    <i class="fa fa-cube"></i> <span>Komponen</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('subpengujian.index') }}">
-                    <i class="fa fa-cube"></i> <span>Tipe Inspeksi / Pengujian</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('proyek.index') }}">
-                    <i class="fa fa-cube"></i> <span>Proyek</span>
-                </a>
-            </li>
-            <li class="header">INSPEKSI</li>
-            <li>
-                <a href="{{ route('full_calender') }}" target="_blank">
-                    <i class="fa fa-dashboard"></i> <span>Schedule</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('dmu.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Buat Doc Inspeksi EMU/DMU </span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('emu.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Start Inspeksi Emu/DMU</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('emu_ctrl.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Approve & Print Inspeksi</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('temuan.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Daftarkan Temuan</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('temuan2.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Tindak Lanjut Temuan</span>
-                </a>
-            </li>
-            <li>
-            <li class="header">PERMINTAAN BARANG</li>
-            <li>
-                <a href="{{ route('permintaan.index') }}">
-                    <i class="fa fa-upload"></i> <span>Minta Barang</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('proses.index') }}">
-                    <i class="fa fa-download"></i> <span>Terima Barang</span>
-                </a>
-            </li>
-            <li class="header">DESIGN DRAWING</li>
-            <li>
-                <a href="{{ route('design.index') }}">
-                    <i class="fa fa-cube"></i> <span>Design Drawing</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('design_detail.index') }}">
-                    <i class="fa fa-cube"></i> <span>Release Design Drawing</span>
-                </a>
-            </li>
-        </ul>
-        @endif
-
-        @if (auth()->user()->level == 6)
-        <ul class="sidebar-menu" data-widget="tree">
-            <li>
-                <a href="{{ route('dashboard') }}">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="header">INSPEKSI & TEMUAN</li>
-            <li>
-                <a href="{{ route('emu.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Start Inspeksi Emu/DMU</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('temuan.index') }}">
-                    <i class="fa fa-cubes"></i> <span>Daftarkan Temuan</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('full_calender') }}" target="_blank">
-                    <i class="fa fa-dashboard"></i> <span>Schedule</span>
-                </a>
-            </li>
-        </ul>
-        @endif
-        @if (auth()->user()->level == 7)
-        <ul class="sidebar-menu" data-widget="tree">
-        <li>
-                <a href="{{ route('dashboard') }}">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-            </li>
-        <li class="header">PENGIRIMAN BARANG</li>
-            <li>
-                <a href="{{ route('minta.index') }}">
-                    <i class="fa fa-cart-arrow-down"></i> <span>Terima Permintaan</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('transaksi_pemesanan.baru') }}">
-                    <i class="fa fa-truck"></i> <span>Kirim Barang</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('pemesanan.index') }}">
-                    <i class="fa fa-upload"></i> <span>Data Out Barang</span>
-                </a>
-            </li>
-        </ul>
-        @endif
     </section>
     <!-- /.sidebar -->
 </aside>

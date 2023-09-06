@@ -26,6 +26,10 @@ class AddSomeFieldToUsersTable extends Migration
             $table->string('bagian')
                   ->nullable()
                   ->after('nip');
+            $table->string('status_karyawan')
+                  ->nullable()
+                  ->after('bagian');
+                  
         });
     }
 

@@ -19,6 +19,7 @@ class DesignImports implements ToModel, WithHeadingRow
                 'kode_design' => $row['kode_design'],
                 'nama_design' => $row['nama_design'],
                 'revisi' => $row['revisi'],
+                'rev_for_curva' => $row['rev_for_curva'],
                 'pemilik' => $row['pemilik'],
                 'id_refrensi' => $row['id_refrensi'],
                 'refrensi_design' => $row['refrensi_design'],

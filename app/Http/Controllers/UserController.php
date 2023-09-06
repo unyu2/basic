@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Jabatan;
 use App\Models\Level;
 use App\Exports\userExport;
+use App\Exports\userImports;
+
 
 class UserController extends Controller
 {
@@ -25,12 +27,6 @@ class UserController extends Controller
         $level = User::all();
 
         return view('user.index', compact('strata','level','levels'));
-    }
-
-    public function exportExcel()
-    {
-        $user = User::all();
-        return Excel::download(new userExport($user), 'Data_User.xlsx');
     }
 
     public function data()
@@ -77,6 +73,7 @@ class UserController extends Controller
         $user->level = $request->level;
         $user->nip = $request->nip;
         $user->bagian = $request->bagian;
+        $user->status_karyawan = $request->status_karyawan;
         $user->foto = '/img/user.jpg';
         $user->save();
 
@@ -120,6 +117,8 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->bagian = $request->bagian;
+        $user->level = $request->level;
+        $user->nip = $request->nip;
         if ($request->has('password') && $request->password != "") 
             $user->password = bcrypt($request->password);
         $user->update();
@@ -175,4 +174,30 @@ class UserController extends Controller
 
         return response()->json($user, 200);
     }
+
+    public function importExcel(Request $request)
+    {
+        try {
+            $file = $request->file('file'); // Ambil file Excel dari request
+    
+            // Pastikan Anda sudah membuat class Import yang sesuai dengan skema impor Anda
+            Excel::import(new userImports, $file);
+    
+            // Redirect ke halaman index dengan pesan sukses
+            return redirect()->route('design.index')->with('success', 'Import data berhasil.');
+        } catch (\Exception $e) {
+            // Tampilkan pesan error yang lebih rinci
+            return redirect()->route('design.index')->with('error', 'Import data gagal: ' . $e->getMessage() . ' Line: ' . $e->getLine());
+        }
+    }
+
+    public function exportExcel()
+    {
+        $user = User::leftJoin('jabatan', 'jabatan.id_jabatan', '=', 'users.bagian')
+        ->leftjoin('level', 'level.id_level', '=', 'users.level')
+        ->select('users.*', 'jabatan.nama_jabatan', 'level.nama_level')
+        ->get();
+        return Excel::download(new userExport($user), 'Data_User.xlsx');
+    }
+
 }

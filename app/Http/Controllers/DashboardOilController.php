@@ -280,8 +280,8 @@ class DashboardOilController extends Controller
 
     $tanggal_awal = date('Y-m-01');
 
-    if (auth()->user()->level == 1) {
-            return view('admin.dashboard_oil', compact(
+    if (auth()->user()->level == 6 || auth()->user()->level == 7 || auth()->user()->level == 1 || auth()->user()->level == 11 || auth()->user()->level == 12) {
+        return view('admin.dashboard_oil', compact(
             'temuans',
             'temuans2',
             'temuan3',
@@ -332,6 +332,7 @@ class DashboardOilController extends Controller
             'barang_request',
             'barang_diterima',));
         }
+
     }
 
 }

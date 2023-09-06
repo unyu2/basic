@@ -14,6 +14,22 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
+            <div class="container-fluid">
+
+            @if (auth()->user()->level == 1)
+            <div class="box-header">
+                <div class="input-group input-group-sm">
+                    <form action="{{ route('user.import') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <label for="file">Pilih file Excel untuk diunggah:</label>
+                        <input type="file" name="file" id="file" class="form-control" aria-label="File input">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-success btn-flat">Import</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            @endif
                 <button onclick="addForm('{{ route('user.store') }}')" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Tambah</button>
                 <a href="{{ route('user.export') }}" class="btn btn-primary btn-xs btn-flat"><i class="fa fa-file-excel"></i> Export Excel</a>
             </div>

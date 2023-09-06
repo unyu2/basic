@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{
-    DashboardOilController, DashboardController, Dashboard2Controller, Dashboard3Controller, Dashboard4Controller, Dashboard5Controller,
+    DashboardController, DashboardOilController, Dashboard2Controller, Dashboard3Controller, Dashboard4Controller, Dashboard5Controller,
     Dashboard6Controller, Dashboard7Controller, Dashboard8Controller, Dashboard9Controller, Dashboard10Controller,
     Dashboard11Controller, Dashboard12Controller, Dashboard13Controller, Dashboard14Controller, Dashboard15Controller,
     Dashboard16Controller, Dashboard17Controller, Dashboard18Controller, Dashboard19Controller, Dashboard20Controller,
@@ -45,6 +45,7 @@ use App\Http\Controllers\{
     ChartJadwalController,
     DwgController,
     DesignController,
+    DinasController,
     DesignDetailController,
     SistemController,
     FullCalenderController,
@@ -107,11 +108,10 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
-
-    Route::get('/dashboard_oil', [DashboardOilController::class, 'index'])->name('dashboard_oil');
+Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard_oil', [DashboardOilController::class, 'index'])->name('dashboard_oil');
     Route::get('/dashboard2', [Dashboard2Controller::class, 'index'])->name('dashboard2');
     Route::get('/dashboard3', [Dashboard3Controller::class, 'index'])->name('dashboard3');
     Route::get('/dashboard4', [Dashboard4Controller::class, 'index'])->name('dashboard4');
@@ -206,13 +206,18 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
     Route::get('/dashboard31x2', [Dashboard31x2Controller::class, 'index'])->name('dashboard31x2');
     Route::get('/dashboard32x1', [Dashboard32x1Controller::class, 'index'])->name('dashboard32x1');
     Route::get('/dashboard32x2', [Dashboard32x2Controller::class, 'index'])->name('dashboard32x2');          
-    
     Route::get('/page_pengujian', [PagePengujianController::class, 'index'])->name('page_pengujian');
     
     
-    Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
+    Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
+
+        Route::get('/dinas/data', [DinasController::class, 'data'])->name('dinas.data');
+        Route::get('/dinas/dataModal', [DinasController::class, 'dataModal'])->name('dinas.dataModal');
+        Route::get('dinas/pilihUser/{id}', [DinasController::class, 'pilihUser'])->name('dinas.pilihUser');
+        Route::resource('/dinas', DinasController::class);
 
         Route::get('/design/data', [DesignController::class, 'data'])->name('design.data');
+        Route::get('/design/dataAdmin', [DesignController::class, 'dataAdmin'])->name('design.dataAdmin');
         Route::get('/design/export', [DesignController::class, 'exportExcel'])->name('design.export');
         Route::get('/design/exportLog', [DesignController::class, 'exportExcelLog'])->name('design.exportLog');
         Route::post('/design/import', [DesignController::class, 'importExcel'])->name('design.import');
@@ -220,16 +225,12 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
         Route::get('/design/dataModal2', [DesignController::class, 'dataModal2'])->name('design.dataModal2');
         Route::get('design/dataDetail', [DesignController::class, 'dataDetail'])->name('design.dataDetail');
         Route::get('/design/{id_design}/showDetail', [DesignController::class, 'showDetail'])->name('design.showDetail');
-
         Route::put('/design/{id_design}', [DesignController::class, 'updatex'])->name('design.updatex');
         Route::put('/design/{id_design}/release', [DesignController::class, 'release'])->name('design.release');
         Route::get('design/pilihData/{id}', [DesignController::class, 'pilihData'])->name('design.pilihData');
         Route::get('design/pilihRevisi/{id}', [DesignController::class, 'pilihRevisi'])->name('design.pilihRevisi');
         Route::post('/design/storeRevisi', [DesignController::class, 'storeRevisi'])->name('design.storeRevisi');
-
         Route::post('/design/stores', [DesignController::class, 'stores'])->name('design.stores');
-
-
         Route::post('/design/delete-selected', [DesignController::class, 'deleteSelected'])->name('design.delete_selected');
         Route::post('/design/exportSelected', [DesignController::class, 'exportSelected'])->name('design.exportSelected');
         Route::post('/design/cetakPdf', [DesignController::class, 'cetakPdf'])->name('design.cetakPdf');
@@ -240,8 +241,6 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
         Route::get('design_detail/pilihData/{id}', [DesignDetailController::class, 'pilihData'])->name('design_detail.pilihData');
         Route::put('/design_detail/{id}', [DesignDetailController::class, 'updatex'])->name('design_detail.updatex');
         Route::post('/design_detail/import', [DesignDetailController::class, 'importExcel'])->name('design_detail.import');
-  //      Route::post('/design_detail/store', [DesignDetailController::class, 'store'])->name('design_detail.store');
-  //      Route::post('/design_detail/stores', [DesignController::class, 'stores'])->name('design_detail.stores');
         Route::post('/design_detail/delete-selected', [DesignDetailController::class, 'deleteSelected'])->name('design_detail.delete_selected');
         Route::resource('/design_detail', DesignDetailController::class);
 
@@ -303,8 +302,6 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
         Route::post('/charts/chartDesign/fetch_data_qes_bobot', [ChartDesignController::class, 'fetch_data_qes_bobot']);
 
         Route::post('/charts/chartDesign/fetch_data_curvaS', [ChartDesignController::class, 'fetch_data_curvaS']);
-
-
 
         Route::get('/charts/chartsJadwal', [ChartJadwalController::class, 'index'])->name('chartsJadwal');
         Route::get('/charts/chartsMes', [ChartJadwalController::class, 'chartMes'])->name('chartsMes');
@@ -479,7 +476,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
 
     });
 
-    Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
+    Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
         Route::get('/transaksi/baru', [PenjualanController::class, 'create'])->name('transaksi.baru');
         Route::post('/transaksi/simpan', [PenjualanController::class, 'store'])->name('transaksi.simpan');
         Route::get('/transaksi/selesai', [PenjualanController::class, 'selesai'])->name('transaksi.selesai');
@@ -493,7 +490,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
 
     });
 
-    Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
+    Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
         Route::get('/transaksi/baru', [PinjamController::class, 'create'])->name('transaksi.baru');
         Route::post('/transaksi/simpan', [PinjamController::class, 'store'])->name('transaksi.simpan');
         Route::get('/transaksi/selesai', [PinjamController::class, 'selesai'])->name('transaksi.selesai');
@@ -505,7 +502,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
 
     });
 
-    Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
+    Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
         Route::get('/transaksi_pemesanan/baru', [PemesananController::class, 'create'])->name('transaksi_pemesanan.baru');
         Route::post('/transaksi_pemesanan/simpan', [PemesananController::class, 'store'])->name('transaksi_pemesanan.simpan');
         Route::get('/transaksi_pemesanan/selesai', [PemesananController::class, 'selesai'])->name('transaksi_pemesanan.selesai');
@@ -519,7 +516,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
 
     });
 
-    Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
+    Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/data/{awal}/{akhir}', [LaporanController::class, 'data'])->name('laporan.data');
         Route::get('/laporan/pdf/{awal}/{akhir}', [LaporanController::class, 'exportPDF'])->name('laporan.export_pdf');
@@ -530,6 +527,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
 
         Route::get('/user/export', [UserController::class, 'exportExcel'])->name('user.export');
         Route::get('/user/data', [UserController::class, 'data'])->name('user.data');
+        Route::post('/user/import', [UserController::class, 'importExcel'])->name('user.import');
         Route::resource('/user', UserController::class);
 
         Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
@@ -537,7 +535,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11'], function () {
         Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
     });
  
-    Route::group(['middleware' => 'level:1,2,3,4,5,6,7'], function () {
+    Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
         Route::get('/profil', [UserController::class, 'profil'])->name('user.profil');
         Route::post('/profil', [UserController::class, 'updateProfil'])->name('user.update_profil');
     });

@@ -56,14 +56,6 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group row hidden-form ">
-                        <label for="bobot_rev" class="col-lg-2 col-lg-offset-1 control-label">Bobot Revisi</label> 
-                        <div class="col-lg-6">
-                        <input type="text" name="bobot_rev" id="bobot_rev" class="form-control" autofocus>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    
                     <div class="form-group row">
                         <label for="konfigurasi" class="col-lg-2 col-lg-offset-1 control-label">Dipakai Konfigurasi</label> 
                         <div class="col-lg-6">
@@ -88,7 +80,7 @@
 
                         <label for="size" class="col-lg-1 control-label">Size</label>
                         <div class="col-lg-2">
-                            <select type="text" name="size" id="size" class="form-control" required autofocus>
+                            <select name="size" id="size" class="form-control" required autofocus>
                             <option></option>
                                 <option Value="64">A0</option>
                                 <option Value="32">A1</option>
@@ -134,7 +126,7 @@
                         <div class="col-lg-2">
                             <select type="text" name="id_approve" id="id_approve" class="form-control" required autofocus>
                             <option></option>
-                            @foreach ($approver as $key => $item)
+                            @foreach ($drafter as $key => $item)
                                      <option value="{{ $key }}" >{{ $item }}</option>
                                 @endforeach
                             </select>

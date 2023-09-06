@@ -1,3 +1,9 @@
+<style>
+    .hidden-form {
+        display: none;
+    }
+</style>
+
 <div class="modal fade" id="modal-form2" tabindex="-1" role="dialog" aria-labelledby="modal-form2">
     <div class="modal-dialog modal-lg" role="document">
         <form action="" method="post" class="form-horizontal" enctype="multipart/form-data" data-toggle="validator">
@@ -11,6 +17,67 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
+
+                <div class="form-group row hidden-form">
+                        <label for="id_draft" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                            <div class="col-lg-6">
+                                <input type="date" name="id_draft" id="id_draft" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row hidden-form">
+                        <label for="id_check" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                            <div class="col-lg-6">
+                                <input type="date" name="id_check" id="id_check" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row hidden-form">
+                        <label for="id_approve" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                            <div class="col-lg-6">
+                                <input type="date" name="id_approve" id="id_approve" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row hidden-form">
+                        <label for="jenis" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                            <div class="col-lg-6">
+                                <input type="date" name="jenis" id="jenis" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row hidden-form">
+                        <label for="pemilik" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                            <div class="col-lg-6">
+                                <input type="date" name="pemilik" id="pemilik" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row hidden-form">
+                        <label for="bobot_rev" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                            <div class="col-lg-6">
+                                <input type="date" name="bobot_rev" id="bobot_rev" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row hidden-form">
+                        <label for="size" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                            <div class="col-lg-6">
+                                <input type="date" name="size" id="size" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row hidden-form">
+                        <label for="lembar" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                            <div class="col-lg-6">
+                                <input type="date" name="lembar" id="lembar" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+
+
+<!----------------------------------------------------------Real Form For Show------------------------------------------------------------------>
+
                 <div class="form-group row">
                         <label for="prediksi_akhir" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
                             <div class="col-lg-6">

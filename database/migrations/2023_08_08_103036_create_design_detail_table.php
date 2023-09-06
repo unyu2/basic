@@ -21,6 +21,17 @@ class CreateDesignDetailTable extends Migration
             $table->string('revisi');
             $table->string('status');
             $table->string('prediksi_akhir');
+
+            $table->integer('id_draft');
+            $table->integer('id_check');
+            $table->integer('id_approve');
+            $table->string('jenis');
+            $table->string('pemilik');
+            $table->integer('bobot_rev');
+            $table->integer('size');
+            $table->integer('lembar');
+
+
             $table->timestamps();
         });
     }
