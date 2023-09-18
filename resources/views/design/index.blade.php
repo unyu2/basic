@@ -73,6 +73,9 @@
                             <th>No Dwg</th>
                             <th>Nama</th>
                             <th>Proyek</th>
+                            <th>Draft</th>
+                            <th>Check</th>
+                            <th>Approve</th>
                             <th>Revisi</th>
                             <th>Kesesuaian Jadwal</th>
                             <th>Status</th>
@@ -175,6 +178,9 @@
                 {data: 'kode_design'},
                 {data: 'nama_design'},
                 {data: 'id_proyek'},
+                {data: 'id_draft'},
+                {data: 'id_check'},
+                {data: 'id_approve'},
                 {data: 'revisi'},
                 {data: 'kondisi'},
                 {data: 'status'},
@@ -561,9 +567,6 @@
                     {data: 'DT_RowIndex', searchable: false, sortable: false},
                     {data: 'kode_design'},
                     {data: 'revisi'},
-                    {data: 'id_draft'},
-                    {data: 'id_check'},
-                    {data: 'id_approve'},
                     {data: 'created_at'},
                 ]
             });

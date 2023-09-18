@@ -97,8 +97,14 @@ class DesignController extends Controller
     {
         $design = Design::leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', 'design.id_kepala_gambar')
             ->leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
-            ->select('design.*', 'nama', 'nama_proyek', 'design.jenis')
+            ->leftJoin('users as check_user', 'check_user.id', '=', 'design.id_check')
+            ->leftJoin('users as approve_user', 'approve_user.id', '=', 'design.id_approve')
+            ->leftJoin('users as draft_user', 'draft_user.id', '=', 'design.id_draft')
+            ->select('design.*', 'nama_proyek', 'nama', 'design.jenis', 'design.status as design_status', 'proyek.status as proyek_status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
             ->where('jenis', 'Doc')
+            ->where(function ($query) {
+                $query->where('proyek.status', 'Open');
+            })
             ->orderBy('id_design', 'DESC')
             ->get();
 
@@ -124,6 +130,15 @@ class DesignController extends Controller
                     return ''; // Return empty string for 'Release' status
                 }
             })
+            ->editColumn('id_draft', function ($detail) {
+                return $detail->draft_user_name ?? '';
+            })
+            ->editColumn('id_check', function ($detail) {
+                return $detail->check_user_name ?? '';
+            })
+            ->editColumn('id_approve', function ($detail) {
+                return $detail->approve_user_name ?? '';
+            })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';      
                 $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
@@ -138,10 +153,7 @@ class DesignController extends Controller
     {
         $id_design = $request->query('id_design');
         $detail = DesignDetail::with('design')
-            ->leftJoin('users as check_user', 'check_user.id', '=', 'design_detail.id_check')
-            ->leftJoin('users as approve_user', 'approve_user.id', '=', 'design_detail.id_approve')
-            ->leftJoin('users as draft_user', 'draft_user.id', '=', 'design_detail.id_draft')
-            ->select('design_detail.*', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+            ->select('design_detail.*')
             ->where('design_detail.id_design', $id_design)
             ->get();
     
@@ -150,15 +162,6 @@ class DesignController extends Controller
             ->addIndexColumn()
             ->addColumn('kode_design', function ($detail) {
                 return '<span class="label label-success">'. $detail->design->id_design .'</span>';
-            })
-            ->editColumn('id_draft', function ($detail) {
-                return $detail->draft_user_name ?? '';
-            })
-            ->editColumn('id_check', function ($detail) {
-                return $detail->check_user->name ?? '';
-            })
-            ->editColumn('id_approve', function ($detail) {
-                return $detail->approve_user_name ?? '';
             })
             ->addColumn('created_at', function ($detail) {
                 return tanggal_indonesia($detail->created_at, false);
@@ -198,6 +201,15 @@ class DesignController extends Controller
             })
             ->editColumn('id_proyek', function ($design) {
                 return $design->nama_proyek ?? '';
+            })
+            ->editColumn('id_draft', function ($detail) {
+                return $detail->draft_user_name ?? '';
+            })
+            ->editColumn('id_check', function ($detail) {
+                return $detail->check_user_name ?? '';
+            })
+            ->editColumn('id_approve', function ($detail) {
+                return $detail->approve_user_name ?? '';
             })
             ->addColumn('kondisi', function ($design) {
                 if ($design->status !== 'Release') {

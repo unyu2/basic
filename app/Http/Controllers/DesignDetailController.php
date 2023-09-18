@@ -86,7 +86,7 @@ class DesignDetailController extends Controller
             $query->where('proyek.status', 'Open');
         })
         ->where(function ($query) {
-            $query->where('design_jenis', 'Doc');
+            $query->where('design.jenis', 'Doc');
         })
         ->orderBy('id_design', 'DESC')
         ->get();

@@ -14,9 +14,6 @@
                 <th width="5%">No</th>
                 <th>Kode Design</th>
                 <th>Revisi</th>
-                <th>Draft</th>
-                <th>Check</th>
-                <th>Approve</th>
                 <th>Tanggal</th>
             </tr>
         </thead>
