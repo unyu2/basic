@@ -13,9 +13,14 @@ class Produk extends Model
     protected $primaryKey = 'id_produk';
     protected $guarded = [];
 
-        public function user()
+    public function user()
     {
         return $this->belongsTo(User::class, 'id', 'id_user');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'id_supplier', 'id_supplier');
     }
 }
 

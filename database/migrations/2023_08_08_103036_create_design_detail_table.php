@@ -31,6 +31,8 @@ class CreateDesignDetailTable extends Migration
             $table->integer('size');
             $table->integer('lembar');
 
+            $table->float('tipe');
+
 
             $table->timestamps();
         });

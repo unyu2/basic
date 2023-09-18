@@ -63,26 +63,130 @@ class DesignController extends Controller
        ));
     }
 
+    public function indexOverall()
+    {
+
+        $design = Design::select('id_design')->orderBy('id_design', 'DESC')->get();
+        $userLoggedIn = Auth::user(); 
+        $bagianUser = $userLoggedIn->bagian;
+        $levelUser = $userLoggedIn->level;
+
+        $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar');
+        $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
+    
+        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
+        $drafter = User::where('bagian', $bagianUser)->where('level', '3')->pluck('name', 'id');
+    
+        $proyek = Proyek::where('status', 'open')->pluck('nama_proyek' , 'id_proyek');
+
+        $konfigurasi = Konfigurasi::all()->pluck('nama_konfigurasi','id_konfigurasi');
+        $konfigurasi_dmu = Konfigurasi::where('tipe_konfigurasi', 'DMU')->pluck('nama_konfigurasi','id_konfigurasi');
+        $konfigurasi_emu = Konfigurasi::where('tipe_konfigurasi', 'EMU')->pluck('nama_konfigurasi','id_konfigurasi');
+        $konfigurasi_light = Konfigurasi::where('tipe_konfigurasi', 'Light')->pluck('nama_konfigurasi','id_konfigurasi');
+        $konfigurasi_coach = Konfigurasi::where('tipe_konfigurasi', 'Single Coach')->pluck('nama_konfigurasi','id_konfigurasi');
+        $konfigurasi_wagon = Konfigurasi::where('tipe_konfigurasi', 'Wagon')->pluck('nama_konfigurasi','id_konfigurasi');
+        $konfigurasi_other = Konfigurasi::where('tipe_konfigurasi', 'Other')->pluck('nama_konfigurasi','id_konfigurasi');
+    
+        return view('design_overall.index', compact('design', 'kepala', 'subsistem', 'approver', 'drafter', 'proyek',
+        'konfigurasi', 'konfigurasi_dmu', 'konfigurasi_emu', 'konfigurasi_light', 'konfigurasi_coach', 'konfigurasi_wagon', 'konfigurasi_other',
+        'approver'
+       ));
+    }
+
+    public function dataOverall()
+    {
+        $design = Design::leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', 'design.id_kepala_gambar')
+            ->leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
+            ->select('design.*', 'nama', 'nama_proyek', 'design.jenis')
+            ->where('jenis', 'Doc')
+            ->orderBy('id_design', 'DESC')
+            ->get();
+
+        return datatables()
+            ->of($design)
+            ->addIndexColumn()
+            ->editColumn('id_proyek', function ($design) {
+                return $design->nama_proyek ?? '';
+            })
+            ->addColumn('kondisi', function ($design) {
+                if ($design->status !== 'Release') {
+                    $tanggalPrediksi = new DateTime($design->tanggal_prediksi);
+                    $today = new DateTime();
+                    $interval = $tanggalPrediksi->diff($today);
+                    $selisihHari = $interval->days;
+            
+                    if ($tanggalPrediksi > $today) {
+                        return $selisihHari . ' Hari';
+                    } else {
+                        return '-' . $selisihHari . ' Hari';
+                    }
+                } else {
+                    return ''; // Return empty string for 'Release' status
+                }
+            })
+            ->addColumn('aksi', function ($design) {
+                $buttons = '<div class="btn-group">';      
+                $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
+                $buttons .= '</div>';
+                return $buttons;
+            })
+            ->rawColumns(['aksi', 'id_design'])
+            ->make(true);
+    }
+
+    public function dataDetail(Request $request)
+    {
+        $id_design = $request->query('id_design');
+        $detail = DesignDetail::with('design')
+            ->leftJoin('users as check_user', 'check_user.id', '=', 'design_detail.id_check')
+            ->leftJoin('users as approve_user', 'approve_user.id', '=', 'design_detail.id_approve')
+            ->leftJoin('users as draft_user', 'draft_user.id', '=', 'design_detail.id_draft')
+            ->select('design_detail.*', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+            ->where('design_detail.id_design', $id_design)
+            ->get();
+    
+        return datatables()
+            ->of($detail)
+            ->addIndexColumn()
+            ->addColumn('kode_design', function ($detail) {
+                return '<span class="label label-success">'. $detail->design->id_design .'</span>';
+            })
+            ->editColumn('id_draft', function ($detail) {
+                return $detail->draft_user_name ?? '';
+            })
+            ->editColumn('id_check', function ($detail) {
+                return $detail->check_user->name ?? '';
+            })
+            ->editColumn('id_approve', function ($detail) {
+                return $detail->approve_user_name ?? '';
+            })
+            ->addColumn('created_at', function ($detail) {
+                return tanggal_indonesia($detail->created_at, false);
+            })
+            ->rawColumns(['kode_design'])
+            ->make(true);
+    }
 
     public function data()
     {
-
         $userId = auth()->user()->id;
 
         $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
         ->leftJoin('users as check_user', 'check_user.id', '=', 'design.id_check')
         ->leftJoin('users as approve_user', 'approve_user.id', '=', 'design.id_approve')
         ->leftJoin('users as draft_user', 'draft_user.id', '=', 'design.id_draft')
-            ->select('design.*', 'nama_proyek','proyek.status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
-            ->where('proyek.status', 'Open')
-            ->where('jenis', 'Doc')
-            ->where(function ($query) use ($userId) {
-                $query->where('design.id_draft', $userId)
-                      ->orWhere('design.id_check', $userId)
-                      ->orWhere('design.id_approve', $userId);
-            })
-            ->orderBy('id_design', 'DESC')
-            ->get();
+        ->select('design.*', 'nama_proyek', 'design.status as design_status', 'proyek.status as proyek_status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+        ->where('jenis', 'Doc')
+        ->where(function ($query) use ($userId) {
+            $query->where('design.id_draft', $userId)
+                  ->orWhere('design.id_check', $userId)
+                  ->orWhere('design.id_approve', $userId);
+        })
+        ->where(function ($query) {
+            $query->where('proyek.status', 'Open');
+        })
+        ->orderBy('id_design', 'DESC')
+        ->get();
 
         return datatables()
             ->of($design)
@@ -128,7 +232,6 @@ class DesignController extends Controller
 
     public function dataAdmin()
     {
-
         $userId = auth()->user()->id;
 
         $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
@@ -178,7 +281,6 @@ class DesignController extends Controller
     }
 
     public function dataModal()
-
     {
         $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
             ->select('design.*', 'nama_proyek')
@@ -236,26 +338,6 @@ class DesignController extends Controller
             ->rawColumns(['aksi', 'id_design', 'select_all'])
             ->make(true);
     }
-
-    public function dataDetail(Request $request)
-    {
-
-        $id_design = $request->query('id_design');
-        $detail = DesignDetail::with('design')->where('id_design', $id_design)->get();
-    
-        return datatables()
-            ->of($detail)
-            ->addIndexColumn()
-            ->addColumn('kode_design', function ($detail) {
-                return '<span class="label label-success">'. $detail->design->id_design .'</span>';
-            })
-            ->addColumn('created_at', function ($detail) {
-                return tanggal_indonesia($detail->created_at, false);
-            })
-            ->rawColumns(['kode_design'])
-            ->make(true);
-    }
-
 
         /**
      * Display the specified resource.
@@ -341,7 +423,6 @@ class DesignController extends Controller
 
 public function stores(Request $request)
 {
-
         Design::where('kode_design', $request->kode_design)->delete();
 
         $design = new Design($request->all());
@@ -480,6 +561,7 @@ public function stores(Request $request)
                 $design->revisi = $inputrev;
 
             $design->bobot_rev = $request->bobot_rev;
+            $design->prosentase = "60";
             
             $design->update($request->all());
         

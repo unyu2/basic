@@ -82,11 +82,11 @@
                         <div class="col-lg-2">
                             <select name="size" id="size" class="form-control" required autofocus>
                             <option></option>
-                                <option Value="64">A0</option>
+                            <option Value="64">A0</option>
                                 <option Value="32">A1</option>
-                                <option Value="24">A2</option>
-                                <option Value="16">A3</option>
-                                <option Value="8">A4</option>
+                                <option Value="16">A2</option>
+                                <option Value="8">A3</option>
+                                <option Value="4">A4</option>
                             </select>
                             <span class="help-block with-errors"></span>
                         </div>

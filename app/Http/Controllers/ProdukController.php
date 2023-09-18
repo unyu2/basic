@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kategori;
 use App\Models\Produk;
+use App\Models\Proyek;
+use App\Models\Supplier;
+use App\Models\Konfigurasi;
+
+
 use PDF;
 
 class ProdukController extends Controller
@@ -17,8 +22,9 @@ class ProdukController extends Controller
     public function index()
     {
         $kategori = Kategori::all()->pluck('nama_kategori', 'id_kategori');
+        $supplier = Supplier::all()->pluck('nama', 'id_supplier');
 
-        return view('produk.index', compact('kategori'));
+        return view('produk.index', compact('kategori', 'supplier'));
     }
 
     public function data()
@@ -64,6 +70,35 @@ class ProdukController extends Controller
             })
             ->rawColumns(['aksi', 'kode_produk', 'select_all'])
             ->make(true);
+    }
+
+    public function dataModal()
+    {
+        $supplier = Supplier::orderBy('created_at', 'DESC')->get();
+    
+        return datatables()
+            ->of($supplier)
+            ->addIndexColumn()
+            ->addColumn('select_all', function ($supplier) {
+                return '
+                    <input type="checkbox" name="id_supplier[]" value="'. $supplier->id_supplier .'">
+                ';
+            })
+            ->addColumn('aksi', function ($supplier) {
+                $buttons = '<div class="btn-group">';                   
+                $buttons .= '<button type="button" onclick="pilihSupplier(`'. route('design.pilihData', $supplier->id_supplier) .'`)" class="btn btn-xs btn-success btn-flat">Pilih</button>';
+                $buttons .= '</div>';
+        
+                return $buttons;
+            })
+            ->rawColumns(['aksi', 'id_design', 'select_all'])
+            ->make(true);    
+    }
+
+    public function pilihData($id_supplier)
+    {
+        $supplier = Supplier::find($id_supplier);
+        return response()->json($supplier);
     }
 
     /**

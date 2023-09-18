@@ -19,6 +19,22 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="satuan" class="col-lg-2 col-lg-offset-1 control-label">satuan</label>
+                        <div class="col-lg-6">   
+                            <select value="satuan" name="satuan" id="satuan" class="form-control" required autofocus>
+                                        <option value=""></option>
+                                        <option value="pcs">Pcs</option>
+                                        <option value="set">Set</option>
+                                        <option value="unit">Unit</option>
+                                        <option value="box">Box</option>
+                                        <option value="m">m</option>
+                                        <option value="m2">m2</option>
+                                        <option value="m3">m3</option>
+                            </select>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="id_kategori" class="col-lg-2 col-lg-offset-1 control-label">Kategori</label>
                         <div class="col-lg-6">
                             <select name="id_kategori" id="id_kategori" class="form-control" required autofocus>
@@ -33,29 +49,46 @@
                     <div class="form-group row">
                         <label for="komat" class="col-lg-2 col-lg-offset-1 control-label">Kode Material</label>
                         <div class="col-lg-6">
-                            <input type="text" name="komat" id="komat" class="form-control">
+                            <input type="text" name="komat" id="komat" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    <!--
                     <div class="form-group row">
-                        <label for="merk" class="col-lg-2 col-lg-offset-1 control-label">Merk / Spek</label>
+                        <label for="id_supplier" class="col-lg-2 col-lg-offset-1 control-label">Supplier</label>
                         <div class="col-lg-6">
-                            <input type="text" name="merk" id="merk" class="form-control">
+                            <select name="id_supplier" id="id_supplier" class="form-control" required autofocus>
+                                <option value="">Pilih Supplier</option>
+                                @foreach ($supplier as $key => $item)
+                                <option value="{{ $key }}">{{ $item }}</option>
+                                @endforeach
+                            </select>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div> -->
+                    <div class="form-group row">
+                        <label for="id_supplier" class="col-lg-2 col-lg-offset-1 control-label"></label> 
+                        <div class="col-lg-2">
+                            <button onclick="addSupplier()" type="button" class="btn btn-info">Pilih Supplier</button>
+                        </div>
+                        <div class="col-lg-4">
+                            <input name="id_supplier" id="id_supplier" class="form-control">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="satuan" class="col-lg-2 col-lg-offset-1 control-label">satuan</label>
-                        <div class="col-lg-6">   
-                            <select value="satuan" name="satuan" id="satuan" class="form-control" required autofocus>
-                                        <option value=""></option>
-                                        <option value="pcs">PCS</option>
-                                        <option value="set">SET</option>
-                                        <option value="box">UNIT</option>
-                                        <option value="m">m</option>
-                                        <option value="m2">m2</option>
-                                        <option value="m3">m3</option>
-                            </select>
+                        <label for="spesifikasi" class="col-lg-2 col-lg-offset-1 control-label">Spesifikasi</label>
+                        <div class="col-lg-6">
+                            <textarea type="text" name="spesifikasi" id="spesifikasi" class="form-control" required autofocus placeholder="Masukkan Spesifikasi"></textarea>
+                            </textarea>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="keterangan" class="col-lg-2 col-lg-offset-1 control-label">Keterangan</label>
+                        <div class="col-lg-6">
+                            <textarea type="text" name="keterangan" id="keterangan" class="form-control">
+                            </textarea>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

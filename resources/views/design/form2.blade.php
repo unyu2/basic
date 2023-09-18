@@ -1,3 +1,9 @@
+<style>
+    .hidden-form {
+        display: none;
+    }
+</style>
+
 <div class="modal fade" id="modal-form2" tabindex="-1" role="dialog" aria-labelledby="modal-form2">
     <div class="modal-dialog modal-lg" role="document">
         <form action="" method="post" class="form-horizontal" enctype="multipart/form-data" data-toggle="validator">
@@ -31,6 +37,18 @@
                                 <input value="Proses Revisi" placeholder="Proses Revisi" type="text" name="status" id="status" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
+                    </div>
+                    <div class="form-group row hidden-form">
+                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
+                        <div class="col-lg-6">
+                        <select name="tipe" id="tipe" class="form-control" required autofocus readonly>
+                                <option></option>
+                                <option Value="1">New</option>
+                                <option Value="0.5">Konversi</option>
+                                <option Value="0.05">Konversi & Revisi</option>
+                         </select>
+                         </div>
+                            <span class="help-block with-errors"></span>
                     </div>
                     <div class="form-group row">
                         <label for="bobot_rev" class="col-lg-2 col-lg-offset-1 control-label">Bobot Rev</label> 

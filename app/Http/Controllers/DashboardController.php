@@ -52,7 +52,7 @@ class DashboardController extends Controller
             ->where(function ($query) use ($userId) {
                 $query->where('id_draft', $userId);
             })
-            ->selectRaw('status, sum((size * lembar * 1)/3) as total')
+            ->selectRaw('status, sum((size * lembar * tipe * 1)/3) as total') // 3 ini apa ya??
             ->groupBy('status')
             ->get();
 
@@ -60,7 +60,7 @@ class DashboardController extends Controller
             ->where(function ($query) use ($userId) {
                 $query->where('id_check', $userId);
             })
-            ->selectRaw('status, sum((size * lembar * 0.7)/3) as total')
+            ->selectRaw('status, sum((size * lembar * tipe * 0.7)/3) as total')
             ->groupBy('status')
             ->get();
 
@@ -68,7 +68,7 @@ class DashboardController extends Controller
             ->where(function ($query) use ($userId) {
                 $query->where('id_approve', $userId);
             })
-            ->selectRaw('status, sum((size * lembar * 0.5)/3) as total')
+            ->selectRaw('status, sum((size * lembar * tipe * 0.5)/3) as total')
             ->groupBy('status')
             ->get();
 
@@ -132,23 +132,23 @@ class DashboardController extends Controller
 
             $design_release_jam_draft = Design::where('status', 'Release')->where('id_draft', $userId)->where('jenis', 'Dinas')
             ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size', 0));
-
+/*
             $design_release_jam_check = Design::where('status', 'Release')->where('id_check', $userId)->where('jenis', 'Dinas')
             ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size', 0));
 
             $design_release_jam_approve = Design::where('status', 'Release')->where('id_approve', $userId)->where('jenis', 'Dinas')
             ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size', 0));
-
+*/
             $design_release_jam_draft_detail = DesignDetail::where('id_draft', $userId)->where('status', 'Release')
-            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * (bobot_rev /3) * 1', 0));
+            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev /3) * 1', 0));
 
             $design_release_jam_check_detail = DesignDetail::where('id_check', $userId)->where('status', 'Release')
-            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * (bobot_rev / 3) * 0.66', 0));
+            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev / 3) * 0.66', 0));
 
             $design_release_jam_approve_detail = DesignDetail::where('id_approve', $userId)->where('status', 'Release')
-            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * (bobot_rev / 3) * 0.33', 0));
+            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev / 3) * 0.33', 0));
 
-            $release_jam = ($jumlah_hari_kerja > 0) ? ($design_release_jam_draft + $design_release_jam_check + $design_release_jam_approve) / ($jumlah_hari_kerja)  : 0;
+            $release_jam = ($jumlah_hari_kerja > 0) ? ($design_release_jam_draft / $jumlah_hari_kerja)  : 0;
             $release_jam_detail = ($jumlah_hari_kerja > 0) ? ($design_release_jam_draft_detail + $design_release_jam_check_detail + $design_release_jam_approve_detail) / ($jumlah_hari_kerja) : 0;
 
             }

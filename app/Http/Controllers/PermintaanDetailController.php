@@ -29,6 +29,7 @@ class PermintaanDetailController extends Controller
         $detail = PermintaanDetail::with('produk')
             ->where('id_permintaan', $id)
             ->get();
+            
         $data = array();
         $total = 0;
         $total_item = 0;

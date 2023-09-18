@@ -51,6 +51,8 @@ class CreateDesignTable extends Migration
             $table->string('size')->nullable();
             $table->integer('lembar')->nullable();
 
+            $table->float('tipe')->nullable();
+
             $table->string('konfigurasi')->nullable();
             
             $table->integer('id_draft')->nullable();

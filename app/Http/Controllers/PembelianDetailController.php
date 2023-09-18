@@ -29,6 +29,7 @@ class PembelianDetailController extends Controller
         $detail = PembelianDetail::with('produk')
             ->where('id_pembelian', $id)
             ->get();
+            
         $data = array();
         $total = 0;
         $total_item = 0;

@@ -113,20 +113,20 @@
                     <i class="fa fa-cube"></i> <span>Supplier</span>
                 </a>
             </li>
-            <li class="header">DESIGN DRAWING</li>
+            <li class="header">DOC DESIGN & ENG</li>
             <li>
                 <a href="{{ route('design.index') }}">
-                    <i class="fa fa-cube"></i> <span>Design Drawing</span>
+                    <i class="fa fa-cube"></i> <span>Dokumen Saya</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('design_detail.index') }}">
-                    <i class="fa fa-cube"></i> <span>Release Design Drawing</span>
+                    <i class="fa fa-cube"></i> <span>Release Dokumen</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('dinas.index') }}">
-                    <i class="fa fa-cube"></i> <span>Data Dinas</span>
+                    <i class="fa fa-cube"></i> <span>Data Dinas Saya</span>
                 </a>
             </li>
 
@@ -255,26 +255,36 @@
                     <i class="fa fa-cube"></i> <span>Chart Jadwal</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('chartsCurva') }}">
+                    <i class="fa fa-cube"></i> <span>Chart S-Curve</span>
+                </a>
+            </li>
             <li class="header">MASTER</li>
             <li>
                 <a href="{{ route('kepala_gambar.index') }}">
                     <i class="fa fa-cube"></i> <span>Kepala Gambar</span>
                 </a>
             </li>
-            <li class="header">DESIGN DRAWING</li>
+            <li class="header">DOC DESIGN & ENG</li>
             <li>
                 <a href="{{ route('design.index') }}">
-                    <i class="fa fa-cube"></i> <span>Design Drawing</span>
+                    <i class="fa fa-cube"></i> <span>Dokumen Saya</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('design_detail.index') }}">
-                    <i class="fa fa-cube"></i> <span>Release Design Drawing</span>
+                    <i class="fa fa-cube"></i> <span>Release Dokumen</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('dinas.index') }}">
-                    <i class="fa fa-cube"></i> <span>Data Dinas</span>
+                    <i class="fa fa-cube"></i> <span>Data Dinas Saya</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('design_overall.indexOverall') }}">
+                    <i class="fa fa-cube"></i> <span>Data Overall</span>
                 </a>
             </li>
         </ul>

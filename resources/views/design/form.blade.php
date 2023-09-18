@@ -71,6 +71,16 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
+                        <select name="tipe" id="tipe" class="form-control" required autofocus>
+                            <option></option>
+                                <option Value="1">New</option>
+                                <option Value="0.5">Konversi</option>
+                                <option Value="0.05">Konversi & Revisi</option>
+                            </select>
+                            <span class="help-block with-errors"></span>
+                    </div>
                 <div class="form-group row">
                         <label for="nama_design" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
                         <div class="col-lg-6">
@@ -107,9 +117,9 @@
                             <option></option>
                                 <option Value="64">A0</option>
                                 <option Value="32">A1</option>
-                                <option Value="24">A2</option>
-                                <option Value="16">A3</option>
-                                <option Value="8">A4</option>
+                                <option Value="16">A2</option>
+                                <option Value="8">A3</option>
+                                <option Value="4">A4</option>
                             </select>
                             <span class="help-block with-errors"></span>
                         </div>

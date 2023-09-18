@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Produk;
+use App\Models\Proyek;
 use App\Models\Part;
 use PDF;
 
@@ -16,7 +17,7 @@ class PartController extends Controller
      */
     public function index()
     {
-        $produk = Produk::all()->pluck('nama_produk', 'id_produk');
+        $produk = Produk::all();
 
         return view('part.index', compact('produk'));
     }
@@ -24,6 +25,36 @@ class PartController extends Controller
     public function data()
     {
         $part = Part::leftJoin('produk', 'produk.id_produk', 'part.id_produk')
+            ->select('part.*', 'nama_produk')
+            ->orderBy('nama_part', 'DESC')
+            ->get();
+
+        return datatables()
+            ->of($part)
+            ->addIndexColumn()
+            ->addColumn('select_all', function ($part) {
+                return '
+                    <input type="checkbox" name="id_part[]" value="'. $part->id_part .'">
+                ';
+            })
+            ->addColumn('kode_part', function ($part) {
+                return '<span class="label label-success">'. $part->kode_part .'</span>';
+            })
+            ->addColumn('aksi', function ($part) {
+                return '
+                <div class="btn-group">
+                    <button type="button" onclick="editForm(`'. route('part.update', $part->id_part) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>
+                    <button type="button" onclick="deleteData(`'. route('part.destroy', $part->id_part) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                </div>
+                ';
+            })
+            ->rawColumns(['aksi', 'kode_part', 'select_all'])
+            ->make(true);
+    }
+
+    public function dataModal()
+    {
+        $produk = Produk::leftJoin('produk', 'produk.id_produk', 'part.id_produk')
             ->select('part.*', 'nama_produk')
             ->orderBy('nama_part', 'DESC')
             ->get();

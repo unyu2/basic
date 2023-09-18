@@ -422,6 +422,7 @@
                 $('#modal-form2 [name=kode_design]').val(response.kode_design);
                 $('#modal-form2 [name=revisi]').val(response.revisi);
                 $('#modal-form2 [name=bobot_rev]').val(response.bobot_rev);
+                $('#modal-form2 [name=tipe]').val(response.tipe);
 
  
             })
@@ -517,6 +518,8 @@
             $('#modal-form4 [name=size]').val(response.size);
             $('#modal-form4 [name=lembar]').val(response.lembar);
             $('#modal-form4 [name=konfigurasi]').val(response.konfigurasi);
+            $('#modal-form4 [name=tipe]').val(response.tipe);
+
         })
         .fail((errors) => {
             alert('Tidak dapat menampilkan data');
@@ -539,7 +542,7 @@
             }
         });
 
-
+//-------------------------------------------------------------------------------------
     function showDetail(url) {
         $('#modal-detail').modal('show');
         tableDetail.ajax.url(url);
@@ -558,6 +561,9 @@
                     {data: 'DT_RowIndex', searchable: false, sortable: false},
                     {data: 'kode_design'},
                     {data: 'revisi'},
+                    {data: 'id_draft'},
+                    {data: 'id_check'},
+                    {data: 'id_approve'},
                     {data: 'created_at'},
                 ]
             });

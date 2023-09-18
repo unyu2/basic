@@ -44,13 +44,11 @@ use App\Http\Controllers\{
     ChartDesignController,
     ChartJadwalController,
     ChartCurvaController,
-    DwgController,
     DesignController,
     DinasController,
     DesignDetailController,
     SistemController,
     FullCalenderController,
-    PagePengujianController,
     KategoriController,
     KepalaGambarController,
     KonfigurasiController,
@@ -205,64 +203,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
     Route::get('/dashboard31x1', [Dashboard31x1Controller::class, 'index'])->name('dashboard31x1');
     Route::get('/dashboard31x2', [Dashboard31x2Controller::class, 'index'])->name('dashboard31x2');
     Route::get('/dashboard32x1', [Dashboard32x1Controller::class, 'index'])->name('dashboard32x1');
-    Route::get('/dashboard32x2', [Dashboard32x2Controller::class, 'index'])->name('dashboard32x2');          
-    Route::get('/page_pengujian', [PagePengujianController::class, 'index'])->name('page_pengujian');
-
-    
-    Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
-        Route::get('/dinas/data', [DinasController::class, 'data'])->name('dinas.data');
-        Route::get('/dinas/dataModal', [DinasController::class, 'dataModal'])->name('dinas.dataModal');
-        Route::get('dinas/pilihUser/{id}', [DinasController::class, 'pilihUser'])->name('dinas.pilihUser');
-        Route::resource('/dinas', DinasController::class);
-
-        Route::get('/design/data', [DesignController::class, 'data'])->name('design.data');
-        Route::get('/design/dataAdmin', [DesignController::class, 'dataAdmin'])->name('design.dataAdmin');
-        Route::get('/design/export', [DesignController::class, 'exportExcel'])->name('design.export');
-        Route::get('/design/exportLog', [DesignController::class, 'exportExcelLog'])->name('design.exportLog');
-        Route::post('/design/import', [DesignController::class, 'importExcel'])->name('design.import');
-        Route::get('/design/dataModal', [DesignController::class, 'dataModal'])->name('design.dataModal');
-        Route::get('/design/dataModal2', [DesignController::class, 'dataModal2'])->name('design.dataModal2');
-        Route::get('design/dataDetail', [DesignController::class, 'dataDetail'])->name('design.dataDetail');
-        Route::get('/design/{id_design}/showDetail', [DesignController::class, 'showDetail'])->name('design.showDetail');
-        Route::put('/design/{id_design}', [DesignController::class, 'updatex'])->name('design.updatex');
-        Route::put('/design/{id_design}/release', [DesignController::class, 'release'])->name('design.release');
-        Route::get('design/pilihData/{id}', [DesignController::class, 'pilihData'])->name('design.pilihData');
-        Route::get('design/pilihRevisi/{id}', [DesignController::class, 'pilihRevisi'])->name('design.pilihRevisi');
-        Route::post('/design/storeRevisi', [DesignController::class, 'storeRevisi'])->name('design.storeRevisi');
-        Route::post('/design/stores', [DesignController::class, 'stores'])->name('design.stores');
-        Route::post('/design/delete-selected', [DesignController::class, 'deleteSelected'])->name('design.delete_selected');
-        Route::post('/design/exportSelected', [DesignController::class, 'exportSelected'])->name('design.exportSelected');
-        Route::post('/design/cetakPdf', [DesignController::class, 'cetakPdf'])->name('design.cetakPdf');
-        Route::resource('/design', DesignController::class);
-
-        Route::get('/design_detail/dataModal', [DesignDetailController::class, 'dataModal'])->name('design_detail.dataModal');
-        Route::get('/design_detail/data', [DesignDetailController::class, 'data'])->name('design_detail.data');
-        Route::get('design_detail/pilihData/{id}', [DesignDetailController::class, 'pilihData'])->name('design_detail.pilihData');
-        Route::put('/design_detail/{id}', [DesignDetailController::class, 'updatex'])->name('design_detail.updatex');
-        Route::put('/design_detail/{id}/update', [DesignDetailController::class, 'update'])->name('design_detail.update');
-        Route::post('/design_detail/import', [DesignDetailController::class, 'importExcel'])->name('design_detail.import');
-        Route::post('/design_detail/delete-selected', [DesignDetailController::class, 'deleteSelected'])->name('design_detail.delete_selected');
-        Route::resource('/design_detail', DesignDetailController::class);
-
-
-        Route::get('/full_calender', [FullCalenderController::class, 'index'])->name('full_calender');
-        Route::post('/full_calender/action', [FullCalenderController::class, 'action']);
-
-        Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
-        Route::resource('/kategori', KategoriController::class);
-
-        Route::get('/kepala_gambar/data', [KepalaGambarController::class, 'data'])->name('kepala_gambar.data');
-        Route::post('/kepala_gambar/import', [KepalaGambarController::class, 'importExcel'])->name('kepala_gambar.import');
-        Route::resource('/kepala_gambar', KepalaGambarController::class);
-
-        Route::get('/konfigurasi/data', [KonfigurasiController::class, 'data'])->name('konfigurasi.data');
-        Route::resource('/konfigurasi', KonfigurasiController::class);
-
-        Route::get('/subsistem/data', [SubsistemController::class, 'data'])->name('subsistem.data');
-        Route::resource('/subsistem', SubsistemController::class);
-
-        Route::get('/jabatan/data', [JabatanController::class, 'data'])->name('jabatan.data');
-        Route::resource('/jabatan', JabatanController::class);
+    Route::get('/dashboard32x2', [Dashboard32x2Controller::class, 'index'])->name('dashboard32x2');
 
         Route::get('/charts', [ChartController::class, 'index'])->name('charts');
         Route::post('chart/fetch_data_jumlah', [ChartController::class, 'fetch_data_jumlah']);
@@ -305,6 +246,10 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::post('/charts/chartCurva/fetch_data_curvaS_sample_dua', [ChartCurvaController::class, 'fetch_data_curvaS_sample_dua']);
         Route::post('/charts/chartCurva/fetch_data_curvaS_sample', [ChartCurvaController::class, 'fetch_data_curvaS_sample']);
         Route::post('/charts/chartCurva/fetch_data_combined', [ChartCurvaController::class, 'fetch_data_combined']);
+        Route::post('/charts/chartCurva/fetch_data_combined_engineering', [ChartCurvaController::class, 'fetch_data_combined_engineering']);
+        Route::post('/charts/chartCurva/fetch_data_combined_design', [ChartCurvaController::class, 'fetch_data_combined_design']);
+
+        Route::post('/charts/chartCurva/fetch_data_combined_eld', [ChartCurvaController::class, 'fetch_data_combined_eld']);
 
         Route::post('/charts/chartCurva/getSData', [ChartCurvaController::class, 'getSData']);
 
@@ -316,7 +261,68 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('/charts/chartsEld', [ChartJadwalController::class, 'chartEld'])->name('chartsEld');
         Route::get('/charts/chartsMid', [ChartJadwalController::class, 'chartMid'])->name('chartsMid');
         Route::get('/charts/chartsCbd', [ChartJadwalController::class, 'chartCbd'])->name('chartsCbd');
-        Route::get('/charts/chartsBwd', [ChartJadwalController::class, 'chartBwd'])->name('chartsBwd');
+        Route::get('/charts/chartsBwd', [ChartJadwalController::class, 'chartBwd'])->name('chartsBwd');          
+    
+    Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
+        Route::get('/dinas/data', [DinasController::class, 'data'])->name('dinas.data');
+        Route::get('/dinas/dataModal', [DinasController::class, 'dataModal'])->name('dinas.dataModal');
+        Route::get('dinas/pilihUser/{id}', [DinasController::class, 'pilihUser'])->name('dinas.pilihUser');
+        Route::resource('/dinas', DinasController::class);
+
+
+        Route::get('/design_overall/indexOverall', [DesignController::class, 'indexOverall'])->name('design_overall.indexOverall');
+        Route::get('/design/dataOverall', [DesignController::class, 'dataOverall'])->name('design.dataOverall');
+
+
+        Route::get('/design/data', [DesignController::class, 'data'])->name('design.data');
+        Route::get('/design/dataAdmin', [DesignController::class, 'dataAdmin'])->name('design.dataAdmin');
+        Route::get('/design/export', [DesignController::class, 'exportExcel'])->name('design.export');
+        Route::get('/design/exportLog', [DesignController::class, 'exportExcelLog'])->name('design.exportLog');
+        Route::post('/design/import', [DesignController::class, 'importExcel'])->name('design.import');
+        Route::get('/design/dataModal', [DesignController::class, 'dataModal'])->name('design.dataModal');
+        Route::get('/design/dataModal2', [DesignController::class, 'dataModal2'])->name('design.dataModal2');
+        Route::get('design/dataDetail', [DesignController::class, 'dataDetail'])->name('design.dataDetail');
+        Route::get('/design/{id_design}/showDetail', [DesignController::class, 'showDetail'])->name('design.showDetail');
+        Route::put('/design/{id_design}', [DesignController::class, 'updatex'])->name('design.updatex');
+        Route::put('/design/{id_design}/release', [DesignController::class, 'release'])->name('design.release');
+        Route::get('design/pilihData/{id}', [DesignController::class, 'pilihData'])->name('design.pilihData');
+        Route::get('design/pilihRevisi/{id}', [DesignController::class, 'pilihRevisi'])->name('design.pilihRevisi');
+        Route::post('/design/storeRevisi', [DesignController::class, 'storeRevisi'])->name('design.storeRevisi');
+        Route::post('/design/stores', [DesignController::class, 'stores'])->name('design.stores');
+        Route::post('/design/delete-selected', [DesignController::class, 'deleteSelected'])->name('design.delete_selected');
+        Route::post('/design/exportSelected', [DesignController::class, 'exportSelected'])->name('design.exportSelected');
+        Route::post('/design/cetakPdf', [DesignController::class, 'cetakPdf'])->name('design.cetakPdf');
+        Route::resource('/design', DesignController::class);
+
+        Route::get('/design_detail/dataModal', [DesignDetailController::class, 'dataModal'])->name('design_detail.dataModal');
+        Route::get('/design_detail/dataAdmin', [DesignDetailController::class, 'dataAdmin'])->name('design_detail.dataAdmin');
+        Route::get('/design_detail/data', [DesignDetailController::class, 'data'])->name('design_detail.data');
+        Route::get('design_detail/pilihData/{id}', [DesignDetailController::class, 'pilihData'])->name('design_detail.pilihData');
+        Route::put('/design_detail/{id}', [DesignDetailController::class, 'updatex'])->name('design_detail.updatex');
+        Route::put('/design_detail/{id}/update', [DesignDetailController::class, 'update'])->name('design_detail.update');
+        Route::post('/design_detail/import', [DesignDetailController::class, 'importExcel'])->name('design_detail.import');
+        Route::post('/design_detail/delete-selected', [DesignDetailController::class, 'deleteSelected'])->name('design_detail.delete_selected');
+        Route::resource('/design_detail', DesignDetailController::class);
+
+
+        Route::get('/full_calender', [FullCalenderController::class, 'index'])->name('full_calender');
+        Route::post('/full_calender/action', [FullCalenderController::class, 'action']);
+
+        Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
+        Route::resource('/kategori', KategoriController::class);
+
+        Route::get('/kepala_gambar/data', [KepalaGambarController::class, 'data'])->name('kepala_gambar.data');
+        Route::post('/kepala_gambar/import', [KepalaGambarController::class, 'importExcel'])->name('kepala_gambar.import');
+        Route::resource('/kepala_gambar', KepalaGambarController::class);
+
+        Route::get('/konfigurasi/data', [KonfigurasiController::class, 'data'])->name('konfigurasi.data');
+        Route::resource('/konfigurasi', KonfigurasiController::class);
+
+        Route::get('/subsistem/data', [SubsistemController::class, 'data'])->name('subsistem.data');
+        Route::resource('/subsistem', SubsistemController::class);
+
+        Route::get('/jabatan/data', [JabatanController::class, 'data'])->name('jabatan.data');
+        Route::resource('/jabatan', JabatanController::class);
 
         Route::get('/sistem/data', [SistemController::class, 'data'])->name('sistem.data');
         Route::resource('/sistem', SistemController::class);
@@ -331,19 +337,10 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::resource('/car', CarController::class);
 
         Route::get('/produk/data', [ProdukController::class, 'data'])->name('produk.data');
+        Route::get('/produk/dataModal', [ProdukController::class, 'dataModal'])->name('produk.dataModal');
         Route::post('/produk/delete-selected', [ProdukController::class, 'deleteSelected'])->name('produk.delete_selected');
         Route::post('/produk/cetak-barcode', [ProdukController::class, 'cetakBarcode'])->name('produk.cetak_barcode');
         Route::resource('/produk', ProdukController::class);
-
-        Route::get('/dwg/data', [DwgController::class, 'data'])->name('dwg.data');
-
-        Route::get('/dwg/dwg', [DwgController::class, 'datas'])->name('dwg.datas');
-        Route::get('/dwg/closed/{id}', [DwgController::class, 'closed'])->name('dwg.closed');
-
-        
-        Route::post('/dwg/delete-selected', [DwgController::class, 'deleteSelected'])->name('dwg.delete_selected');
-        Route::post('/dwg/cetak-barcode', [DwgController::class, 'cetakBarcode'])->name('dwg.cetak_barcode');
-        Route::resource('/dwg', DwgController::class);
 
         Route::get('/part/data', [PartController::class, 'data'])->name('part.data');
         Route::post('/part/delete-selected', [PartController::class, 'deleteSelected'])->name('part.delete_selected');

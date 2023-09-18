@@ -17,6 +17,8 @@ class CreateProdukTable extends Migration
             $table->increments('id_produk');
             $table->unsignedInteger('id_kategori');
             $table->foreign('id_kategori')->references('id_kategori')->on('kategori')->onDelete('restrict')->onUpdate('restrict');
+            $table->unsignedInteger('id_proyek');
+            $table->foreign('id_proyek')->references('id_proyek')->on('id_proyek')->onDelete('restrict')->onUpdate('restrict');
             $table->string('kode_produk')->unique();
             $table->string('nama_produk')->unique();
             $table->string('merk')->nullable();
@@ -31,6 +33,9 @@ class CreateProdukTable extends Migration
             $table->string('komat')->nullable()->index();
             $table->string('status')->nullable();
             $table->string('sets')->nullable();
+            $table->string('spesifikasi')->nullable();
+            $table->string('keterangan')->nullable();
+
             $table->timestamps();
         });
     }

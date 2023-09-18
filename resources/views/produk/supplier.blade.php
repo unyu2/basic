@@ -1,25 +1,24 @@
-<div class="modal fade" id="modal-detail" tabindex="-1" role="dialog" aria-labelledby="modal-detail">
+<div class="modal fade" id="modal-supplier" tabindex="-1" role="dialog" aria-labelledby="modal-supplier">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Detail Revisi</h4>
+                <h4 class="modal-title">Pilih Supplier</h4>
             </div>
             
             <div class="modal-body">
-            <table class="tableDetail table-stiped table-bordered" style="width:100%">
+            <table id="table1" class="tableSupplier table-stiped table-bordered" style="width:100%">
         <thead>
             <tr>
                 <th width="5%">No</th>
-                <th>Kode Design</th>
-                <th>Revisi</th>
-                <th>Draft</th>
-                <th>Check</th>
-                <th>Approve</th>
-                <th>Tanggal</th>
+                <th>Nama Supplier</th>
+                <th width="15%"><i class="fa fa-cog"></i></th>
             </tr>
         </thead>
+        <tbody>
+            <!-- Data diisi melalui AJAX -->
+        </tbody>
     </table>
             </div>
         </div>

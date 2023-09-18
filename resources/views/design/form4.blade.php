@@ -1,3 +1,9 @@
+<style>
+    .hidden-form {
+        display: none;
+    }
+</style>
+
 <div class="modal fade" id="modal-form4" tabindex="-1" role="dialog" aria-labelledby="modal-form4">
     <div class="modal-dialog modal-lg" role="document">
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data" data-toggle="validator">
@@ -51,6 +57,18 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
+                        <div class="col-lg-6">
+                        <select name="tipe" id="tipe" class="form-control" required autofocus>
+                                <option></option>
+                                <option Value="1">New</option>
+                                <option Value="0.5">Konversi</option>
+                                <option Value="0.05">Konversi & Revisi</option>
+                         </select>
+                         </div>
+                            <span class="help-block with-errors"></span>
+                    </div>
+                    <div class="form-group row">
                         <label for="konfigurasi" class="col-lg-2 col-lg-offset-1 control-label">Dipakai Konfigurasi</label> 
                         <div class="col-lg-6">
                             <input name="konfigurasi" id="konfigurasi" class="form-control" required autofocus>
@@ -83,11 +101,11 @@
                         <div class="col-lg-2">
                             <select type="text" name="size" id="size" class="form-control" required autofocus>
                             <option></option>
-                                <option Value="64">A0</option>
+                            <option Value="64">A0</option>
                                 <option Value="32">A1</option>
-                                <option Value="24">A2</option>
-                                <option Value="16">A3</option>
-                                <option Value="8">A4</option>
+                                <option Value="16">A2</option>
+                                <option Value="8">A3</option>
+                                <option Value="4">A4</option>
                             </select>
                             <span class="help-block with-errors"></span>
                         </div>

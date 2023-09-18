@@ -12,4 +12,9 @@ class Part extends Model
     protected $table = 'part';
     protected $primaryKey = 'id_part';
     protected $guarded = [];
+
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'id_produk', 'id_produk');
+    }
 }

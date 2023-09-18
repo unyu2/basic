@@ -74,20 +74,39 @@
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
-                <div class="form-group row">
-                        <label for="duplicate_status" class="col-lg-1 col-lg-offset-2 control-label">Duplicate Status</label>
+                <div class="form-group row hidden-form">
+                        <label for="prosentase" class="col-lg-1 col-lg-offset-2 control-label">Prosentase</label>
                             <div class="col-lg-6">
-                                <input value="Release" placeholder="Release"  name="duplicate_status" id="duplicate_status" class="form-control" required autofocus readonly>
+                                <input type="text" value="100" placeholder="100" name="prosentase" id="prosentase" class="form-control" required autofocus>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row hidden-form">
                         <label for="time_release_rev0" class="col-lg-1 col-lg-offset-2 control-label">Time release Rev.0</label>
                             <div class="col-lg-6">
-                                <input value="{{now()}}"  name="time_release_rev0" id="time_release_rev0" class="form-control" required autofocus readonly>
+                                <input type="text" name="time_release_rev0" id="time_release_rev0" class="form-control" required autofocus>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
+                <div class="form-group row hidden-form">
+                        <label for="duplicate_status" class="col-lg-1 col-lg-offset-2 control-label">Duplicate Status</label>
+                            <div class="col-lg-6">
+                                <input type="text" name="duplicate_status" id="duplicate_status" class="form-control" required autofocus>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row  hidden-form">
+                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
+                        <select name="tipe" id="tipe" class="form-control" required autofocus>
+                            <option></option>
+                                <option Value="1">New</option>
+                                <option Value="0.5">Konversi</option>
+                                <option Value="0.05">Konversi & Revisi</option>
+                            </select>
+                            <span class="help-block with-errors"></span>
+                    </div>
+                
+
 
 
 <!----------------------------------------------------------Real Form For Show------------------------------------------------------------------>

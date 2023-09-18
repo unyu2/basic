@@ -63,6 +63,39 @@
                     </div>
                 </div>
             </div>
+            <br> </br>
+
+            <div class="hurup-kapital">Engineering S-Curve</div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="chart">
+                        <!-- Sales Chart Canvas -->
+                        <div id="curva_2" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+            <br> </br>
+
+            <div class="hurup-kapital">Design S-Curve</div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="chart">
+                        <!-- Sales Chart Canvas -->
+                        <div id="curva_3" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hurup-kapital">Electrical Design S-Curve</div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="chart">
+                        <!-- Sales Chart Canvas -->
+                        <div id="curva_4" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+
         <br> </br>
         </div>
         <!-- /.box -->
@@ -398,7 +431,308 @@
 
 </script>
 
+<!-------------------------------------------- KURVA S OVERALL ENGINEERING DOUBLE LINE ---------------------------------------------->
 
+
+<script type="text/javascript">
+
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(loadChart);
+
+    function loadChart() {
+        $('#id_proyek').change(function () {
+            var id_proyek = $(this).val();
+            if (id_proyek != '') {
+                loadCurvasChartDataCombinedEngineering(id_proyek, 'S-Curve:');
+            } else {
+                loadCurvasChartDataCombinedEngineering('all', 'S-Curve for All Projects:');
+            }
+        });
+    }
+
+    function drawCurvasChartCombinedEngineering(targetData, realisasiData, chart_main_title) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Tanggal');
+        data.addColumn('number', 'Target');
+        data.addColumn('number', 'Realisasi');
+
+        var mergedData = {};
+
+        targetData.forEach(function (row) {
+            var tanggal = new Date(row.prediksi_akhir);
+            var totalCountTarget = parseFloat(row.totalCountTarget);
+            mergedData[tanggal] = { date: tanggal, totalCountTarget: totalCountTarget };
+        });
+
+        realisasiData.forEach(function (row) {
+            var tanggal = new Date(row.time_release_rev0);
+            var totalCountRelease = parseFloat(row.totalCountRelease);
+            if (mergedData[tanggal]) {
+                mergedData[tanggal].totalCountRelease = totalCountRelease;
+            } else {
+                mergedData[tanggal] = { date: tanggal, totalCountRelease: totalCountRelease };
+            }
+        });
+
+        var dataRows = [];
+        for (var tanggal in mergedData) {
+            dataRows.push([mergedData[tanggal].date, mergedData[tanggal].totalCountTarget, mergedData[tanggal].totalCountRelease]);
+        }
+
+        dataRows.sort(function (a, b) {
+            return a[0] - b[0];
+        });
+
+        data.addRows(dataRows);
+        var minDate = new Date(Math.min.apply(null, dataRows.map(function (row) { return row[0]; })));
+
+        var options = {
+            title: chart_main_title,
+            hAxis: {
+                title: "Tanggal",
+                format: 'MMM yyyy',
+                viewWindow: {
+                    min: minDate
+                }
+            },
+            vAxis: {
+                title: "Total Count"
+            },
+            colors: ['red', 'green'],
+            chartArea: {
+                width: '80%',
+                height: '80%'
+            },
+            interpolateNulls: true
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curva_2'));
+        chart.draw(data, options);
+    }
+
+    function loadCurvasChartDataCombinedEngineering(id_proyek, title) {
+        const temp_title = title + ' ' + id_proyek;
+        $.ajax({
+            url: '/charts/chartCurva/fetch_data_combined_engineering',
+            method: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                id_proyek: id_proyek
+            },
+            dataType: "JSON",
+            success: function (data) {
+                console.log(data);
+                let targetData = data.target;
+                let realisasiData = data.realisasi;
+                drawCurvasChartCombinedEngineering(targetData, realisasiData, temp_title);
+            }
+        });
+        console.log(`Proyek: ${id_proyek}`);
+    }
+
+</script>
+
+<!-------------------------------------------- KURVA S OVERALL DESIGN DOUBLE LINE ---------------------------------------------->
+
+
+<script type="text/javascript">
+
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(loadChart);
+
+    function loadChart() {
+        $('#id_proyek').change(function () {
+            var id_proyek = $(this).val();
+            if (id_proyek != '') {
+                loadCurvasChartDataCombinedDesign(id_proyek, 'S-Curve:');
+            } else {
+                loadCurvasChartDataCombinedDesign('all', 'S-Curve for All Projects:');
+            }
+        });
+    }
+
+    function drawCurvasChartCombinedDesign(targetData, realisasiData, chart_main_title) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Tanggal');
+        data.addColumn('number', 'Target');
+        data.addColumn('number', 'Realisasi');
+
+        var mergedData = {};
+
+        targetData.forEach(function (row) {
+            var tanggal = new Date(row.prediksi_akhir);
+            var totalCountTarget = parseFloat(row.totalCountTarget);
+            mergedData[tanggal] = { date: tanggal, totalCountTarget: totalCountTarget };
+        });
+
+        realisasiData.forEach(function (row) {
+            var tanggal = new Date(row.time_release_rev0);
+            var totalCountRelease = parseFloat(row.totalCountRelease);
+            if (mergedData[tanggal]) {
+                mergedData[tanggal].totalCountRelease = totalCountRelease;
+            } else {
+                mergedData[tanggal] = { date: tanggal, totalCountRelease: totalCountRelease };
+            }
+        });
+
+        var dataRows = [];
+        for (var tanggal in mergedData) {
+            dataRows.push([mergedData[tanggal].date, mergedData[tanggal].totalCountTarget, mergedData[tanggal].totalCountRelease]);
+        }
+
+        dataRows.sort(function (a, b) {
+            return a[0] - b[0];
+        });
+
+        data.addRows(dataRows);
+        var minDate = new Date(Math.min.apply(null, dataRows.map(function (row) { return row[0]; })));
+
+        var options = {
+            title: chart_main_title,
+            hAxis: {
+                title: "Tanggal",
+                format: 'MMM yyyy',
+                viewWindow: {
+                    min: minDate
+                }
+            },
+            vAxis: {
+                title: "Total Count"
+            },
+            colors: ['red', 'green'],
+            chartArea: {
+                width: '80%',
+                height: '80%'
+            },
+            interpolateNulls: true
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curva_3'));
+        chart.draw(data, options);
+    }
+
+    function loadCurvasChartDataCombinedDesign(id_proyek, title) {
+        const temp_title = title + ' ' + id_proyek;
+        $.ajax({
+            url: '/charts/chartCurva/fetch_data_combined_design',
+            method: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                id_proyek: id_proyek
+            },
+            dataType: "JSON",
+            success: function (data) {
+                console.log(data);
+                let targetData = data.target;
+                let realisasiData = data.realisasi;
+                drawCurvasChartCombinedDesign(targetData, realisasiData, temp_title);
+            }
+        });
+        console.log(`Proyek: ${id_proyek}`);
+    }
+
+</script>
+
+<!-------------------------------------------- KURVA S OVERALL ELD DOUBLE LINE ---------------------------------------------->
+
+
+<script type="text/javascript">
+
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(loadChart);
+
+    function loadChart() {
+        $('#id_proyek').change(function () {
+            var id_proyek = $(this).val();
+            if (id_proyek != '') {
+                loadCurvasChartDataCombinedEld(id_proyek, 'S-Curve:');
+            } else {
+                loadCurvasChartDataCombinedEld('all', 'S-Curve for All Projects:');
+            }
+        });
+    }
+
+    function drawCurvasChartCombinedEld(targetData, realisasiData, chart_main_title) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Tanggal');
+        data.addColumn('number', 'Target');
+        data.addColumn('number', 'Realisasi');
+
+        var mergedData = {};
+
+        targetData.forEach(function (row) {
+            var tanggal = new Date(row.prediksi_akhir);
+            var totalCountTarget = parseFloat(row.totalCountTarget);
+            mergedData[tanggal] = { date: tanggal, totalCountTarget: totalCountTarget };
+        });
+
+        realisasiData.forEach(function (row) {
+            var tanggal = new Date(row.time_release_rev0);
+            var totalCountRelease = parseFloat(row.totalCountRelease);
+            if (mergedData[tanggal]) {
+                mergedData[tanggal].totalCountRelease = totalCountRelease;
+            } else {
+                mergedData[tanggal] = { date: tanggal, totalCountRelease: totalCountRelease };
+            }
+        });
+
+        var dataRows = [];
+        for (var tanggal in mergedData) {
+            dataRows.push([mergedData[tanggal].date, mergedData[tanggal].totalCountTarget, mergedData[tanggal].totalCountRelease]);
+        }
+
+        dataRows.sort(function (a, b) {
+            return a[0] - b[0];
+        });
+
+        data.addRows(dataRows);
+        var minDate = new Date(Math.min.apply(null, dataRows.map(function (row) { return row[0]; })));
+
+        var options = {
+            title: chart_main_title,
+            hAxis: {
+                title: "Tanggal",
+                format: 'MMM yyyy',
+                viewWindow: {
+                    min: minDate
+                }
+            },
+            vAxis: {
+                title: "Total Count"
+            },
+            colors: ['red', 'green'],
+            chartArea: {
+                width: '80%',
+                height: '80%'
+            },
+            interpolateNulls: true
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curva_4'));
+        chart.draw(data, options);
+    }
+
+    function loadCurvasChartDataCombinedEld(id_proyek, title) {
+        const temp_title = title + ' ' + id_proyek;
+        $.ajax({
+            url: '/charts/chartCurva/fetch_data_combined_eld',
+            method: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                id_proyek: id_proyek
+            },
+            dataType: "JSON",
+            success: function (data) {
+                console.log(data);
+                let targetData = data.target;
+                let realisasiData = data.realisasi;
+                drawCurvasChartCombinedEld(targetData, realisasiData, temp_title);
+            }
+        });
+        console.log(`Proyek: ${id_proyek}`);
+    }
+
+</script>
 <!--
 
 <script type="text/javascript">

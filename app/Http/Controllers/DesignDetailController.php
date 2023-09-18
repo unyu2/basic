@@ -70,11 +70,26 @@ class DesignDetailController extends Controller
 
     public function data()
     {
-        $design = Design::leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', 'design.id_kepala_gambar')
-            ->leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
-            ->select('design.*', 'nama', 'nama_proyek')
-            ->orderBy('id_design', 'DESC')
-            ->get();
+        $userId = auth()->user()->id;
+
+        $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
+        ->leftJoin('users as check_user', 'check_user.id', '=', 'design.id_check')
+        ->leftJoin('users as approve_user', 'approve_user.id', '=', 'design.id_approve')
+        ->leftJoin('users as draft_user', 'draft_user.id', '=', 'design.id_draft')
+        ->select('design.*', 'nama_proyek', 'design.jenis as design_jenis','design.status as design_status', 'design.revisi as design_revisi', 'proyek.status as proyek_status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+        ->where(function ($query) use ($userId) {
+            $query->where('design.id_draft', $userId)
+                  ->orWhere('design.id_check', $userId)
+                  ->orWhere('design.id_approve', $userId);
+        })
+        ->where(function ($query) {
+            $query->where('proyek.status', 'Open');
+        })
+        ->where(function ($query) {
+            $query->where('design_jenis', 'Doc');
+        })
+        ->orderBy('id_design', 'DESC')
+        ->get();
 
         return datatables()
             ->of($design)
@@ -89,10 +104,18 @@ class DesignDetailController extends Controller
             })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
-                $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev.0</i></button>';        
-                $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release</i></button>';        
+            
+                // Cek nilai kolom "status"
+                if ($design->revisi == 'Rev.0') {
+                    // Jika status adalah "Rev.0", tampilkan tombol "Release Rev.0"
+                    $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev. 0</i></button>';
+                } else {
+                    // Jika status bukan "Rev.0", tampilkan tombol "Release"
+                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Revisi</i></button>';
+                }
+            
                 $buttons .= '</div>';
-        
+            
                 return $buttons;
             })
             ->rawColumns(['aksi', 'id_design', 'select_all'])
@@ -126,6 +149,56 @@ class DesignDetailController extends Controller
             ->rawColumns(['aksi', 'id_design', 'select_all'])
             ->make(true);
     }
+
+    public function dataAdmin()
+    {
+/*
+        $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
+            ->select('design.*', 'nama_proyek','proyek.status')
+            ->where('proyek.status', 'Open')
+            ->where('jenis', 'Doc')
+            ->orderBy('id_design', 'DESC')
+            ->get(); */
+
+        $userId = auth()->user()->id;
+
+        $design = Design::leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', 'design.id_kepala_gambar')
+            ->leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
+            ->select('design.*', 'nama', 'nama_proyek')
+            ->orderBy('id_design', 'DESC')
+            ->get();
+
+        return datatables()
+            ->of($design)
+            ->addIndexColumn()
+            ->addColumn('select_all', function ($design) {
+                return '
+                    <input type="checkbox" name="id_design[]" value="'. $design->id_design .'">
+                ';
+            })
+            ->editColumn('id_proyek', function ($design) {
+                return $design->nama_proyek ?? '';
+            })
+            ->addColumn('aksi', function ($design) {
+                $buttons = '<div class="btn-group">';
+            
+                // Cek nilai kolom "status"
+                if ($design->revisi == 'Rev.0') {
+                    // Jika status adalah "Rev.0", tampilkan tombol "Release Rev.0"
+                    $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev. 0</i></button>';
+                } else {
+                    // Jika status bukan "Rev.0", tampilkan tombol "Release"
+                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Revisi</i></button>';
+                }
+            
+                $buttons .= '</div>';
+            
+                return $buttons;
+            })
+            ->rawColumns(['aksi', 'id_design', 'select_all'])
+            ->make(true);
+    }
+
 
 
         /**
@@ -172,7 +245,7 @@ class DesignDetailController extends Controller
      */
 
   
-    public function update(Request $request, $id)
+    public function updates(Request $request, $id)
     {
         $design = Design::find($id);
         $design->id_design =$request->id_design;
@@ -180,7 +253,6 @@ class DesignDetailController extends Controller
         $design->nama_design =$request->nama_design;
         $design->revisi = $request->revisi;
         $design->status = $request->status;
-        $design->duplicate_status = $request->duplicate_status;
         $design->prediksi_akhir = $request->prediksi_akhir;
 
         $design->id_draft = $request->id_draft;
@@ -192,9 +264,12 @@ class DesignDetailController extends Controller
         $design->size = $request->size;
         $design->lembar = $request->lembar;
 
-        $design->time_release_rev0 = $request->time_release_rev0;
+        $design->prosentase = $request->prosentase;
 
-        $design->save();
+ //       $design->duplicate_status = 'Release';
+ //       $design->time_release_rev0 = now();
+
+        $design->update();
     
         $detail = new DesignDetail();
         $detail->id_design = $design->id_design;
@@ -211,6 +286,7 @@ class DesignDetailController extends Controller
         $detail->bobot_rev = $design->bobot_rev;
         $detail->size = $design->size;
         $detail->lembar = $design->lembar;
+        $detail->tipe = $design->tipe;
 
         $detail->save();
 
@@ -236,6 +312,10 @@ class DesignDetailController extends Controller
             $design->size = $request->size;
             $design->lembar = $request->lembar;
 
+            $design->duplicate_status = $request->duplicate_status;
+            $design->time_release_rev0 = $request->time_release_rev0;
+            $design->prosentase = $request->prosentase;
+
             $design->update();
         
             $detail = new DesignDetail();
@@ -253,6 +333,7 @@ class DesignDetailController extends Controller
             $detail->bobot_rev = $design->bobot_rev;
             $detail->size = $design->size;
             $detail->lembar = $design->lembar;
+            $detail->tipe = $design->tipe;
 
             $detail->save();
     
