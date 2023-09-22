@@ -25,6 +25,7 @@ class CreateDesignTable extends Migration
             $table->string('nama_design')->nullable();
 
             $table->string('revisi')->nullable();
+            $table->string('rev_for_curva')->nullable();
             $table->string('pemilik')->nullable();
             $table->string('jenis')->nullable();
 
@@ -44,6 +45,7 @@ class CreateDesignTable extends Migration
             $table->integer('pa_yy')->nullable();
 
             $table->integer('bobot_rev')->nullable();
+            $table->integer('bobot_design')->nullable();
 
             $table->string('status')->nullable();
             $table->string('duplicate_status')->nullable();

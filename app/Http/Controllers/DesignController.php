@@ -41,7 +41,7 @@ class DesignController extends Controller
         $bagianUser = $userLoggedIn->bagian;
         $levelUser = $userLoggedIn->level;
 
-        $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar');
+        $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar', 'bobot_kepala');
         $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
     
         $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
@@ -244,11 +244,12 @@ class DesignController extends Controller
 
     public function dataAdmin()
     {
-        $userId = auth()->user()->id;
 
         $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
-            ->select('design.*', 'nama_proyek','proyek.status')
-            ->where('proyek.status', 'Open')
+            ->select('design.*', 'nama_proyek','proyek.status', 'design.status')
+            ->where(function ($query) {
+                $query->where('proyek.status', 'Open');
+            })
             ->where('jenis', 'Doc')
             ->orderBy('id_design', 'DESC')
             ->get();
@@ -322,7 +323,6 @@ class DesignController extends Controller
     }
 
     public function dataModal2()
-
     {
         $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
             ->select('design.*', 'nama_proyek')
@@ -391,7 +391,6 @@ class DesignController extends Controller
     {
         $design = Design::find($id);
         return response()->json($design);
-
     }
 
         /**
@@ -402,36 +401,36 @@ class DesignController extends Controller
      */
     public function store(Request $request)
     {
-    $existingDesign = Design::where('kode_design', $request->kode_design)->first();
+        $existingDesign = Design::where('kode_design', $request->kode_design)->first();
 
-    if ($existingDesign) {
-        $existingDesign->delete();
+        if ($existingDesign) {
+            $existingDesign->delete();
+        }
+
+        $design = Design::create($request->all());
+
+        $design->kode_design = $request->kode_design;
+
+        if ($request->filled('tanggal_refrensi')) {
+            $design->tanggal_prediksi = $request->tanggal_refrensi;
+        } else {
+            $design->tanggal_prediksi = $request->tanggal_prediksi;
+        }
+
+        $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
+        $design->pa_yy = $design->prediksi_akhir->format('Y');
+        $design->pa_mm = $design->prediksi_akhir->format('m');
+        $design->pa_dd = $design->prediksi_akhir->format('d');
+
+        list($year, $month, $day) = explode('-', $design->tanggal_prediksi);
+        $design->tp_yy = $year;
+        $design->tp_mm = $month;
+        $design->tp_dd = $day;
+
+        $design->save();
+
+        return response()->json('Data berhasil disimpan', 200);
     }
-
-    $design = Design::create($request->all());
-
-    $design->kode_design = $request->kode_design;
-
-    if ($request->filled('tanggal_refrensi')) {
-        $design->tanggal_prediksi = $request->tanggal_refrensi;
-    } else {
-        $design->tanggal_prediksi = $request->tanggal_prediksi;
-    }
-
-    $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari);
-    $design->pa_yy = $design->prediksi_akhir->format('Y');
-    $design->pa_mm = $design->prediksi_akhir->format('m');
-    $design->pa_dd = $design->prediksi_akhir->format('d');
-
-    list($year, $month, $day) = explode('-', $design->tanggal_prediksi);
-    $design->tp_yy = $year;
-    $design->tp_mm = $month;
-    $design->tp_dd = $day;
-
-    $design->save();
-
-    return response()->json('Data berhasil disimpan', 200);
-}
 
 public function stores(Request $request)
 {
@@ -444,6 +443,7 @@ public function stores(Request $request)
         $design->rev_for_curva = 'Rev.0';
         $design->jenis = 'Doc';
 
+        $design->bobot_design = $request->bobot_design;
         $design->lembar = $request->lembar;
         $design->size = $request->size;
         $design->prediksi_hari = $design->lembar * $design->size / 8; //tipe integer
@@ -646,7 +646,10 @@ public function stores(Request $request)
     public function exportExcelLog()
     {
         $designlog = DesignDetail::leftJoin('design', 'design.id_design', '=', 'design_detail.id_design')
-        ->select('design_detail.*', 'design.nama_design')
+        ->leftJoin('users as check_user', 'check_user.id', '=', 'design.id_check')
+        ->leftJoin('users as approve_user', 'approve_user.id', '=', 'design.id_approve')
+        ->leftJoin('users as draft_user', 'draft_user.id', '=', 'design.id_draft')
+        ->select('design_detail.*', 'design.nama_design', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
         ->get();
     
         return Excel::download(new designExportLog($designlog), 'Log.xlsx');
@@ -655,19 +658,16 @@ public function stores(Request $request)
     public function importExcel(Request $request)
     {
         try {
-            $file = $request->file('file'); // Ambil file Excel dari request
+            $file = $request->file('file');
     
-            // Pastikan Anda sudah membuat class Import yang sesuai dengan skema impor Anda
             Excel::import(new designImports, $file);
     
-            // Redirect ke halaman index dengan pesan sukses
             return redirect()->route('design.index')->with('success', 'Import data berhasil.');
         } catch (\Exception $e) {
-            // Tampilkan pesan error yang lebih rinci
+
             return redirect()->route('design.index')->with('error', 'Import data gagal: ' . $e->getMessage() . ' Line: ' . $e->getLine());
         }
     }
     
 
 }
-

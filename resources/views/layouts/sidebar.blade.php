@@ -34,7 +34,7 @@
             </li>
             <li>
                 <a href="{{ route('chartsDesign') }}">
-                    <i class="fa fa-cube"></i> <span>Chart Design</span>
+                    <i class="fa fa-cube"></i> <span>Chart % Des-Eng</span>
                 </a>
             </li>
             <li>
@@ -127,6 +127,11 @@
             <li>
                 <a href="{{ route('dinas.index') }}">
                     <i class="fa fa-cube"></i> <span>Data Dinas Saya</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('design_overall.indexOverall') }}">
+                    <i class="fa fa-cube"></i> <span>Data Overall</span>
                 </a>
             </li>
 
@@ -238,7 +243,7 @@
 
 <!-------------------------------------------Side Bar For Teknologi ----------------------------------------------->
 
-        @if (auth()->user()->level == 2  || auth()->user()->level == 3 || auth()->user()->level == 4)
+        @if (auth()->user()->level == 2  || auth()->user()->level == 3 || auth()->user()->level == 4 || auth()->user()->level == 13 || auth()->user()->level == 14)
         <ul class="sidebar-menu" data-widget="tree">
             <li>
                 <a href="{{ route('dashboard') }}">
@@ -247,7 +252,7 @@
             </li>
             <li>
                 <a href="{{ route('chartsDesign') }}">
-                    <i class="fa fa-cube"></i> <span>Chart Design</span>
+                    <i class="fa fa-cube"></i> <span>Chart Des & Eng</span>
                 </a>
             </li>
             <li>
@@ -285,6 +290,13 @@
             <li>
                 <a href="{{ route('design_overall.indexOverall') }}">
                     <i class="fa fa-cube"></i> <span>Data Overall</span>
+                </a>
+            </li>
+
+            <li class="header">AGENDA</li>
+            <li>
+                <a href="{{ route('full_calender') }}" target="_blank">
+                    <i class="fa fa-dashboard"></i> <span>Agenda Proyek</span>
                 </a>
             </li>
         </ul>

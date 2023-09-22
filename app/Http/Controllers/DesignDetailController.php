@@ -104,16 +104,15 @@ class DesignDetailController extends Controller
             })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
-            
-                // Cek nilai kolom "status"
-                if ($design->revisi == 'Rev.0') {
-                    // Jika status adalah "Rev.0", tampilkan tombol "Release Rev.0"
-                    $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev. 0</i></button>';
-                } else {
-                    // Jika status bukan "Rev.0", tampilkan tombol "Release"
-                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Revisi</i></button>';
+                if ($design->status == 'Open' || $design->status == 'Proses Revisi') {
+                    if ($design->revisi == 'Rev.0') {
+                        // Jika status adalah "Rev.0", tampilkan tombol "Release Rev.0"
+                        $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev. 0</i></button>';
+                    } else {
+                        // Jika status bukan "Rev.0", tampilkan tombol "Release"
+                        $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Revisi</i></button>';
+                    }
                 }
-            
                 $buttons .= '</div>';
             
                 return $buttons;
@@ -152,14 +151,6 @@ class DesignDetailController extends Controller
 
     public function dataAdmin()
     {
-/*
-        $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
-            ->select('design.*', 'nama_proyek','proyek.status')
-            ->where('proyek.status', 'Open')
-            ->where('jenis', 'Doc')
-            ->orderBy('id_design', 'DESC')
-            ->get(); */
-
         $userId = auth()->user()->id;
 
         $design = Design::leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', 'design.id_kepala_gambar')
@@ -198,8 +189,6 @@ class DesignDetailController extends Controller
             ->rawColumns(['aksi', 'id_design', 'select_all'])
             ->make(true);
     }
-
-
 
         /**
      * Show the form for creating a new resource.
@@ -261,6 +250,7 @@ class DesignDetailController extends Controller
         $design->jenis = $request->jenis;
         $design->pemilik = $request->pemilik;
         $design->bobot_rev = $request->bobot_rev;
+        $design->bobot_design = $request->bobot_design;
         $design->size = $request->size;
         $design->lembar = $request->lembar;
 
@@ -284,6 +274,7 @@ class DesignDetailController extends Controller
         $detail->jenis = $design->jenis;
         $detail->pemilik = $design->pemilik;
         $detail->bobot_rev = $design->bobot_rev;
+        $detail->bobot_design = $design->bobot_design;
         $detail->size = $design->size;
         $detail->lembar = $design->lembar;
         $detail->tipe = $design->tipe;
@@ -309,6 +300,7 @@ class DesignDetailController extends Controller
             $design->jenis = $request->jenis;
             $design->pemilik = $request->pemilik;
             $design->bobot_rev = $request->bobot_rev;
+            $design->bobot_design = $request->bobot_design;
             $design->size = $request->size;
             $design->lembar = $request->lembar;
 
@@ -331,6 +323,7 @@ class DesignDetailController extends Controller
             $detail->jenis = $design->jenis;
             $detail->pemilik = $design->pemilik;
             $detail->bobot_rev = $design->bobot_rev;
+            $detail->bobot_design = $design->bobot_design;
             $detail->size = $design->size;
             $detail->lembar = $design->lembar;
             $detail->tipe = $design->tipe;

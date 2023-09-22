@@ -17,6 +17,7 @@ class CreateDesignDetailTable extends Migration
             $table->increments('id_design_detail');
             $table->unsignedInteger('id_design');
             $table->foreign('id_design')->references('id_design')->on('design')->onDelete('restrict')->onUpdate('restrict');
+
             $table->string('kode_design');
             $table->string('revisi');
             $table->string('status');
@@ -27,7 +28,10 @@ class CreateDesignDetailTable extends Migration
             $table->integer('id_approve');
             $table->string('jenis');
             $table->string('pemilik');
+
             $table->integer('bobot_rev');
+            $table->integer('bobot_design');
+
             $table->integer('size');
             $table->integer('lembar');
 

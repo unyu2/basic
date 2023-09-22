@@ -15,6 +15,18 @@
     }
 </style>
 
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 @section('content')
 
 @if(auth()->user()->level == 1)
@@ -276,6 +288,7 @@
             $('#modal-form3 [name=jenis]').val(response.jenis);
             $('#modal-form3 [name=pemilik]').val(response.pemilik);
             $('#modal-form3 [name=bobot_rev]').val(response.bobot_rev);
+            $('#modal-form3 [name=bobot_design]').val(response.bobot_design);
             $('#modal-form3 [name=size]').val(response.size);
             $('#modal-form3 [name=lembar]').val(response.lembar);
             $('#modal-form3 [name=tipe]').val(response.tipe);
@@ -341,6 +354,7 @@ function editForm4(url) {
             $('#modal-form4 [name=jenis]').val(response.jenis);
             $('#modal-form4 [name=pemilik]').val(response.pemilik);
             $('#modal-form4 [name=bobot_rev]').val(response.bobot_rev);
+            $('#modal-form4 [name=bobot_design]').val(response.bobot_design);
             $('#modal-form4 [name=size]').val(response.size);
             $('#modal-form4 [name=lembar]').val(response.lembar);
 

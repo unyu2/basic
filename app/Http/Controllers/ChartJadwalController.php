@@ -108,7 +108,7 @@ class ChartJadwalController extends Controller
             })
             ->get();
     
-        return view('charts.chartsEes', compact('design', 'proyek'));
+        return view('charts.chartsQen', compact('design', 'proyek'));
     }
 
     public function chartPre()
@@ -125,7 +125,7 @@ class ChartJadwalController extends Controller
             })
             ->get();
     
-        return view('charts.chartsEes', compact('design', 'proyek'));
+        return view('charts.chartsPre', compact('design', 'proyek'));
     }
 
     public function chartCbd()
@@ -142,7 +142,7 @@ class ChartJadwalController extends Controller
             })
             ->get();
     
-        return view('charts.chartsEes', compact('design', 'proyek'));
+        return view('charts.chartsCbd', compact('design', 'proyek'));
     }
 
     public function chartBwd()
@@ -159,7 +159,7 @@ class ChartJadwalController extends Controller
             })
             ->get();
     
-        return view('charts.chartsEes', compact('design', 'proyek'));
+        return view('charts.chartsBwd', compact('design', 'proyek'));
     }
 
     public function chartEld()
@@ -176,7 +176,7 @@ class ChartJadwalController extends Controller
             })
             ->get();
     
-        return view('charts.chartsEes', compact('design', 'proyek'));
+        return view('charts.chartsEld', compact('design', 'proyek'));
     }
 
     public function chartMid()
@@ -193,7 +193,7 @@ class ChartJadwalController extends Controller
             })
             ->get();
     
-        return view('charts.chartsEes', compact('design', 'proyek'));
+        return view('charts.chartsMid', compact('design', 'proyek'));
     }
 
 }

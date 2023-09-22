@@ -57,6 +57,17 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="bobot_design" class="col-lg-2 col-lg-offset-1 control-label">Bobot Design</label> 
+                        <div class="col-lg-6">
+                        <select type="text" name="bobot_design" id="bobot_design" class="form-control" required autofocus>
+                            <option value="1">Low</option>
+                            <option value="2">Medium</option>
+                            <option value="3">High</option>
+                            </select>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="konfigurasi" class="col-lg-2 col-lg-offset-1 control-label">Dipakai Konfigurasi</label> 
                         <div class="col-lg-6">
                             <input name="konfigurasi" id="konfigurasi" class="form-control" required autofocus>

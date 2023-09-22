@@ -97,6 +97,7 @@
                                 <input type="checkbox" name="select_all" id="select_all">
                             </th>
                             <th width="5%">No</th>
+                            <th>Ref ID</th>
                             <th>No Dwg</th>
                             <th>Nama</th>
                             <th>Proyek</th>
@@ -209,6 +210,7 @@
             columns: [
                 {data: 'select_all', searchable: false, sortable: false},
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'id_design'},
                 {data: 'kode_design'},
                 {data: 'nama_design'},
                 {data: 'id_proyek'},

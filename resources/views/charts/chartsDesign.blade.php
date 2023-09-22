@@ -89,16 +89,6 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="chart">
-            <!-- Sales Chart Canvas -->
-            <div id="chart_div3" style="width: 100%; height: 400px;"></div>
-        </div>
-    </div>
-</div>
-<br> </br>
-<br> </br>
 
 <div class="hurup-kapital"> Electrical Design Progress</div>
 <br> </br>
@@ -298,8 +288,8 @@
                 options.slices[0] = { color: 'red' };
             } else {
                 options.slices[0] = { color: 'red' };
-                options.slices[1] = { color: 'orange' };
-                options.slices[2] = { color: 'green' };
+                options.slices[1] = { color: 'green' };
+                options.slices[2] = { color: 'orange' };
             }
 
             var chart = new google.visualization.PieChart(document.getElementById('overall_normal'));
@@ -522,8 +512,8 @@ $(document).ready(function() {
             options.slices[0] = { color: 'red' }; // Jika seluruh data adalah "Open", set warna menjadi hijau
         } else {
             options.slices[0] = { color: 'red' }; // Warna untuk segmen "Open"
-            options.slices[1] = { color: 'orange' }; // Warna untuk segmen "Release"
-            options.slices[2] = { color: 'green' }; // Warna untuk segmen "Proses Revisi"
+            options.slices[1] = { color: 'green' }; // Warna untuk segmen "Release"
+            options.slices[2] = { color: 'orange' }; // Warna untuk segmen "Proses Revisi"
         }
 
         // Instantiate and draw the chart
@@ -944,121 +934,6 @@ $(document).ready(function() {
 </script>
 
 
-
-<!-------------------------------------------------- KURVA S TANPA BOBOT ----------------------------------------------------->
-<script type="text/javascript">
-    // Load the Visualization API and the corechart package.
-    google.charts.load('current', {
-        'packages': ['corechart']
-    });
-
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.charts.setOnLoadCallback(loadChart);
-
-    function loadChart() {
-        $('#id_proyek').change(function() {
-            var id_proyek = $(this).val();
-            if (id_proyek != '') {
-                loadCurvasChartData(id_proyek, 'Curvas Chart:');
-            }
-        });
-    }
-
-    function drawCurvasChart(chart_data, chart_main_title) {
-    if (!chart_data || chart_data.length === 0) {
-        // Handle the case when chart_data is undefined or empty
-        console.error('No data available.');
-        return;
-    }
-
-    let jsonData = chart_data;
-
-    let data = new google.visualization.DataTable();
-    data.addColumn('date', 'Tanggal');
-    data.addColumn('number', 'Total Target');
-    data.addColumn('number', 'Total Realisasi');
-
-    let totalTargetData = {};
-    let totalRealisasiData = {};
-
-    $.each(jsonData, (i, jsonData) => {
-        let tanggal = new Date(jsonData.prediksi_akhir);
-        let totalTarget = parseFloat(jsonData.garis_target);
-        let totalRealisasi = parseFloat(jsonData.garis_realisasi);
-
-        totalTargetData[tanggal] = totalTarget;
-        totalRealisasiData[tanggal] = totalRealisasi;
-    });
-
-    let combinedData = [];
-
-    for (let tanggal in totalTargetData) {
-        let totalTarget = totalTargetData[tanggal];
-        let totalRealisasi = totalRealisasiData[tanggal];
-
-        combinedData.push([new Date(tanggal), totalTarget, totalRealisasi]);
-    }
-
-    // Sort the data by tanggal in ascending order
-    combinedData.sort((a, b) => a[0] - b[0]);
-
-    // Add the combined data to the DataTable
-    data.addRows(combinedData);
-
-    // Set chart options
-    var options = {
-        title: chart_main_title,
-        hAxis: {
-            title: "Tanggal",
-            format: 'MMM yyyy',
-            viewWindow: {
-                min: new Date(2023, 0, 1) // Set the minimum date on the horizontal axis
-            }
-        },
-        vAxis: {
-            title: "Output"
-        },
-        series: {
-            0: { color: 'red', strokeColor: 'red' }, // Garis target dengan warna merah
-            1: { color: 'green', strokeColor: 'green' }, // Garis realisasi dengan warna hijau
-        },
-        chartArea: {
-            width: '80%',
-            height: '80%'
-        }
-    };
-
-    // Instantiate and draw the chart
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div3'));
-    chart.draw(data, options);
-}
-
-
-function loadCurvasChartData(id_proyek, title) {
-    const temp_title = title + ' ' + id_proyek;
-    $.ajax({
-        url: '/charts/chartDesign/fetch_data_curvaS',
-        method: "POST",
-        data: {
-            "_token": "{{ csrf_token() }}",
-            id_proyek: id_proyek
-        },
-        dataType: "JSON"
-    })
-    .done(function(data) {
-        console.log(data); // Tampilkan data yang berhasil dimuat
-        drawCurvasChart(data, temp_title);
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        console.error("AJAX request failed:", textStatus, errorThrown); // Tampilkan pesan error jika ada kesalahan
-    });
-    console.log(`Proyek: ${id_proyek}`);
-}
-</script>
-
-
-
-
 <!------------------------------------JS ELD---------------------------------------------------------->
 
 <!-- PIE CHART ELD -->
@@ -1097,7 +972,7 @@ function loadCurvasChartData(id_proyek, title) {
 
         var options = {
             title: chart_main_title,
-            colors: ['red', 'orange', 'green'],
+            colors: ['red', 'green', 'orange'],
             chartArea: {
                 width: '80%',
                 height: '80%'
@@ -1284,7 +1159,7 @@ function loadCurvasChartData(id_proyek, title) {
 
         var options = {
             title: chart_main_title,
-            colors: ['red', 'orange', 'green'],
+            colors: ['red', 'green', 'orange'],
             chartArea: {
                 width: '80%',
                 height: '80%'
@@ -1472,7 +1347,7 @@ function loadCurvasChartData(id_proyek, title) {
 
         var options = {
             title: chart_main_title,
-            colors: ['red', 'orange', 'green'],
+            colors: ['red', 'green', 'orange'],
             chartArea: {
                 width: '80%',
                 height: '80%'
@@ -1659,7 +1534,7 @@ function loadCurvasChartData(id_proyek, title) {
 
         var options = {
             title: chart_main_title,
-            colors: ['red', 'orange', 'green'],
+            colors: ['red', 'green', 'orange'],
             chartArea: {
                 width: '80%',
                 height: '80%'
@@ -1846,7 +1721,7 @@ function loadCurvasChartData(id_proyek, title) {
 
         var options = {
             title: chart_main_title,
-            colors: ['red', 'orange', 'green'],
+            colors: ['red', 'green', 'orange'],
             chartArea: {
                 width: '80%',
                 height: '80%'
@@ -2033,7 +1908,7 @@ function loadCurvasChartData(id_proyek, title) {
 
         var options = {
             title: chart_main_title,
-            colors: ['red', 'orange', 'green'],
+            colors: ['red', 'green', 'orange'],
             chartArea: {
                 width: '80%',
                 height: '80%'
@@ -2220,7 +2095,7 @@ function loadCurvasChartData(id_proyek, title) {
 
         var options = {
             title: chart_main_title,
-            colors: ['red', 'orange', 'green'],
+            colors: ['red', 'green', 'orange'],
             chartArea: {
                 width: '80%',
                 height: '80%'
@@ -2407,7 +2282,7 @@ function loadCurvasChartData(id_proyek, title) {
 
         var options = {
             title: chart_main_title,
-            colors: ['red', 'orange', 'green'],
+            colors: ['red', 'green', 'orange'],
             chartArea: {
                 width: '80%',
                 height: '80%'

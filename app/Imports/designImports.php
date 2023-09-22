@@ -21,6 +21,7 @@ class DesignImports implements ToModel, WithHeadingRow
                 'revisi' => $row['revisi'],
                 'rev_for_curva' => $row['rev_for_curva'],
                 'pemilik' => $row['pemilik'],
+                'jenis' => $row['jenis'],
                 'id_refrensi' => $row['id_refrensi'],
                 'refrensi_design' => $row['refrensi_design'],
                 'tanggal_refrensi' => $this->transformDate($row['tanggal_refrensi']),
@@ -34,14 +35,18 @@ class DesignImports implements ToModel, WithHeadingRow
                 'pa_mm' => $row['pa_mm'],
                 'pa_yy' => $row['pa_yy'],
                 'bobot_rev' => $row['bobot_rev'],
+                'bobot_design' => $row['bobot_design'],
                 'status' => $row['status'],
+                'duplicate_status' => $row['duplicate_status'],
                 'prosentase' => $row['prosentase'],
                 'size' => $row['size'],
                 'lembar' => $row['lembar'],
+                'tipe' => $row['tipe'],
                 'konfigurasi' => $row['konfigurasi'],
                 'id_draft' => $row['id_draft'],
                 'id_check' => $row['id_check'],
                 'id_approve' => $row['id_approve'],
+                'time_release_rev0'  => $this->transformDate($row['time_release_rev0']),
             ]);
         } catch (\Exception $e) {
             return null;

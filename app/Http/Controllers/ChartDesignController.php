@@ -70,7 +70,7 @@ public function fetch_data_overall_bobot(Request $request)
 
     $id_proyek = $request->input('id_proyek');
 
-    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek")->where('jenis', 'Doc');
+    $chart_data = Design::select("status", "size", "lembar", "tipe", "bobot_rev", "bobot_design", "id_design", "id_proyek")->where('jenis', 'Doc');
 
     if (empty($id_proyek)) {
         $chart_data->whereIn('id_proyek', $proyek_dengan_status_open);
@@ -98,8 +98,10 @@ public function fetch_data_overall_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         $totalStatus[$status] += $jumlah;
     }
@@ -179,7 +181,7 @@ public function fetch_data_engineering_bobot(Request $request)
     $id_proyek = $request->input('id_proyek');
 
     // Inisialisasi query builder
-    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik")->where('jenis', 'Doc');
+    $chart_data = Design::select("status", "size", "lembar", "tipe", "bobot_rev", "bobot_design", "id_design", "id_proyek", "pemilik")->where('jenis', 'Doc');
 
     // Jika id_proyek kosong, ambil semua data dengan status "Open"
     if (empty($id_proyek)) {
@@ -212,9 +214,10 @@ public function fetch_data_engineering_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        // Menghitung jumlah (size * lembar * bobot_rev)
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         // Menambahkan jumlah ke total masing-masing status
         $totalStatus[$status] += $jumlah;
@@ -299,7 +302,7 @@ public function fetch_data_status_bobot(Request $request)
     $id_proyek = $request->input('id_proyek');
 
     // Inisialisasi query builder
-    $chart_data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik")->where('jenis', 'Doc');
+    $chart_data = Design::select("status", "size", "lembar", "tipe", "bobot_rev", "bobot_design", "id_design", "id_proyek", "pemilik")->where('jenis', 'Doc');
 
     // Jika id_proyek kosong, ambil semua data dengan status "Open"
     if (empty($id_proyek)) {
@@ -332,9 +335,10 @@ public function fetch_data_status_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        // Menghitung jumlah (size * lembar * bobot_rev)
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         // Menambahkan jumlah ke total masing-masing status
         $totalStatus[$status] += $jumlah;
@@ -390,7 +394,7 @@ public function fetch_data_status_bobot(Request $request)
     {
         $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
 
-        $data = Design::select("status", "size", "lembar", "bobot_rev", "id_design", "id_proyek", "pemilik")
+        $data = Design::select("status", "size", "lembar", "tipe", "bobot_rev", "bobot_design", "id_design", "id_proyek", "pemilik")
         ->where('jenis', 'Doc')
         ->where('pemilik', 'Design')
         ->join('kepala_gambar', 'design.id_kepala_gambar', '=', 'kepala_gambar.id_kepala_gambar')
@@ -470,9 +474,10 @@ public function fetch_data_status_bobot(Request $request)
             $size = $row->size;
             $lembar = $row->lembar;
             $bobot_rev = $row->bobot_rev;
-    
-            // Menghitung jumlah (size * lembar * bobot_rev)
-            $jumlah = $size * $lembar * $bobot_rev;
+            $bobot_design = $row->bobot_design;
+            $tipe = $row->tipe;
+
+            $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
     
             // Menambahkan jumlah ke total masing-masing status
             $totalStatus[$status] += $jumlah;
@@ -559,8 +564,10 @@ public function fetch_data_mid_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         $totalStatus[$status] += $jumlah;
     }
@@ -643,8 +650,10 @@ public function fetch_data_ced_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         $totalStatus[$status] += $jumlah;
     }
@@ -727,8 +736,10 @@ public function fetch_data_bwd_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         $totalStatus[$status] += $jumlah;
     }
@@ -811,8 +822,10 @@ public function fetch_data_pen_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         $totalStatus[$status] += $jumlah;
     }
@@ -895,8 +908,10 @@ public function fetch_data_qen_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         $totalStatus[$status] += $jumlah;
     }
@@ -978,8 +993,10 @@ public function fetch_data_ees_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         $totalStatus[$status] += $jumlah;
     }
@@ -1061,8 +1078,10 @@ public function fetch_data_mes_bobot(Request $request)
         $size = $row->size;
         $lembar = $row->lembar;
         $bobot_rev = $row->bobot_rev;
+        $bobot_design = $row->bobot_design;
+        $tipe = $row->tipe;
 
-        $jumlah = $size * $lembar * $bobot_rev;
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
         $totalStatus[$status] += $jumlah;
     }

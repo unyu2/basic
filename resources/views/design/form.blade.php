@@ -34,6 +34,13 @@
                         </div>
                     </div>
                     <div class="form-group row hidden-form">
+                        <label for="bobot_design" class="col-lg-2 col-lg-offset-1 control-label">Bobot Design</label> 
+                        <div class="col-lg-6">
+                            <input name="bobot_design" id="bobot_design" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row hidden-form">
                     <label for="id_proyek" class="col-lg-2 col-lg-offset-1 control-label">Proyek</label>
                         <div class="col-lg-6">
                             <select type="text" name="id_proyek" id="id_proyek" class="form-control" required autofocus>

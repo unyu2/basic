@@ -25,15 +25,18 @@ class DashboardController extends Controller
 
 //---------------------------------------------------Status Normal Output Dokumen-------------------------------------//
 
-        $statusCounts = Design::whereIn('status', ['Release', 'Open', 'Proses Revisi'])
-        ->where(function ($query) use ($userId) {
-            $query->where('id_draft', $userId)
-                ->orWhere('id_check', $userId)
-                ->orWhere('id_approve', $userId);
-        })
-        ->selectRaw('status, count(*) as count')
-        ->groupBy('status')
-        ->get();
+        $statusCounts = Design::whereIn('design.status', ['Release', 'Open', 'Proses Revisi'])
+            ->where(function ($query) use ($userId) {
+                $query->where('id_draft', $userId)
+                    ->orWhere('id_check', $userId)
+                    ->orWhere('id_approve', $userId);
+            })
+            ->where('jenis', 'Doc')
+            ->selectRaw('design.status, count(*) as count')
+            ->groupBy('design.status')
+            ->join('proyek', 'design.id_proyek', '=', 'proyek.id_proyek')
+            ->where('proyek.status', 'Open')
+            ->get();
 
         $job_closed = $statusCounts->firstWhere('status', 'Release')->count ?? 0;
         $job_open = $statusCounts->firstWhere('status', 'Open')->count ?? 0;
@@ -48,28 +51,35 @@ class DashboardController extends Controller
 
 //---------------------------------------------------Status Berdasarkan Jam---------------------------------------------//
 
-        $statusCountsJamDraft = Design::whereIn('status', ['Release', 'Open', 'Proses Revisi'])
+        $statusCountsJamDraft = Design::whereIn('design.status', ['Release', 'Open', 'Proses Revisi'])
             ->where(function ($query) use ($userId) {
                 $query->where('id_draft', $userId);
             })
-            ->selectRaw('status, sum((size * lembar * tipe * 1)/3) as total') // 3 ini apa ya??
-            ->groupBy('status')
+            ->where('jenis','Doc')
+            ->selectRaw('design.status, sum(size * lembar * tipe * (bobot_rev / 3) * (bobot_design / 3) * 1) as total') // 3 ini apa ya??
+            ->groupBy('design.status')
+            ->join('proyek', 'design.id_proyek', '=', 'proyek.id_proyek')
+            ->where('proyek.status', 'Open')
             ->get();
 
-        $statusCountsJamCheck = Design::whereIn('status', ['Release', 'Open', 'Proses Revisi'])
+        $statusCountsJamCheck = Design::whereIn('design.status', ['Release', 'Open', 'Proses Revisi'])
             ->where(function ($query) use ($userId) {
                 $query->where('id_check', $userId);
             })
-            ->selectRaw('status, sum((size * lembar * tipe * 0.7)/3) as total')
-            ->groupBy('status')
+            ->selectRaw('design.status, sum(size * lembar * (bobot_rev / 3) * (bobot_design / 3) * tipe * 0.5) as total')
+            ->groupBy('design.status')
+            ->join('proyek', 'design.id_proyek', '=', 'proyek.id_proyek')
+            ->where('proyek.status', 'Open')
             ->get();
 
-        $statusCountsJamApprove = Design::whereIn('status', ['Release', 'Open', 'Proses Revisi'])
+        $statusCountsJamApprove = Design::whereIn('design.status', ['Release', 'Open', 'Proses Revisi'])
             ->where(function ($query) use ($userId) {
                 $query->where('id_approve', $userId);
             })
-            ->selectRaw('status, sum((size * lembar * tipe * 0.5)/3) as total')
-            ->groupBy('status')
+            ->selectRaw('design.status, sum(size * lembar * tipe * (bobot_rev / 3) * (bobot_design / 3) * 0.25) as total')
+            ->groupBy('design.status')
+            ->join('proyek', 'design.id_proyek', '=', 'proyek.id_proyek')
+            ->where('proyek.status', 'Open')
             ->get();
 
         $job_closed_jam_draft = $statusCountsJamDraft->firstWhere('status', 'Release')->total ?? 0;
@@ -86,7 +96,7 @@ class DashboardController extends Controller
 
         $all_open_jam [] = $job_open_jam_draft + $job_open_jam_check + $job_open_jam_approve;
         $all_closed_jam [] = $job_closed_jam_draft + $job_closed_jam_check + $job_closed_jam_approve;
-        $all_revisi_jam [] = $job_revisi_jam_draft + $job_revisi_jam_check + $job_revisi_jam_approve;
+        $all_revisi_jam [] = ($job_revisi_jam_draft * 0.25) + ($job_revisi_jam_check * 0.25) + ($job_revisi_jam_approve * 0.25);
 
 
 //---------------------------------------------------------Data Array------------------------------------------------------//
@@ -138,15 +148,18 @@ class DashboardController extends Controller
 
             $design_release_jam_approve = Design::where('status', 'Release')->where('id_approve', $userId)->where('jenis', 'Dinas')
             ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size', 0));
-*/
+
             $design_release_jam_draft_detail = DesignDetail::where('id_draft', $userId)->where('status', 'Release')
-            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev /3) * 1', 0));
+            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev /3) * 1', 0));  */
+
+            $design_release_jam_draft_detail = DesignDetail::where('id_draft', $userId)->where('status', 'Release')
+            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev / 3) * (bobot_design / 3) * 1' , 0));
 
             $design_release_jam_check_detail = DesignDetail::where('id_check', $userId)->where('status', 'Release')
-            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev / 3) * 0.66', 0));
+            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev / 3) * (bobot_design / 3) * 0.5', 0));
 
             $design_release_jam_approve_detail = DesignDetail::where('id_approve', $userId)->where('status', 'Release')
-            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev / 3) * 0.33', 0));
+            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev / 3) * (bobot_design / 3) * 0.25', 0));
 
             $release_jam = ($jumlah_hari_kerja > 0) ? ($design_release_jam_draft / $jumlah_hari_kerja)  : 0;
             $release_jam_detail = ($jumlah_hari_kerja > 0) ? ($design_release_jam_draft_detail + $design_release_jam_check_detail + $design_release_jam_approve_detail) / ($jumlah_hari_kerja) : 0;
@@ -168,6 +181,7 @@ class DashboardController extends Controller
                         ->orWhere('id_check', $userId)
                         ->orWhere('id_approve', $userId);
                 })
+                ->where('jenis', 'Doc')
                 ->where('created_at', 'LIKE', "%$tanggal_awal%")
                 ->count();
             
@@ -177,6 +191,7 @@ class DashboardController extends Controller
                         ->orWhere('id_check', $userId)
                         ->orWhere('id_approve', $userId);
                 })
+                ->where('jenis', 'Doc')
                 ->where('created_at', 'LIKE', "%$tanggal_awal%")
                 ->count();
             
@@ -186,6 +201,7 @@ class DashboardController extends Controller
                         ->orWhere('id_check', $userId)
                         ->orWhere('id_approve', $userId);
                 })
+                ->where('jenis', 'Doc')
                 ->where('created_at', 'LIKE', "%$tanggal_awal%")
                 ->count();
 
@@ -201,7 +217,7 @@ class DashboardController extends Controller
 
         $tanggal_awal = date('Y-m-01');
 
-        if (auth()->user()->level == 2 || auth()->user()->level == 3 || auth()->user()->level == 1 || auth()->user()->level == 9 || auth()->user()->level == 10) {
+        if (auth()->user()->level == 2 || auth()->user()->level == 3 || auth()->user()->level == 1 || auth()->user()->level == 9 || auth()->user()->level == 10 || auth()->user()->level == 13 || auth()->user()->level == 14) {
             return view('admin.dashboard', compact( 
                 'data_target', 
                 'data_open',

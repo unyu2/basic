@@ -61,6 +61,13 @@
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
+                        <label for="bobot_design" class="col-lg-1 col-lg-offset-2 control-label">Bobot Design</label>
+                            <div class="col-lg-6">
+                                <input name="bobot_design" id="bobot_design" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row hidden-form">
                         <label for="size" class="col-lg-1 col-lg-offset-2 control-label">Size</label>
                             <div class="col-lg-6">
                                 <input name="size" id="size" class="form-control" required autofocus readonly>
