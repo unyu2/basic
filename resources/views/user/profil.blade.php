@@ -63,30 +63,6 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="kompetensi" class="col-lg-3 col-lg-offset-1 control-label">Kompetensi</label>
-                        <div class="col-lg-6">
-                            <textarea name="kompetensi" id="kompetensi" class="form-control" required autofocus></textarea>
-                            <span class="help-block with-errors"></span>
-                            <span style="color: green;">Pisahkan dengan titik koma (;). Contoh: Embeded System , RFID , Dst...</span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="sertifikasi" class="col-lg-3 col-lg-offset-1 control-label">Sertifikasi</label>
-                        <div class="col-lg-6">
-                            <textarea name="sertifikasi" id="sertifikasi" class="form-control" required autofocus></textarea>
-                            <span class="help-block with-errors"></span>
-                            <span style="color: green;">Pisahkan dengan koma (,). Contoh: Project Management , Auditor , Dst...</span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="training" class="col-lg-3 col-lg-offset-1 control-label">Training</label>
-                        <div class="col-lg-6">
-                            <textarea name="training" id="training" class="form-control" required autofocus></textarea>
-                            <span class="help-block with-errors"></span>
-                            <span style="color: green;">Pisahkan dengan koma (,). Contoh: Autodesk Vault , Autocad , Dst...</span>
-                        </div>
-                    </div>
                 </div>
                 <div class="box-footer text-right">
                     <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan Perubahan</button>

@@ -47,6 +47,8 @@ use App\Http\Controllers\{
     DesignController,
     DinasController,
     DesignDetailController,
+    TekprodController,
+    TekprodDetailController,
     SistemController,
     FullCalenderController,
     KategoriController,
@@ -269,10 +271,10 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('dinas/pilihUser/{id}', [DinasController::class, 'pilihUser'])->name('dinas.pilihUser');
         Route::resource('/dinas', DinasController::class);
 
-
         Route::get('/design_overall/indexOverall', [DesignController::class, 'indexOverall'])->name('design_overall.indexOverall');
         Route::get('/design/dataOverall', [DesignController::class, 'dataOverall'])->name('design.dataOverall');
 
+        //Design Routing
 
         Route::get('/design/data', [DesignController::class, 'data'])->name('design.data');
         Route::get('/design/dataAdmin', [DesignController::class, 'dataAdmin'])->name('design.dataAdmin');
@@ -304,6 +306,39 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::post('/design_detail/delete-selected', [DesignDetailController::class, 'deleteSelected'])->name('design_detail.delete_selected');
         Route::resource('/design_detail', DesignDetailController::class);
 
+        //Tekprod Routing
+
+        Route::get('/tekprod/data', [TekprodController::class, 'data'])->name('tekprod.data');
+        Route::get('/tekprod/dataAdmin', [TekprodController::class, 'dataAdmin'])->name('tekprod.dataAdmin');
+        Route::get('/tekprod/export', [TekprodController::class, 'exportExcel'])->name('tekprod.export');
+        Route::get('/tekprod/exportLog', [TekprodController::class, 'exportExcelLog'])->name('tekprod.exportLog');
+        Route::post('/tekprod/import', [TekprodController::class, 'importExcel'])->name('tekprod.import');
+        Route::get('/tekprod/dataModal', [TekprodController::class, 'dataModal'])->name('tekprod.dataModal');
+        Route::get('/tekprod/dataModal2', [TekprodController::class, 'dataModal2'])->name('tekprod.dataModal2');
+        Route::get('tekprod/dataDetail', [TekprodController::class, 'dataDetail'])->name('tekprod.dataDetail');
+        Route::get('/tekprod/{id_design}/showDetail', [TekprodController::class, 'showDetail'])->name('tekprod.showDetail');
+        Route::put('/tekprod/{id_design}', [TekprodController::class, 'updatex'])->name('tekprod.updatex');
+        Route::put('/tekprod/{id_design}/release', [TekprodController::class, 'release'])->name('tekprod.release');
+        Route::get('tekprod/pilihData/{id}', [TekprodController::class, 'pilihData'])->name('tekprod.pilihData');
+        Route::get('tekprod/pilihRevisi/{id}', [TekprodController::class, 'pilihRevisi'])->name('tekprod.pilihRevisi');
+        Route::post('/tekprod/storeRevisi', [TekprodController::class, 'storeRevisi'])->name('tekprod.storeRevisi');
+        Route::post('/tekprod/stores', [TekprodController::class, 'stores'])->name('tekprod.stores');
+        Route::post('/tekprod/delete-selected', [TekprodController::class, 'deleteSelected'])->name('tekprod.delete_selected');
+        Route::post('/tekprod/exportSelected', [TekprodController::class, 'exportSelected'])->name('tekprod.exportSelected');
+        Route::post('/tekprod/cetakPdf', [TekprodController::class, 'cetakPdf'])->name('tekprod.cetakPdf');
+        Route::resource('/tekprod', TekprodController::class);
+
+        Route::get('/tekprod_detail/dataModal', [TekprodDetailController::class, 'dataModal'])->name('tekprod_detail.dataModal');
+        Route::get('/tekprod_detail/dataAdmin', [TekprodDetailController::class, 'dataAdmin'])->name('tekprod_detail.dataAdmin');
+        Route::get('/tekprod_detail/data', [TekprodDetailController::class, 'data'])->name('tekprod_detail.data');
+        Route::get('tekprod_detail/pilihData/{id}', [TekprodDetailController::class, 'pilihData'])->name('tekprod_detail.pilihData');
+        Route::put('/tekprod_detail/{id}', [TekprodDetailController::class, 'updatex'])->name('tekprod_detail.updatex');
+        Route::put('/tekprod_detail/{id}/update', [TekprodDetailController::class, 'update'])->name('tekprod_detail.update');
+        Route::post('/tekprod_detail/import', [TekprodDetailController::class, 'importExcel'])->name('tekprod_detail.import');
+        Route::post('/tekprod_detail/delete-selected', [TekprodDetailController::class, 'deleteSelected'])->name('tekprod_detail.delete_selected');
+        Route::resource('/tekprod_detail', TekprodDetailController::class);
+
+        //End of tekprod
 
         Route::get('/full_calender', [FullCalenderController::class, 'index'])->name('full_calender');
         Route::post('/full_calender/action', [FullCalenderController::class, 'action']);
@@ -371,7 +406,6 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('/dmu/form1', [DmuController::class, 'store'])->name('dmu.form1');
         Route::put('/dmu/{id}', [DmuController::class, 'updatex'])->name('dmu.updatex');
         Route::post('/form1', [DmuController::class, 'store'])->name('form1.store');
-    //    Route::get('/dmu/store-modal', [DmuController::class, 'storeModal'])->name('dmu.storeModal');
         Route::post('/dmu/store-modal', [DmuController::class, 'storeModal'])->name('dmu.storeModal');
 
         Route::post('/dmu', [DmuController::class, 'store'])->name('dmu.store');
@@ -380,7 +414,6 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::resource('/dmu', DmuController::class);
 
         Route::get('/dmuapv/data', [DmuapvController::class, 'data'])->name('dmuapv.data');
-    //    Route::get('/dmuapv/store-modal', [DmuapvController::class, 'storeModal'])->name('dmuapv.storeModal');
         Route::post('/dmuapv/store-modal', [DmuapvController::class, 'storeModal'])->name('dmuapv.storeModal');
         Route::post('/dmuapv/delete-selected', [DmuapvController::class, 'deleteSelected'])->name('dmuapv.delete_selected');
         Route::resource('/dmuapv', DmuapvController::class);
