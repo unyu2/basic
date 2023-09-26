@@ -26,7 +26,23 @@
                         <span style="color: green;">Pilih Dokumen Yang Akan Dibuat Dan Atau Di Edit Schedule Nya</span>
                         </div>
                     </div>
-                    <div class="form-group row hidden-form">
+                    <div class="form-group row">
+                        <label for="kode_design" class="col-lg-2 col-lg-offset-1 control-label">Kode Design</label> 
+                        <div class="col-lg-6">
+                            <input name="kode_design" id="kode_design" class="form-control" required autofocus readonly>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                <div class="form-group row">
+                        <label for="nama_design" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
+                        <div class="col-lg-6">
+                            <input name="nama_design" id="nama_design" class="form-control" required autofocus readonly>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+
+<!-- Start hidden -->
+<div class="form-group row hidden-form">
                         <label for="id_design" class="col-lg-2 col-lg-offset-1 control-label">ID Design</label> 
                         <div class="col-lg-6">
                             <input name="id_design" id="id_design" class="form-control" required autofocus>
@@ -34,9 +50,58 @@
                         </div>
                     </div>
                     <div class="form-group row hidden-form">
+                        <label for="pemilik" class="col-lg-2 col-lg-offset-1 control-label">Pemilik</label> 
+                        <div class="col-lg-6">
+                            <input name="pemilik" id="pemilik" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row hidden-form">
+                        <label for="rev_for_curva" class="col-lg-2 col-lg-offset-1 control-label">Rev For Curva</label> 
+                        <div class="col-lg-6">
+                            <input name="rev_for_curva" id="rev_for_curva" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row hidden-form">
+                        <label for="duplicate_status" class="col-lg-2 col-lg-offset-1 control-label">Duplicate Status</label> 
+                        <div class="col-lg-6">
+                            <input name="duplicate_status" id="duplicate_status" class="form-control">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row hidden-form">
+                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
+                        <div class="col-lg-6">
+                            <input name="tipe" id="tipe" class="form-control">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row hidden-form">
+                        <label for="time_release_rev0" class="col-lg-2 col-lg-offset-1 control-label">Time Release Rev 0</label> 
+                        <div class="col-lg-6">
+                            <input type="date" name="time_release_rev0" id="time_release_rev0" class="form-control datepicker">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row hidden-form">
+                        <label for="jenis" class="col-lg-2 col-lg-offset-1 control-label">Jenis</label> 
+                        <div class="col-lg-6">
+                            <input name="jenis" id="jenis" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row hidden-form">
                         <label for="bobot_design" class="col-lg-2 col-lg-offset-1 control-label">Bobot Design</label> 
                         <div class="col-lg-6">
                             <input name="bobot_design" id="bobot_design" class="form-control" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row hidden-form">
+                        <label for="prosentase" class="col-lg-2 col-lg-offset-1 control-label">Prosentase</label> 
+                        <div class="col-lg-6">
+                            <input name="prosentase" id="prosentase" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -64,38 +129,6 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group row hidden-form ">
-                        <label for="bobot_rev" class="col-lg-2 col-lg-offset-1 control-label">Bobot Revisi</label> 
-                        <div class="col-lg-6">
-                        <input type="text" name="bobot_rev" id="bobot_rev" class="form-control" autofocus>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="kode_design" class="col-lg-2 col-lg-offset-1 control-label">Kode Design</label> 
-                        <div class="col-lg-6">
-                            <input name="kode_design" id="kode_design" class="form-control" required autofocus readonly>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
-                        <select name="tipe" id="tipe" class="form-control" required autofocus>
-                            <option></option>
-                                <option Value="1">New</option>
-                                <option Value="0.5">Konversi</option>
-                                <option Value="0.05">Konversi & Revisi</option>
-                            </select>
-                            <span class="help-block with-errors"></span>
-                    </div>
-                <div class="form-group row">
-                        <label for="nama_design" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
-                        <div class="col-lg-6">
-                            <input name="nama_design" id="nama_design" class="form-control" required autofocus readonly>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    
                     <div class="form-group row hidden-form">
                         <label for="konfigurasi" class="col-lg-2 col-lg-offset-1 control-label">Dipakai Konfigurasi</label> 
                         <div class="col-lg-6">
@@ -104,17 +137,25 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+
+                    <div class="form-group row hidden-form">
+                        <label for="bobot_rev" class="col-lg-2 col-lg-offset-1 control-label">Bobot Revisi</label> 
+                        <div class="col-lg-6">
+                        <input type="text" name="bobot_rev" id="bobot_rev" class="form-control" autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
                     <div class="form-group row hidden-form">
                         <label for="status" class="col-lg-2 col-lg-offset-1 control-label">Status</label> 
                         <div class="col-lg-6">
-                            <input value="Open" name="status" id="status" class="form-control" required autofocus>
+                            <input name="status" id="status" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row hidden-form">
                     <label for="revisi" class="col-lg-1 col-lg-offset-1 control-label">Revisi</label>
                         <div class="col-lg-2">
-                            <input value="Rev.0" type="text" name="revisi" id="revisi" class="form-control" required autofocus>
+                            <input type="text" name="revisi" id="revisi" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
 
@@ -162,7 +203,7 @@
                         <div class="col-lg-2">
                             <select type="text" name="id_approve" id="id_approve" class="form-control" required autofocus>
                             <option></option>
-                            @foreach ($approver as $key => $item)
+                            @foreach ($drafter as $key => $item)
                                      <option value="{{ $key }}" >{{ $item }}</option>
                                 @endforeach
                             </select>
@@ -170,75 +211,7 @@
                         </div>
                     </div>
 
-                    
-         <!--           <br>
-                    <a> <b><center>-- Pilih Konfigurasi Kereta Yang Digunakan Dalam Drawing --</center></b></a>
-                    </br>
-                   <div class="form-group row">
-                        <label for="konf_emu" class="col-lg-1 col-lg-offset-1 control-label">EMU</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_emu as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_emu[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_dmu" class="col-lg-1 control-label">DMU</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_dmu as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_dmu[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_light" class="col-lg-1 control-label">Light / Tram</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_light as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_light[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="konf_coach" class="col-lg-1 col-lg-offset-1 control-label">Coach</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_coach as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_coach[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_wagon" class="col-lg-1 control-label">Wagon</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_wagon as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_wagon[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                        <label for="konf_other" class="col-lg-1 control-label">Other</label>
-                        <div class="col-lg-2">
-                            @foreach ($konfigurasi_other as $key => $item)
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="konf_other[]" value="{{ $item }}" autofocus>{{ $item }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div> -->
-                    
+ <!-- End hidden -->                   
                         <a> <b><center> !!!!! DATA UNTUK SCHEDULE !!!!! DATA UNTUK SCHEDULE !!!!!</center></b></a>
                         <br>
 

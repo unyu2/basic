@@ -102,20 +102,18 @@
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
-                <div class="form-group row  hidden-form">
-                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
-                        <select name="tipe" id="tipe" class="form-control" required autofocus>
-                            <option></option>
-                                <option Value="1">New</option>
-                                <option Value="0.5">Konversi</option>
-                                <option Value="0.05">Konversi & Revisi</option>
-                            </select>
-                            <span class="help-block with-errors"></span>
-                    </div>
 
 
 <!----------------------------------------------------------Real Form For Show------------------------------------------------------------------>
-                <div class="form-group row hidden-form">
+<div class="form-group row">
+                        <label for="tipe" class="col-lg-1 col-lg-offset-2 control-label">Tipe</label>
+                            <div class="col-lg-6">
+                                <input name="tipe" id="tipe" class="form-control" required autofocus readonly>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                    </div>
+
+                        <div class="form-group row">
                         <label for="id_design" class="col-lg-1 col-lg-offset-2 control-label">ID Design</label>
                             <div class="col-lg-6">
                                 <input type="number" name="id_design" id="id_design" class="form-control" required autofocus readonly>

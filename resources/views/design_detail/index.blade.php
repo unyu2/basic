@@ -136,7 +136,8 @@
 @push('scripts')
 <script>
     let table;
-    let tableModal;
+    let table2;
+    let table3;
 
     $(function () {
         table = $('#table1').DataTable({
@@ -166,7 +167,7 @@
 
 
     $(function () {
-            table = $('#table3').DataTable({
+            table3 = $('#table3').DataTable({
                 responsive: true,
                 processing: true, 
                 serverSide: true,
@@ -191,10 +192,8 @@
         });
     });
         
-
-
     $(function () {
-            table = $('#table2').DataTable({
+            table2 = $('#table2').DataTable({
                 responsive: true,
                 processing: true, 
                 serverSide: true,
@@ -220,6 +219,22 @@
         });
     });
 
+    function deleteData(url) {
+        if (confirm('Yakin ingin menghapus data terpilih?')) {
+            $.post(url, {
+                    '_token': $('[name=csrf-token]').attr('content'),
+                    '_method': 'delete'
+                })
+                .done((response) => {
+                    table2.ajax.reload();
+                })
+                .fail((errors) => {
+                    alert('Tidak dapat menghapus data | Mengandung detail Data');
+                    return;
+                });
+        }
+    }
+
     function addForm(url) {
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('');
@@ -235,7 +250,7 @@
                 $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
                     .done((response) => {
                         $('#modal-form').modal('hide');
-                        table.ajax.reload();
+                        table3.ajax.reload();
                     })
                     .fail((errors) => {
                         alert('Tidak dapat menyimpan data | Periksa kembali :)');
@@ -243,22 +258,6 @@
                     });
             }
         });
-
-        function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'delete'
-                })
-                .done((response) => {
-                    table.ajax.reload();
-                })
-                .fail((errors) => {
-                    alert('Tidak dapat menghapus data | Mengandung detail Data');
-                    return;
-                });
-        }
-    }
 
 
     function editForm3(url) {
@@ -313,6 +312,7 @@ $('#modal-form3').validator().on('submit', function (e) {
 
                 $('#modal-form3').modal('hide');
                 table.ajax.reload();
+                table3.ajax.reload();
             })
             .fail((errors) => {
                 console.error('Gagal menyimpan data:', errors);
@@ -370,26 +370,20 @@ function editForm4(url) {
         });
     }
 
-
-$('#modal-form4').validator().on('submit', function (e) {
-    if (!e.preventDefault()) {
-        console.log('Mengirim permintaan POST ke URL: ' + $('#modal-form4 form').attr('action'));
-
-        $.post($('#modal-form4 form').attr('action'), $('#modal-form4 form').serialize())
-            .done((response) => {
-                console.log('Response dari permintaan POST:', response);
-
-                $('#modal-form4').modal('hide');
-                table.ajax.reload();
-            })
-            .fail((errors) => {
-                console.error('Gagal menyimpan data:', errors);
-
-                alert('Tidak dapat menyimpan data | Periksa kembali :)');
-                return;
-            });
-    }
-});
+    $('#modal-form4').validator().on('submit', function (e) {
+            if (! e.preventDefault()) {
+                $.post($('#modal-form4 form').attr('action'), $('#modal-form4 form').serialize())
+                    .done((response) => {
+                        $('#modal-form4').modal('hide');
+                        table.ajax.reload();
+                        table3.ajax.reload();
+                    })
+                    .fail((errors) => {
+                        alert('Tidak dapat menyimpan data | Periksa kembali :)');
+                        return;
+                    });
+            }
+        });
 
 
 </script>

@@ -143,7 +143,6 @@
                 $('#modal-form [name=training]').val(response.training);
                 $('#modal-form [name=status_karyawan]').val(response.status_karyawan);
 
-
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');

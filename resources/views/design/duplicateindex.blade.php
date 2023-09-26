@@ -160,7 +160,6 @@
     let tableAdmin;
     let table1;
     let table0;
-    let tableModal;
     let tableModal2;
     let tableModal3;
     let tableDetail;
@@ -200,7 +199,7 @@
     }
 
     $(function () {
-        tableAdmin = $('#tableAdmin').DataTable({
+        table = $('#tableAdmin').DataTable({
             responsive: true,
             processing: true,
             serverSide: true,
@@ -229,7 +228,7 @@
 
 
     $(function () {
-            tableModal = $('.tableModal').DataTable({
+            table = $('.tableModal').DataTable({
                 responsive: true,
                 processing: true,
                 serverSide: true,
@@ -356,12 +355,6 @@
             $('#id_check').val(data.id_check);
             $('#id_approve').val(data.id_approve);
             $('#prosentase').val(data.prosentase);
-            $('#pemilik').val(data.pemilik);
-            $('#jenis').val(data.jenis);
-            $('#rev_for_curva').val(data.rev_for_curva);
-            $('#duplicate_status').val(data.duplicate_status);
-            $('#time_release_rev0').val(data.time_release_rev0);
-            $('#tipe').val(data.tipe);
 
             $('#id_refrensi').val(data.id_refrensi);
             $('#refrensi_design').val(data.refrensi_design);
@@ -464,7 +457,6 @@
                     .done((response) => {
                         $('#modal-form2').modal('hide');
                         table.ajax.reload();
-                        tableAdmin.ajax.reload();
                     })
                     .fail((errors) => {
                         alert('Tidak dapat menyimpan data | Periksa kembali :)');
@@ -482,7 +474,6 @@
                 })
                 .done((response) => {
                     table.ajax.reload();
-                    tableAdmin.ajax.reload();
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menghapus data | Mengandung detail Data');
@@ -497,7 +488,6 @@
                 $.post(url, $('.form-design').serialize())
                     .done((response) => {
                         table.ajax.reload();
-                        tableAdmin.ajax.reload();
                     })
                     .fail((errors) => {
                         alert('Tidak dapat menghapus data');

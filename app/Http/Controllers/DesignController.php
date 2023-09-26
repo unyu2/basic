@@ -230,21 +230,23 @@ class DesignController extends Controller
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
                 if ($design->status !== 'Release') {
-                $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
-                $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
+                    $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
                 }
-                $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>';        
+                if ($design->status === 'Release') {
+                    $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>'; 
+                }
                 $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
                 $buttons .= '</div>';
                 return $buttons;
             })
+            
             ->rawColumns(['aksi', 'id_design', 'select_all'])
             ->make(true);
     }
 
     public function dataAdmin()
     {
-
         $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
             ->select('design.*', 'nama_proyek','proyek.status', 'design.status')
             ->where(function ($query) {
@@ -281,10 +283,12 @@ class DesignController extends Controller
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
                 if ($design->status !== 'Release') {
-                $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
-                $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
+                    $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
                 }
-                $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>';        
+                if ($design->status === 'Release') {
+                    $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>'; 
+                }
                 $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
                 $buttons .= '</div>';
                 return $buttons;
@@ -325,9 +329,10 @@ class DesignController extends Controller
     public function dataModal2()
     {
         $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
-            ->select('design.*', 'nama_proyek')
-            ->orderBy('id_design', 'DESC')
-            ->get();
+        ->where('design.status', 'Open')
+        ->select('design.*', 'proyek.nama_proyek', 'design.status')
+        ->orderBy('id_design', 'DESC')
+        ->get();
 
         return datatables()
             ->of($design)
@@ -437,12 +442,12 @@ public function stores(Request $request)
         Design::where('kode_design', $request->kode_design)->delete();
 
         $design = new Design($request->all());
-        $design->pemilik = 'Design';
-        $design->prosentase = '0';
+        $design->prosentase = '30';
         $design->bobot_rev = '3';
         $design->rev_for_curva = 'Rev.0';
         $design->jenis = 'Doc';
 
+        $design->pemilik = $request->pemilik;
         $design->bobot_design = $request->bobot_design;
         $design->lembar = $request->lembar;
         $design->size = $request->size;

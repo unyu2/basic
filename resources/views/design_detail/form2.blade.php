@@ -54,21 +54,21 @@
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="bobot_rev" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                        <label for="bobot_rev" class="col-lg-1 col-lg-offset-2 control-label">Bobot Rev</label>
                             <div class="col-lg-6">
                                 <input type="date" name="bobot_rev" id="bobot_rev" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="size" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                        <label for="size" class="col-lg-1 col-lg-offset-2 control-label">Size</label>
                             <div class="col-lg-6">
                                 <input type="date" name="size" id="size" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="lembar" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                        <label for="lembar" class="col-lg-1 col-lg-offset-2 control-label">Jumlah Sheet</label>
                             <div class="col-lg-6">
                                 <input type="date" name="lembar" id="lembar" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>

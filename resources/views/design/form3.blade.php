@@ -60,12 +60,36 @@
                         <label for="bobot_design" class="col-lg-2 col-lg-offset-1 control-label">Bobot Design</label> 
                         <div class="col-lg-6">
                         <select type="text" name="bobot_design" id="bobot_design" class="form-control" required autofocus>
+                        <option></option>
                             <option value="1">Low</option>
                             <option value="2">Medium</option>
                             <option value="3">High</option>
                             </select>
                             <span class="help-block with-errors"></span>
                         </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
+                        <div class="col-lg-6">
+                        <select name="tipe" id="tipe" class="form-control" required autofocus>
+                                <option></option>
+                                <option Value="1">New</option>
+                                <option Value="0.5">Konversi</option>
+                                <option Value="0.05">Konversi & Revisi</option>
+                         </select>
+                         </div>
+                            <span class="help-block with-errors"></span>
+                    </div>
+                    <div class="form-group row">
+                        <label for="pemilik" class="col-lg-2 col-lg-offset-1 control-label">Pemilik</label> 
+                        <div class="col-lg-6">
+                        <select name="pemilik" id="pemilik" class="form-control" required autofocus>
+                                <option></option>
+                                <option Value="Design">Design</option>
+                                <option Value="Engineering">Engineering</option>
+                         </select>
+                         </div>
+                            <span class="help-block with-errors"></span>
                     </div>
                     <div class="form-group row">
                         <label for="konfigurasi" class="col-lg-2 col-lg-offset-1 control-label">Dipakai Konfigurasi</label> 

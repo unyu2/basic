@@ -142,15 +142,6 @@ class DashboardController extends Controller
 
             $design_release_jam_draft = Design::where('status', 'Release')->where('id_draft', $userId)->where('jenis', 'Dinas')
             ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size', 0));
-/*
-            $design_release_jam_check = Design::where('status', 'Release')->where('id_check', $userId)->where('jenis', 'Dinas')
-            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size', 0));
-
-            $design_release_jam_approve = Design::where('status', 'Release')->where('id_approve', $userId)->where('jenis', 'Dinas')
-            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size', 0));
-
-            $design_release_jam_draft_detail = DesignDetail::where('id_draft', $userId)->where('status', 'Release')
-            ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev /3) * 1', 0));  */
 
             $design_release_jam_draft_detail = DesignDetail::where('id_draft', $userId)->where('status', 'Release')
             ->whereBetween('created_at', [$range_bulan])->sum(DB::raw('lembar * size * tipe * (bobot_rev / 3) * (bobot_design / 3) * 1' , 0));
@@ -175,7 +166,7 @@ class DashboardController extends Controller
 
 //---------------------------------------------------Kurva Normal Output---------------------------------------------//
 
-            $design_release = Design::where('status', 'Release')
+            $design_release = DesignDetail::where('status', 'Release')
                 ->where(function ($query) use ($userId) {
                     $query->where('id_draft', $userId)
                         ->orWhere('id_check', $userId)
@@ -192,10 +183,10 @@ class DashboardController extends Controller
                         ->orWhere('id_approve', $userId);
                 })
                 ->where('jenis', 'Doc')
-                ->where('created_at', 'LIKE', "%$tanggal_awal%")
+                ->where('prediksi_akhir', 'LIKE', "%$tanggal_awal%")
                 ->count();
             
-            $design_revisi = Design::where('status', 'Proses Revisi')
+            $design_revisi = DesignDetail::where('status', 'Proses Revisi')
                 ->where(function ($query) use ($userId) {
                     $query->where('id_draft', $userId)
                         ->orWhere('id_check', $userId)

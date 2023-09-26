@@ -21,7 +21,7 @@ class DesignDetailImports implements ToModel, WithHeadingRow
                 'prediksi_akhir' => $this->transformDate($row['prediksi_akhir']),
                 'id_draft' => $row['id_draft'],
                 'id_check' => $row['id_check'],
-                'id_aprove' => $row['id_aprove'],
+                'id_approve' => $row['id_approve'],
                 'jenis' => $row['jenis'],
                 'pemilik' => $row['pemilik'],
                 'bobot_rev' => $row['bobot_rev'],

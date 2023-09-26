@@ -172,16 +172,15 @@ class DesignDetailController extends Controller
             })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
-            
-                // Cek nilai kolom "status"
-                if ($design->revisi == 'Rev.0') {
-                    // Jika status adalah "Rev.0", tampilkan tombol "Release Rev.0"
-                    $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev. 0</i></button>';
-                } else {
-                    // Jika status bukan "Rev.0", tampilkan tombol "Release"
-                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Revisi</i></button>';
+                if ($design->status == 'Open' || $design->status == 'Proses Revisi') {
+                    if ($design->revisi == 'Rev.0') {
+                        // Jika status adalah "Rev.0", tampilkan tombol "Release Rev.0"
+                        $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev. 0</i></button>';
+                    } else {
+                        // Jika status bukan "Rev.0", tampilkan tombol "Release"
+                        $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Revisi</i></button>';
+                    }
                 }
-            
                 $buttons .= '</div>';
             
                 return $buttons;
@@ -234,7 +233,7 @@ class DesignDetailController extends Controller
      */
 
   
-    public function updates(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $design = Design::find($id);
         $design->id_design =$request->id_design;
@@ -255,9 +254,6 @@ class DesignDetailController extends Controller
         $design->lembar = $request->lembar;
 
         $design->prosentase = $request->prosentase;
-
- //       $design->duplicate_status = 'Release';
- //       $design->time_release_rev0 = now();
 
         $design->update();
     
@@ -304,9 +300,10 @@ class DesignDetailController extends Controller
             $design->size = $request->size;
             $design->lembar = $request->lembar;
 
+            $design->prosentase = $request->prosentase;
+
             $design->duplicate_status = $request->duplicate_status;
             $design->time_release_rev0 = $request->time_release_rev0;
-            $design->prosentase = $request->prosentase;
 
             $design->update();
         

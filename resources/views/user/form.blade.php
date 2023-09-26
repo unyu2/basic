@@ -76,15 +76,15 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="status_karyawan" class="col-lg-3 col-lg-offset-1 control-label">Status Pegawai</label>
+                        <label for="status_karyawan" class="col-lg-3 col-lg-offset-1 control-label">Status Karyawan</label>
                         <div class="col-lg-6">   
                             <select name="status_karyawan" id="status_karyawan" class="form-control" required>
-                            <option></option>
-                            <option>Organik INKA</option>
-                            <option>PKWT INKA</option>
-                            <option>Organik IMS</option>
-                            <option>PKWT IMS</option>
-                            <option>PKWT IMSS</option>
+                            <option value=""></option>
+                            <option value="Organik INKA">Organik INKA</option>
+                            <option value="PKWT INKA">PKWT INKA</option>
+                            <option value="Organik IMS">Organik IMS</option>
+                            <option value="PKWT IMS">PKWT IMS</option>
+                            <option value="PKWT IMSS">PKWT IMSS</option>
                             </select>
                         <span class="help-block with-errors"></span>
                         </div>

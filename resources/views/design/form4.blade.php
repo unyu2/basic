@@ -57,6 +57,29 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="bobot_design" class="col-lg-2 col-lg-offset-1 control-label">Bobot Design</label> 
+                        <div class="col-lg-6">
+                        <select type="text" name="bobot_design" id="bobot_design" class="form-control" required autofocus>
+                            <option value="1">Low</option>
+                            <option value="2">Medium</option>
+                            <option value="3">High</option>
+                            </select>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="bobot_rev" class="col-lg-2 col-lg-offset-1 control-label">Bobot Rev</label> 
+                        <div class="col-lg-6">
+                        <select type="text" name="bobot_rev" id="bobot_rev" class="form-control" required autofocus>
+                            <option></option>
+                            <option value="3">Berubah Total</option>
+                            <option value="2">Berubah Sebagian</option>
+                            <option value="1">Sedikit Penyesuaian</option>
+                            </select>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
                         <div class="col-lg-6">
                         <select name="tipe" id="tipe" class="form-control" required autofocus>
@@ -75,14 +98,7 @@
                             <span style="color: green;">Pisahkan dengan titik koma (;). Ex: Tec;Mc;dst..</span>
                             <span class="help-block with-errors"></span>
                         </div>
-                    </div> <!--
-                    <div class="form-group row">
-                        <label for="nilai" class="col-lg-2 col-lg-offset-1 control-label">Nilai</label> 
-                        <div class="col-lg-6">
-                            <input value="" name="nilai" id="nilai" class="form-control" autofocus>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div> -->
+                    </div>
                     <div class="form-group row">
                         <label for="status" class="col-lg-2 col-lg-offset-1 control-label">Status</label> 
                         <div class="col-lg-6">

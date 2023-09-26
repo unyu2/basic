@@ -102,8 +102,9 @@
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
-                <div class="form-group row  hidden-form">
-                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
+                <div class="form-group row">
+                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label>
+                        <div class="col-lg-6"> 
                         <select name="tipe" id="tipe" class="form-control" required autofocus>
                             <option></option>
                                 <option Value="1">New</option>
@@ -111,6 +112,7 @@
                                 <option Value="0.05">Konversi & Revisi</option>
                             </select>
                             <span class="help-block with-errors"></span>
+                        </div>
                     </div>
                 
 
