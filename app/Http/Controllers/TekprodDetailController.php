@@ -10,11 +10,11 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-use App\Models\Subpengujian;
 use App\Models\Design;
 use App\Models\DesignDetail;
 use App\Models\Tekprod;
 use App\Models\TekprodDetail;
+use App\Models\Subpengujian;
 use App\Models\Proyek;
 use App\Models\Sistem;
 use App\Models\Konfigurasi;
@@ -35,20 +35,18 @@ class TekprodDetailController extends Controller
 
         $userLoggedIn = Auth::user(); 
         $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
-    
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '2')->pluck('name', 'id');
+        $level4Users = User::where('level', '4')->pluck('id');
 
-        $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar');
+        $design = Design::all()->pluck('nama_design', 'id_design');
         $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
     
-        $userLoggedIn = Auth::user(); 
-        $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
-    
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '2')->pluck('name', 'id');
+        $approver = User::where('bagian', $bagianUser)->pluck('name', 'id');
+        $drafter = User::where(function ($query) use ($bagianUser) {
+          $query->where('bagian', $bagianUser)->where('level', '3');
+        })
+        ->orWhereIn('id', $level4Users)
+        ->pluck('name', 'id');
+        
         $tekprod = Tekprod::All();
         $tekprodDetail = TekprodDetail::All();
         
@@ -63,7 +61,7 @@ class TekprodDetailController extends Controller
         $konfigurasi_wagon = Konfigurasi::where('tipe_konfigurasi', 'Wagon')->pluck('nama_konfigurasi','id_konfigurasi');
         $konfigurasi_other = Konfigurasi::where('tipe_konfigurasi', 'Other')->pluck('nama_konfigurasi','id_konfigurasi');
     
-        return view('tekprod_detail.index', compact('tekprod', 'kepala', 'subsistem', 'approver', 'drafter', 'proyek',
+        return view('tekprod_detail.index', compact('tekprod', 'design', 'subsistem', 'approver', 'drafter', 'proyek',
         'konfigurasi', 'konfigurasi_dmu', 'konfigurasi_emu', 'konfigurasi_light', 'konfigurasi_coach', 'konfigurasi_wagon', 'konfigurasi_other',
         'approver', 'drafter', 'tekprodDetail'
        ));
@@ -108,10 +106,8 @@ class TekprodDetailController extends Controller
                 $buttons = '<div class="btn-group">';
                 if ($tekprod->status_tekprod == 'Open' || $tekprod->status_tekprod == 'Proses Revisi') {
                     if ($tekprod->revisi_tekprod == 'Rev.0') {
-                        // Jika status adalah "Rev.0", tampilkan tombol "Release Rev.0"
                         $buttons .= '<button type="button" onclick="editForm3(`'. route('tekprod_detail.updatex', $tekprod->id_tekprod) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev. 0</i></button>';
                     } else {
-                        // Jika status bukan "Rev.0", tampilkan tombol "Release"
                         $buttons .= '<button type="button" onclick="editForm4(`'. route('tekprod_detail.update', $tekprod->id_tekprod) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Revisi</i></button>';
                     }
                 }
@@ -155,7 +151,7 @@ class TekprodDetailController extends Controller
     {
         $userId = auth()->user()->id;
 
-        $tekprod = Tekprod::leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', 'tekprod.id_kepala_gambar')
+        $tekprod = Tekprod::leftJoin('design', 'design.id_design', 'tekprod.id_design')
             ->leftJoin('proyek', 'proyek.id_proyek', 'tekprod.id_proyek')
             ->select('tekprod.*', 'nama', 'nama_proyek')
             ->orderBy('id_tekprod', 'DESC')
@@ -176,10 +172,8 @@ class TekprodDetailController extends Controller
                 $buttons = '<div class="btn-group">';
                 if ($tekprod->status_tekprod == 'Open' || $tekprod->status_tekprod == 'Proses Revisi') {
                     if ($tekprod->revisi_tekprod == 'Rev.0') {
-                        // Jika status adalah "Rev.0", tampilkan tombol "Release Rev.0"
                         $buttons .= '<button type="button" onclick="editForm3(`'. route('tekprod_detail.updatex', $tekprod->id_tekprod) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev. 0</i></button>';
                     } else {
-                        // Jika status bukan "Rev.0", tampilkan tombol "Release"
                         $buttons .= '<button type="button" onclick="editForm4(`'. route('tekprod_detail.update', $tekprod->id_tekprod) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Revisi</i></button>';
                     }
                 }
@@ -352,8 +346,7 @@ class TekprodDetailController extends Controller
         return response(null, 204);
     }
 
-
-        public function importExcel(Request $request)
+    public function importExcel(Request $request)
         {
             try {
                 $file = $request->file('file'); 

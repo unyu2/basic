@@ -227,6 +227,8 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::post('/charts/chartDesign/fetch_data_status_bobot', [ChartDesignController::class, 'fetch_data_status_bobot']);
         Route::post('/charts/chartDesign/fetch_data_engineering', [ChartDesignController::class, 'fetch_data_engineering']);
         Route::post('/charts/chartDesign/fetch_data_engineering_bobot', [ChartDesignController::class, 'fetch_data_engineering_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_tekprod', [ChartDesignController::class, 'fetch_data_tekprod']);
+        Route::post('/charts/chartDesign/fetch_data_tekprod_bobot', [ChartDesignController::class, 'fetch_data_tekprod_bobot']);
         Route::post('/charts/chartDesign/fetch_data_eld', [ChartDesignController::class, 'fetch_data_eld']);
         Route::post('/charts/chartDesign/fetch_data_eld_bobot', [ChartDesignController::class, 'fetch_data_eld_bobot']);
         Route::post('/charts/chartDesign/fetch_data_mid', [ChartDesignController::class, 'fetch_data_mid']);
@@ -243,6 +245,9 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::post('/charts/chartDesign/fetch_data_mes_bobot', [ChartDesignController::class, 'fetch_data_mes_bobot']);
         Route::post('/charts/chartDesign/fetch_data_qes', [ChartDesignController::class, 'fetch_data_qes']);
         Route::post('/charts/chartDesign/fetch_data_qes_bobot', [ChartDesignController::class, 'fetch_data_qes_bobot']);
+
+        Route::post('/charts/chartDesign/fetch_data_tps', [ChartDesignController::class, 'fetch_data_tps']);
+        Route::post('/charts/chartDesign/fetch_data_tps_bobot', [ChartDesignController::class, 'fetch_data_tps_bobot']);
 
         Route::get('/charts/chartsCurva', [ChartCurvaController::class, 'index'])->name('chartsCurva');
         Route::post('/charts/chartCurva/fetch_data_curvaS_sample_dua', [ChartCurvaController::class, 'fetch_data_curvaS_sample_dua']);
@@ -271,10 +276,10 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('dinas/pilihUser/{id}', [DinasController::class, 'pilihUser'])->name('dinas.pilihUser');
         Route::resource('/dinas', DinasController::class);
 
+        //Design Routing
+
         Route::get('/design_overall/indexOverall', [DesignController::class, 'indexOverall'])->name('design_overall.indexOverall');
         Route::get('/design/dataOverall', [DesignController::class, 'dataOverall'])->name('design.dataOverall');
-
-        //Design Routing
 
         Route::get('/design/data', [DesignController::class, 'data'])->name('design.data');
         Route::get('/design/dataAdmin', [DesignController::class, 'dataAdmin'])->name('design.dataAdmin');
@@ -308,6 +313,9 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
 
         //Tekprod Routing
 
+        Route::get('/tekprod_overall/indexOverall', [TekprodController::class, 'indexOverall'])->name('tekprod_overall.indexOverall');
+        Route::get('/tekprod/dataOverall', [TekprodController::class, 'dataOverall'])->name('tekprod.dataOverall');
+
         Route::get('/tekprod/data', [TekprodController::class, 'data'])->name('tekprod.data');
         Route::get('/tekprod/dataAdmin', [TekprodController::class, 'dataAdmin'])->name('tekprod.dataAdmin');
         Route::get('/tekprod/export', [TekprodController::class, 'exportExcel'])->name('tekprod.export');
@@ -315,11 +323,13 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::post('/tekprod/import', [TekprodController::class, 'importExcel'])->name('tekprod.import');
         Route::get('/tekprod/dataModal', [TekprodController::class, 'dataModal'])->name('tekprod.dataModal');
         Route::get('/tekprod/dataModal2', [TekprodController::class, 'dataModal2'])->name('tekprod.dataModal2');
+        Route::get('/tekprod/dataModal3', [TekprodController::class, 'dataModal3'])->name('tekprod.dataModal3');
         Route::get('tekprod/dataDetail', [TekprodController::class, 'dataDetail'])->name('tekprod.dataDetail');
-        Route::get('/tekprod/{id_design}/showDetail', [TekprodController::class, 'showDetail'])->name('tekprod.showDetail');
-        Route::put('/tekprod/{id_design}', [TekprodController::class, 'updatex'])->name('tekprod.updatex');
-        Route::put('/tekprod/{id_design}/release', [TekprodController::class, 'release'])->name('tekprod.release');
+        Route::get('/tekprod/{id_tekprod}/showDetail', [TekprodController::class, 'showDetail'])->name('tekprod.showDetail');
+        Route::put('/tekprod/{id_tekprod}', [TekprodController::class, 'updatex'])->name('tekprod.updatex');
+        Route::put('/tekprod/{id_tekprod}/release', [TekprodController::class, 'release'])->name('tekprod.release');
         Route::get('tekprod/pilihData/{id}', [TekprodController::class, 'pilihData'])->name('tekprod.pilihData');
+        Route::get('tekprod/pilihDataTekprod/{id}', [TekprodController::class, 'pilihDataTekprod'])->name('tekprod.pilihDataTekprod');
         Route::get('tekprod/pilihRevisi/{id}', [TekprodController::class, 'pilihRevisi'])->name('tekprod.pilihRevisi');
         Route::post('/tekprod/storeRevisi', [TekprodController::class, 'storeRevisi'])->name('tekprod.storeRevisi');
         Route::post('/tekprod/stores', [TekprodController::class, 'stores'])->name('tekprod.stores');

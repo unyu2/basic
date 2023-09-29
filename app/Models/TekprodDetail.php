@@ -13,9 +13,9 @@ class TekprodDetail extends Model
     protected $primaryKey = 'id_tekprod_detail';
     protected $guarded = [];
 
-    public function design()
+    public function tekprod()
     {
-        return $this->belongsTo(Design::class, 'id_tekprod', 'id_tekprod');
+        return $this->belongsTo(Tekprod::class, 'id_tekprod', 'id_tekprod');
     }
     public function draft()
     {

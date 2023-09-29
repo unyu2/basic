@@ -230,9 +230,9 @@
                         <button onclick="addRef()" type="button" class="btn btn-info">Pilih Refrensi</button>
                         </div>
                         <div class="col-lg-4">
-                            <input name="refrensi_design" id="refrensi_design" class="form-control">
-                            <input type="date" name="tanggal_refrensi" id="tanggal_refrensi" class="form-control">
-                            <input  name="id_refrensi" id="id_refrensi" class="form-control">
+                            <input name="refrensi_design" id="refrensi_design" class="form-control" readonly>
+                            <input type="date" name="tanggal_refrensi" id="tanggal_refrensi" class="form-control" readonly> 
+                            <input  name="id_refrensi" id="id_refrensi" class="form-control" readonly>
 
                             <span class="help-block with-errors"></span>
                             <span style="color: green;">Gunakan Refrensi Document (field ini) Bila Prediksi Tanggal Start Tidak Bisa Ditentukan.</span>

@@ -29,24 +29,21 @@ class DesignDetailController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-
-        $userLoggedIn = Auth::user(); 
-        $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
-    
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '2')->pluck('name', 'id');
-
+    {    
         $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar');
         $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
     
         $userLoggedIn = Auth::user(); 
         $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
+        $level4Users = User::where('level', '4')->pluck('id');
     
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '2')->pluck('name', 'id');
+        $approver = User::where('bagian', $bagianUser)->pluck('name', 'id');
+        $drafter = User::where(function ($query) use ($bagianUser) {
+          $query->where('bagian', $bagianUser)->where('level', '3');
+        })
+        ->orWhereIn('id', $level4Users)
+        ->pluck('name', 'id');
+
         $design = Design::All();
         $designDetail = DesignDetail::All();
         

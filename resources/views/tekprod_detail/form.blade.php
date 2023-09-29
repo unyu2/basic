@@ -4,9 +4,9 @@
     }
 </style>
 
-<div class="modal fade" id="modal-form3" tabindex="-1" role="dialog" aria-labelledby="modal-form3">
+<div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="{{ route('design.storeRevisi') }}" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <form action="{{ route('tekprod.store') }}" method="post" class="form-horizontal" enctype="multipart/form-data">
             @csrf
             @method('post')
 
@@ -32,44 +32,26 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
-                        <label for="bobot_design_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Bobot Design</label> 
+                    <label for="id_proyek" class="col-lg-2 col-lg-offset-1 control-label">Proyek</label>
                         <div class="col-lg-6">
-                        <select type="text" name="bobot_design_tekprod" id="bobot_design_tekprod" class="form-control" required autofocus>
-                        <option></option>
-                            <option value="1">Low</option>
-                            <option value="2">Medium</option>
-                            <option value="3">High</option>
+                            <select type="text" name="id_proyek" id="id_proyek" class="form-control" required autofocus>
+                                <option></option>
+                                @foreach ($proyek as $key => $item)
+                                    <option value="{{ $key }}">{{ $item }}</option>
+                                @endforeach
                             </select>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="tipe_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label> 
+                    <div class="form-group row hidden-form ">
+                        <label for="bobot_rev_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Bobot Revisi</label> 
                         <div class="col-lg-6">
-                        <select name="tipe_tekprod" id="tipe_tekprod" class="form-control" required autofocus>
-                                <option></option>
-                                <option Value="1">New</option>
-                                <option Value="0.5">Konversi</option>
-                                <option Value="0.05">Konversi & Revisi</option>
-                         </select>
-                         </div>
+                        <input type="text" name="bobot_rev_tekprod" id="bobot_rev_tekprod" class="form-control" autofocus>
                             <span class="help-block with-errors"></span>
+                        </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="pemilik_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Pemilik</label> 
-                        <div class="col-lg-6">
-                        <select name="pemilik_tekprod" id="pemilik_tekprod" class="form-control" required autofocus>
-                                <option></option>
-                                <option Value="Teknologi Proses">Teknologi Proses</option>
-                                <option Value="Shop Drawing">Shop Drawing</option>
-                                <option Value="Preparation Support">Preparation Support</option>
-                                <option Value="Welding Technology">Welding Technology</option>
-                         </select>
-                         </div>
-                            <span class="help-block with-errors"></span>
-                    </div>
+                    
                     <div class="form-group row">
                         <label for="konfigurasi_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Dipakai Konfigurasi</label> 
                         <div class="col-lg-6">
@@ -94,7 +76,7 @@
 
                         <label for="size_tekprod" class="col-lg-1 control-label">Size</label>
                         <div class="col-lg-2">
-                            <select name="size_tekprod" id="size_tekprod" class="form-control" required autofocus>
+                            <select type="text" name="size_tekprod" id="size_tekprod" class="form-control" required autofocus>
                             <option></option>
                             <option Value="64">A0</option>
                                 <option Value="32">A1</option>
@@ -140,7 +122,7 @@
                         <div class="col-lg-2">
                             <select type="text" name="id_approve_tekprod" id="id_approve_tekprod" class="form-control" required autofocus>
                             <option></option>
-                            @foreach ($drafter as $key => $item)
+                            @foreach ($approver as $key => $item)
                                      <option value="{{ $key }}" >{{ $item }}</option>
                                 @endforeach
                             </select>
@@ -159,3 +141,5 @@
         </form>
     </div>
 </div>
+
+

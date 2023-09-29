@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\DesignRevisiUpdated;
 use Illuminate\Support\Facades\Auth;
 
 use Maatwebsite\Excel\Facades\Excel;
@@ -14,16 +13,15 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-use App\Models\Subpengujian;
+use App\Models\Design;
+use App\Models\DesignDetail;
 use App\Models\Tekprod;
 use App\Models\TekprodDetail;
-use App\Models\Design;
 use App\Models\Proyek;
 use App\Models\Sistem;
 use App\Models\Konfigurasi;
 use App\Models\Subsistem;
 use App\Models\KepalaGambar;
-use App\Models\DesignDetail;
 use App\Models\User;
 use DateTime;
 use PDF;
@@ -41,13 +39,17 @@ class TekprodController extends Controller
         $tekprod = Tekprod::select('id_tekprod')->orderBy('id_tekprod', 'DESC')->get();
         $userLoggedIn = Auth::user(); 
         $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
+        $level4Users = User::where('level', '4')->pluck('id');
 
-        $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar', 'bobot_kepala');
+        $design = Design::all()->pluck('nama_design', 'id_design');
         $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
     
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '3')->pluck('name', 'id');
+        $approver = User::where('bagian', $bagianUser)->pluck('name', 'id');
+        $drafter = User::where(function ($query) use ($bagianUser) {
+          $query->where('bagian', $bagianUser)->where('level', '3');
+        })
+        ->orWhereIn('id', $level4Users)
+        ->pluck('name', 'id');
     
         $proyek = Proyek::where('status', 'open')->pluck('nama_proyek' , 'id_proyek');
 
@@ -59,7 +61,7 @@ class TekprodController extends Controller
         $konfigurasi_wagon = Konfigurasi::where('tipe_konfigurasi', 'Wagon')->pluck('nama_konfigurasi','id_konfigurasi');
         $konfigurasi_other = Konfigurasi::where('tipe_konfigurasi', 'Other')->pluck('nama_konfigurasi','id_konfigurasi');
     
-        return view('tekprod.index', compact('tekprod', 'kepala', 'subsistem', 'approver', 'drafter', 'proyek',
+        return view('tekprod.index', compact('tekprod', 'design', 'subsistem', 'approver', 'drafter', 'proyek',
         'konfigurasi', 'konfigurasi_dmu', 'konfigurasi_emu', 'konfigurasi_light', 'konfigurasi_coach', 'konfigurasi_wagon', 'konfigurasi_other',
         'approver'
        ));
@@ -71,13 +73,17 @@ class TekprodController extends Controller
         $tekprod = Tekprod::select('id_tekprod')->orderBy('id_tekprod', 'DESC')->get();
         $userLoggedIn = Auth::user(); 
         $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
+        $level4Users = User::where('level', '4')->pluck('id');
 
-        $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar');
+        $design = Design::all()->pluck('nama_design', 'id_design');
         $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
     
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '3')->pluck('name', 'id');
+        $approver = User::where('bagian', $bagianUser)->pluck('name', 'id');
+        $drafter = User::where(function ($query) use ($bagianUser) {
+          $query->where('bagian', $bagianUser)->where('level', '3');
+        })
+        ->orWhereIn('id', $level4Users)
+        ->pluck('name', 'id');
     
         $proyek = Proyek::where('status', 'open')->pluck('nama_proyek' , 'id_proyek');
 
@@ -89,7 +95,7 @@ class TekprodController extends Controller
         $konfigurasi_wagon = Konfigurasi::where('tipe_konfigurasi', 'Wagon')->pluck('nama_konfigurasi','id_konfigurasi');
         $konfigurasi_other = Konfigurasi::where('tipe_konfigurasi', 'Other')->pluck('nama_konfigurasi','id_konfigurasi');
     
-        return view('tekrod_overall.index', compact('tekprod', 'kepala', 'subsistem', 'approver', 'drafter', 'proyek',
+        return view('tekprod_overall.index', compact('tekprod', 'design', 'subsistem', 'approver', 'drafter', 'proyek',
         'konfigurasi', 'konfigurasi_dmu', 'konfigurasi_emu', 'konfigurasi_light', 'konfigurasi_coach', 'konfigurasi_wagon', 'konfigurasi_other',
         'approver'
        ));
@@ -97,12 +103,12 @@ class TekprodController extends Controller
 
     public function dataOverall()
     {
-        $tekprod = Tekprod::leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', 'tekprod.id_kepala_gambar')
+        $tekprod = Tekprod::leftJoin('design', 'design.id_design', 'tekprod.id_design')
             ->leftJoin('proyek', 'proyek.id_proyek', 'tekprod.id_proyek')
             ->leftJoin('users as check_user', 'check_user.id', '=', 'tekprod.id_check_tekprod')
             ->leftJoin('users as approve_user', 'approve_user.id', '=', 'tekprod.id_approve_tekprod')
             ->leftJoin('users as draft_user', 'draft_user.id', '=', 'tekprod.id_draft_tekprod')
-            ->select('tekprod.*', 'nama_proyek', 'nama', 'tekprod.jenis_tekprod', 'tekprod.status_tekprod as tekprod_status', 'proyek.status as proyek_status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+            ->select('tekprod.*', 'nama_proyek', 'tekprod.jenis_tekprod', 'tekprod.status_tekprod as tekprod_status', 'proyek.status as proyek_status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
             ->where('jenis_tekprod', 'Doc')
             ->where(function ($query) {
                 $query->where('proyek.status', 'Open');
@@ -177,10 +183,11 @@ class TekprodController extends Controller
         $userId = auth()->user()->id;
 
         $tekprod = Tekprod::leftJoin('proyek', 'proyek.id_proyek', 'tekprod.id_proyek')
+        ->leftJoin('design', 'design.id_design', 'tekprod.id_design')
         ->leftJoin('users as check_user', 'check_user.id', '=', 'tekprod.id_check_tekprod')
         ->leftJoin('users as approve_user', 'approve_user.id', '=', 'tekprod.id_approve_tekprod')
         ->leftJoin('users as draft_user', 'draft_user.id', '=', 'tekprod.id_draft_tekprod')
-        ->select('tekprod.*', 'nama_proyek', 'tekprod.status_tekprod as tekprod_status', 'proyek.status as proyek_status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+        ->select('tekprod.*', 'nama_proyek','nama_design', 'tekprod.status_tekprod as tekprod_status', 'proyek.status as proyek_status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
         ->where('jenis_tekprod', 'Doc')
         ->where(function ($query) use ($userId) {
             $query->where('tekprod.id_draft_tekprod', $userId)
@@ -201,6 +208,9 @@ class TekprodController extends Controller
                     <input type="checkbox" name="id_tekprod[]" value="'. $tekprod->id_tekprod .'">
                 ';
             })
+            ->editColumn('id_design', function ($tekprod) {
+                return $tekprod->nama_design ?? '';
+            })
             ->editColumn('id_proyek', function ($tekprod) {
                 return $tekprod->nama_proyek ?? '';
             })
@@ -215,7 +225,7 @@ class TekprodController extends Controller
             })
             ->addColumn('kondisi', function ($tekprod) {
                 if ($tekprod->status_tekprod !== 'Release') {
-                    $tanggalPrediksi = new DateTime($tekprod->tanggal_prediksi);
+                    $tanggalPrediksi = new DateTime($tekprod->tanggal_prediksi_tekprod);
                     $today = new DateTime();
                     $interval = $tanggalPrediksi->diff($today);
                     $selisihHari = $interval->days;
@@ -270,7 +280,7 @@ class TekprodController extends Controller
                 return $tekprod->nama_proyek ?? '';
             })
             ->addColumn('kondisi', function ($tekprod) {
-                $tanggalPrediksi = new DateTime($tekprod->tanggal_prediksi);
+                $tanggalPrediksi = new DateTime($tekprod->tanggal_prediksi_tekprod);
 
                 $today = new DateTime();
                 $interval = $tanggalPrediksi->diff($today);
@@ -301,30 +311,32 @@ class TekprodController extends Controller
 
     public function dataModal()
     {
-        $tekprod = Tekprod::leftJoin('proyek', 'proyek.id_proyek', 'tekprod.id_proyek')
-            ->select('tekprod.*', 'nama_proyek')
-            ->orderBy('id_tekprod', 'DESC')
-            ->get();
+        $design = Design::leftJoin('proyek', 'proyek.id_proyek', 'design.id_proyek')
+        ->where('proyek.status', 'Open')
+        ->select('design.*', 'proyek.nama_proyek', 'design.status')
+        ->orderBy('id_design', 'DESC')
+        ->get();
 
         return datatables()
-            ->of($tekprod)
+            ->of($design)
             ->addIndexColumn()
-            ->addColumn('select_all', function ($tekprod) {
+            ->addColumn('select_all', function ($design) {
                 return '
-                    <input type="checkbox" name="id_tekprod[]" value="'. $tekprod->id_tekprod .'">
+                    <input type="checkbox" name="id_design[]" value="'. $design->id_design .'">
                 ';
             })
-            ->editColumn('id_proyek', function ($tekprod) {
-                return $tekprod->nama_proyek ?? '';
+            ->editColumn('id_proyek', function ($design) {
+                return $design->nama_proyek ?? '';
             })
-            ->addColumn('aksi', function ($tekprod) {
+            ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';                   
-                $buttons .= '<button type="button" onclick="pilihDesign(`'. route('tekprod.pilihData', $tekprod->id_tekprod) .'`)" class="btn btn-xs btn-success btn-flat">Pilih</button>';
+                $buttons .= '<button type="button" onclick="pilihDesign(`'. route('tekprod.pilihDataTekprod', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat">Pilih</button>';
+
                 $buttons .= '</div>';
         
                 return $buttons;
             })
-            ->rawColumns(['aksi', 'id_tekprod', 'select_all'])
+            ->rawColumns(['aksi', 'id_design', 'select_all'])
             ->make(true);
     }
 
@@ -398,6 +410,12 @@ class TekprodController extends Controller
     {
         $tekprod = Tekprod::find($id);
         return response()->json($tekprod);
+    }
+
+    public function pilihDataTekprod($id)
+    {
+        $design = Design::find($id);
+        return response()->json($design);
     }
 
         /**
@@ -475,15 +493,12 @@ public function stores(Request $request)
 
     public function storeRevisi(Request $request)
     {
-        // Mencari data dengan kode yang sama
         $existingTekprod = Tekprod::where('kode_tekprod', $request->kode_tekprod)->first();
     
-        // Jika ada data dengan kode yang sama, hapus data tersebut
         if ($existingTekprod) {
             $existingTekprod->delete();
         }
     
-        // Buat dan simpan data baru
         $tekprod = Tekprod::create($request->all());
         $tekprod->kode_tekprod = $request->kode_tekprod;
     
@@ -640,11 +655,11 @@ public function stores(Request $request)
     public function exportExcel()
     {
         $tekprod = Tekprod::leftJoin('proyek', 'proyek.id_proyek', '=', 'tekprod.id_proyek')
-        ->leftJoin('kepala_gambar', 'kepala_gambar.id_kepala_gambar', '=', 'tekprod.id_kepala_gambar')
+        ->leftJoin('design', 'design.id_design', '=', 'tekprod.id_design')
         ->leftJoin('users as check_user', 'check_user.id', '=', 'tekprod.id_check_tekprod')
         ->leftJoin('users as approve_user', 'approve_user.id', '=', 'tekprod.id_approve_tekprod')
         ->leftJoin('users as draft_user', 'draft_user.id', '=', 'tekprod.id_draft_tekprod')
-        ->select('tekprod.*', 'proyek.nama_proyek', 'kepala_gambar.nama', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+        ->select('tekprod.*', 'proyek.nama_proyek', 'design.nama_design', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
         ->get();
     
         return Excel::download(new tekprodExport($tekprod), 'teknologi_produksi.xlsx');
@@ -652,11 +667,11 @@ public function stores(Request $request)
 
     public function exportExcelLog()
     {
-        $tekprodlog = TekprodDetail::leftJoin('tekprod', 'tekprod.id_design', '=', 'tekprod_detail.id_design')
+        $tekprodlog = TekprodDetail::leftJoin('tekprod', 'tekprod.id_tekprod', '=', 'tekprod_detail.id_tekprod')
         ->leftJoin('users as check_user', 'check_user.id', '=', 'tekprod.id_check_tekprod')
         ->leftJoin('users as approve_user', 'approve_user.id', '=', 'tekprod.id_approve_tekprod')
         ->leftJoin('users as draft_user', 'draft_user.id', '=', 'tekprod.id_draft_tekprod')
-        ->select('tekprod_detail.*', 'tekprod.nama_design', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+        ->select('tekprod_detail.*', 'tekprod.nama_tekprod', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
         ->get();
     
         return Excel::download(new tekprodExportLog($tekprodlog), 'Log_teknologi_produksi.xlsx');

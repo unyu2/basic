@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Design;
 use App\Models\DesignDetail;
+use App\Models\Tekprod;
+use App\Models\TekprodDetail;
 use App\Models\Proyek;
 use Carbon\Carbon;
 
@@ -30,70 +32,93 @@ public function fetch_data_overall(Request $request)
 
     $id_proyek = $request->input('id_proyek');
 
-    $chart_data = Design::select("id_design", "id_proyek", "status", "created_at")->where('jenis', 'Doc');
+    $chart_data_design = Design::select("id_design", "id_proyek", "status")->where('jenis', 'Doc');
 
     if (empty($id_proyek)) {
-        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open);
+        $chart_data_design->whereIn('id_proyek', $proyek_dengan_status_open);
     } else {
-        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
+        $chart_data_design->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
     }
 
-    $chart_data = $chart_data->get();
+    $chart_data_design = $chart_data_design->get();
 
-    $statusData = [];
+    $chart_data_tekprod = Tekprod::select("id_tekprod", "id_proyek", "status_tekprod")->where('jenis_tekprod', 'Doc');
 
-    foreach ($chart_data as $row) {
-        $status = $row->status;
-        if (isset($statusData[$status])) {
-            $statusData[$status]++;
-        } else {
-            $statusData[$status] = 1;
-        }
+    if (empty($id_proyek)) {
+        $chart_data_tekprod->whereIn('id_proyek', $proyek_dengan_status_open);
+    } else {
+        $chart_data_tekprod->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
     }
 
-    $output = [];
-    foreach ($statusData as $status => $jumlah) {
-        $output[] = [
-            'status' => $status,
-            'jumlah' => $jumlah
-        ];
-    }
+    $chart_data_tekprod = $chart_data_tekprod->get();
+
+    $openCountDesign = $chart_data_design->where('status', 'Open')->count();
+    $releaseCountDesign = $chart_data_design->where('status', 'Release')->count();
+    $prosesRevisiCountDesign = $chart_data_design->where('status', 'Proses Revisi')->count();
+
+    $openCountTekprod = $chart_data_tekprod->where('status_tekprod', 'Open')->count();
+    $releaseCountTekprod = $chart_data_tekprod->where('status_tekprod', 'Release')->count();
+    $prosesRevisiCountTekprod = $chart_data_tekprod->where('status_tekprod', 'Proses Revisi')->count();
+
+    $output = [
+        [
+            'status' => 'Open',
+            'jumlah' => $openCountDesign + $openCountTekprod
+        ],
+        [
+            'status' => 'Release',
+            'jumlah' => $releaseCountDesign + $releaseCountTekprod
+        ],
+        [
+            'status' => 'Proses Revisi',
+            'jumlah' => $prosesRevisiCountDesign + $prosesRevisiCountTekprod
+        ]
+    ];
 
     return response()->json($output);
 }
 
-//*--------------------------------------OVERALL TECHNOLOGY BOBOT----------------------------------------------/*
 
+//*--------------------------------------OVERALL TECHNOLOGY BOBOT----------------------------------------------/*
 public function fetch_data_overall_bobot(Request $request)
 {
     $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
 
     $id_proyek = $request->input('id_proyek');
 
-    $chart_data = Design::select("status", "size", "lembar", "tipe", "bobot_rev", "bobot_design", "id_design", "id_proyek")->where('jenis', 'Doc');
+    $chart_data_design = Design::select("status", "size", "lembar", "tipe", "bobot_rev", "bobot_design", "id_design", "id_proyek")->where('jenis', 'Doc');
 
     if (empty($id_proyek)) {
-        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open);
+        $chart_data_design->whereIn('id_proyek', $proyek_dengan_status_open);
     } else {
-        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
+        $chart_data_design->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
     }
 
-    $chart_data = $chart_data->get();
-    
-    // Inisialisasi counter
-    $statusData = [
+    $chart_data_design = $chart_data_design->get();
+
+    $chart_data_tekprod = Tekprod::select("status_tekprod", "size_tekprod", "lembar_tekprod", "tipe_tekprod", "bobot_rev_tekprod", "bobot_design_tekprod", "id_tekprod", "id_proyek")->where('jenis_tekprod', 'Doc');
+
+    if (empty($id_proyek)) {
+        $chart_data_tekprod->whereIn('id_proyek', $proyek_dengan_status_open);
+    } else {
+        $chart_data_tekprod->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
+    }
+
+    $chart_data_tekprod = $chart_data_tekprod->get();
+
+    $totalStatusDesign = [
         'Open' => 0,
         'Release' => 0,
         'Proses Revisi' => 0,
     ];
 
-    $totalStatus = [
+    $totalStatusTekprod = [
         'Open' => 0,
         'Release' => 0,
         'Proses Revisi' => 0,
     ];
 
-    foreach ($chart_data as $row) {
+    foreach ($chart_data_design as $row) {
         $status = $row->status;
         $size = $row->size;
         $lembar = $row->lembar;
@@ -101,17 +126,31 @@ public function fetch_data_overall_bobot(Request $request)
         $bobot_design = $row->bobot_design;
         $tipe = $row->tipe;
 
-        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
+        $jumlahDesign = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
 
-        $totalStatus[$status] += $jumlah;
+        $totalStatusDesign[$status] += $jumlahDesign;
     }
 
-    $totalJumlah = array_sum($totalStatus);
+    foreach ($chart_data_tekprod as $row) {
+        $status_tekprod = $row->status_tekprod;
+        $size_tekprod = $row->size_tekprod;
+        $lembar_tekprod = $row->lembar_tekprod;
+        $bobot_rev_tekprod = $row->bobot_rev_tekprod;
+        $bobot_design_tekprod = $row->bobot_design_tekprod;
+        $tipe_tekprod = $row->tipe_tekprod;
+
+        $jumlahTekprod = $size_tekprod * $lembar_tekprod * $tipe_tekprod * ($bobot_rev_tekprod/3) * ($bobot_design_tekprod/3);
+
+        $totalStatusTekprod[$status_tekprod] += $jumlahTekprod;
+    }
+
+    $totalJumlah = array_sum($totalStatusDesign) + array_sum($totalStatusTekprod);
 
     $output = [];
-    foreach ($totalStatus as $status => $total) {
+    foreach ($totalStatusDesign as $status => $totalDesign) {
+        $totalTekprod = $totalStatusTekprod[$status] ?? 0;
         if ($totalJumlah != 0) {
-            $prosentase = ($total / $totalJumlah) * 100;
+            $prosentase = (($totalDesign + $totalTekprod) / $totalJumlah) * 100;
         } else {
             $prosentase = 0;
         }
@@ -121,7 +160,6 @@ public function fetch_data_overall_bobot(Request $request)
         ];
     }
 
-    // Mengembalikan data dalam format JSON
     return response()->json($output);
 }
 
@@ -365,6 +403,121 @@ public function fetch_data_status_bobot(Request $request)
     // Mengembalikan data dalam format JSON
     return response()->json($output);
 }
+
+
+//*-----------------------------------------TEKNOLOGI PRODUKSI DEPARTMENT NORMAL--------------------------------------------------/*
+
+public function fetch_data_tekprod(Request $request)
+{
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $id_proyek = $request->input('id_proyek');
+
+    $chart_data = Tekprod::select("id_tekprod", "id_proyek", "status_tekprod")->where('jenis_tekprod', 'Doc');
+
+    if (empty($id_proyek)) {
+        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open);
+    } else {
+        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
+    }
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+
+    return response()->json($output);
+}
+
+//*--------------------------------------TEKNOLOGI PRODUKSI DEPARTMENT BOBOT----------------------------------------------/*
+
+public function fetch_data_tekprod_bobot(Request $request)
+{
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $id_proyek = $request->input('id_proyek');
+
+    // Inisialisasi query builder
+    $chart_data = Tekprod::select("status_tekprod", "size_tekprod", "lembar_tekprod", "tipe_tekprod", "bobot_rev_tekprod", "bobot_design_tekprod", "id_tekprod", "id_proyek")->where('jenis_tekprod', 'Doc');
+
+    // Jika id_proyek kosong, ambil semua data dengan status "Open"
+    if (empty($id_proyek)) {
+        $chart_data->whereIn('id_proyek', $proyek_dengan_status_open);
+    } else {
+        // Jika id_proyek tidak kosong, ambil data berdasarkan proyek dan status "Open"
+        $chart_data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
+    }
+
+    // Ambil data dari model dengan filter yang telah ditentukan
+    $chart_data = $chart_data->get();
+    
+    // Inisialisasi counter
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    // Inisialisasi variabel total untuk masing-masing status
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    // Hitung jumlah status dan total berdasarkan perkalian "size", "lembar", dan "bobot_rev"
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        $size = $row->size_tekprod;
+        $lembar = $row->lembar_tekprod;
+        $bobot_rev = $row->bobot_rev_tekprod;
+        $bobot_design = $row->bobot_design_tekprod;
+        $tipe = $row->tipe_tekprod;
+
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
+
+        // Menambahkan jumlah ke total masing-masing status
+        $totalStatus[$status] += $jumlah;
+    }
+
+    // Menghitung total keseluruhan
+    $totalJumlah = array_sum($totalStatus);
+
+    // Mengubah data ke format yang sesuai untuk pie chart
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        // Menghitung prosentase jumlah terhadap total jumlah
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0; // Hindari pembagian oleh nol
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    // Mengembalikan data dalam format JSON
+    return response()->json($output);
+}
+
 
 //*-----------------------------------------NORMAL SELECTION DESIGN---------------------------------------------*/
 
@@ -1103,5 +1256,143 @@ public function fetch_data_mes_bobot(Request $request)
 
     return response()->json($output);
 }
+
+//*--------------------------------------------TP - TECHNOLOGY PRODUKSI-----------------------------------------------*/
+//*--------------------------------------------TP - TECHNOLOGY PRODUKSI-----------------------------------------------*/
+//*--------------------------------------------TP - TECHNOLOGY PRODUKSI-----------------------------------------------*/
+//*--------------------------------------------TP - TECHNOLOGY PRODUKSI-----------------------------------------------*/
+
+//*-----------------------------------------NORMAL SELECTION TEKNOLOGI PRODUKSI---------------------------------------------*/
+
+public function fetch_chart_tp_normal($id_proyek, $pemilik_doc)
+{
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $data = Tekprod::select("id_tekprod", "id_proyek", "status_tekprod")
+        ->where('pemilik', $pemilik_doc) 
+        ->where('jenis_tekprod', 'Doc');
+
+    if (empty($id_proyek)) {
+        $data->whereIn('id_proyek', $proyek_dengan_status_open);
+    } else {
+        $data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
+    }
+
+    return $data;
+}
+
+//*-----------------------------------------BOBOT SELECTION TEKNOLOGI PRODUKSI---------------------------------------------*/
+
+public function fetch_chart_tp_bobot($id_proyek, $pemilik_doc)
+{
+    $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
+
+    $data = Tekprod::select("status_tekprod", "size_tekprod", "lembar_tekprod", "tipe_tekprod", "bobot_rev_tekprod", "bobot_design_tekprod", "id_tekprod", "id_proyek")
+    ->where('pemilik_tekprod', $pemilik_doc) 
+    ->where('jenis_tekprod', 'Doc');
+
+    if (empty($id_proyek)) {
+        $data->whereIn('id_proyek', $proyek_dengan_status_open);
+    } else {
+        $data->where('id_proyek', $id_proyek)->whereIn('id_proyek', $proyek_dengan_status_open);
+    }
+
+    return $data;
+}
+
+//*--------------------------------------------TP - TECHNOLOGY PROCESS-----------------------------------------------*/
+
+public function fetch_data_tps(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $pemilik_doc = 'Teknologi Proses';
+
+    $chart_data = $this->fetch_chart_tp_normal($id_proyek, $pemilik_doc);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
+
+
+/*
+
+public function fetch_data_tps_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $kode_unit = '313.TPS';
+
+    $chart_data = $this->fetch_chart_tp_bobot($id_proyek, $kode_unit);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        $size = $row->size_tekprod;
+        $lembar = $row->lembar_tekprod;
+        $bobot_rev = $row->bobot_rev_tekprod;
+        $bobot_design = $row->bobot_design_tekprod;
+        $tipe = $row->tipe_tekprod;
+
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
+
+*/
+
+
+
+
+
+
 
 }

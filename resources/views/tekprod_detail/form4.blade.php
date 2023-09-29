@@ -19,93 +19,93 @@
                 <div class="modal-body">
 
                 <div class="form-group row hidden-form">
-                        <label for="id_draft" class="col-lg-1 col-lg-offset-2 control-label">ID Draft</label>
+                        <label for="id_draft_tekprod" class="col-lg-1 col-lg-offset-2 control-label">ID Draft</label>
                             <div class="col-lg-6">
-                                <input  name="id_draft" id="id_draft" class="form-control" required autofocus readonly>
+                                <input  name="id_draft_tekprod" id="id_draft_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="id_check" class="col-lg-1 col-lg-offset-2 control-label">ID Check</label>
+                        <label for="id_check_tekprod" class="col-lg-1 col-lg-offset-2 control-label">ID Check</label>
                             <div class="col-lg-6">
-                                <input  name="id_check" id="id_check" class="form-control" required autofocus readonly>
+                                <input  name="id_check_tekprod" id="id_check_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="id_approve" class="col-lg-1 col-lg-offset-2 control-label">Id Approve</label>
+                        <label for="id_approve_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Id Approve</label>
                             <div class="col-lg-6">
-                                <input name="id_approve" id="id_approve" class="form-control" required autofocus readonly>
+                                <input name="id_approve_tekprod" id="id_approve_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="jenis" class="col-lg-1 col-lg-offset-2 control-label">Jenis</label>
+                        <label for="jenis_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Jenis</label>
                             <div class="col-lg-6">
-                                <input name="jenis" id="jenis" class="form-control" required autofocus readonly>
+                                <input name="jenis_tekprod" id="jenis_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="pemilik" class="col-lg-1 col-lg-offset-2 control-label">Pemilik</label>
+                        <label for="pemilik_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Pemilik</label>
                             <div class="col-lg-6">
-                                <input name="pemilik" id="pemilik" class="form-control" required autofocus readonly>
+                                <input name="pemilik_tekprod" id="pemilik_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="bobot_rev" class="col-lg-1 col-lg-offset-2 control-label">Bobot Revisi</label>
+                        <label for="bobot_rev_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Bobot Revisi</label>
                             <div class="col-lg-6">
-                                <input name="bobot_rev" id="bobot_rev" class="form-control" required autofocus readonly>
+                                <input name="bobot_rev_tekprod" id="bobot_rev_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="bobot_design" class="col-lg-1 col-lg-offset-2 control-label">Bobot Design</label>
+                        <label for="bobot_design_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Bobot Design</label>
                             <div class="col-lg-6">
-                                <input name="bobot_design" id="bobot_design" class="form-control" required autofocus readonly>
+                                <input name="bobot_design_tekprod" id="bobot_design_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="size" class="col-lg-1 col-lg-offset-2 control-label">Size</label>
+                        <label for="size_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Size</label>
                             <div class="col-lg-6">
-                                <input name="size" id="size" class="form-control" required autofocus readonly>
+                                <input name="size_tekprod" id="size_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="lembar" class="col-lg-1 col-lg-offset-2 control-label">Sheet</label>
+                        <label for="lembar_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Sheet</label>
                             <div class="col-lg-6">
-                                <input name="lembar" id="lembar" class="form-control" required autofocus readonly>
+                                <input name="lembar_tekprod" id="lembar_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="prosentase" class="col-lg-1 col-lg-offset-2 control-label">Prosentase</label>
+                        <label for="prosentase_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Prosentase</label>
                             <div class="col-lg-6">
-                                <input type="text" value="100" placeholder="100" name="prosentase" id="prosentase" class="form-control" required autofocus>
+                                <input type="text" value="100" placeholder="100" name="prosentase_tekprod" id="prosentase_tekprod" class="form-control" required autofocus>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="time_release_rev0" class="col-lg-1 col-lg-offset-2 control-label">Time release Rev.0</label>
+                        <label for="time_release_rev0_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Time release Rev.0</label>
                             <div class="col-lg-6">
-                                <input type="text" name="time_release_rev0" id="time_release_rev0" class="form-control" required autofocus>
+                                <input type="text" name="time_release_rev0_tekprod" id="time_release_rev0_tekprod" class="form-control" required autofocus>
+                                <span class="help-block with-errors"></span>
+                            </div>
+                </div>
+                <div class="form-group row hidden-form ">
+                        <label for="duplicate_status_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Duplicate Status</label>
+                            <div class="col-lg-6">
+                                <input type="text" name="duplicate_status_tekprod" id="duplicate_status_tekprod" class="form-control" required autofocus>
                                 <span class="help-block with-errors"></span>
                             </div>
                 </div>
                 <div class="form-group row hidden-form">
-                        <label for="duplicate_status" class="col-lg-1 col-lg-offset-2 control-label">Duplicate Status</label>
-                            <div class="col-lg-6">
-                                <input type="text" name="duplicate_status" id="duplicate_status" class="form-control" required autofocus>
-                                <span class="help-block with-errors"></span>
-                            </div>
-                </div>
-                <div class="form-group row hidden-form">
-                        <label for="tipe" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label>
+                        <label for="tipe_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Tipe</label>
                         <div class="col-lg-6"> 
-                        <select name="tipe" id="tipe" class="form-control" required autofocus>
+                        <select name="tipe_tekprod" id="tipe_tekprod" class="form-control" required autofocus>
                             <option></option>
                                 <option Value="1">New</option>
                                 <option Value="0.5">Konversi</option>
@@ -114,51 +114,47 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group row hidden-form">
-                        <label for="id_design" class="col-lg-1 col-lg-offset-2 control-label">ID Design</label>
+                <div class="form-group row hidden-form">
+                        <label for="id_tekprod" class="col-lg-1 col-lg-offset-2 control-label">ID Design</label>
                             <div class="col-lg-6">
-                                <input type="number" name="id_design" id="id_design" class="form-control" required autofocus readonly>
+                                <input type="number" name="id_tekprod" id="id_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                     </div>
-                
-
-
 
 <!----------------------------------------------------------Real Form For Show------------------------------------------------------------------>
-
                 <div class="form-group row">
-                        <label for="prediksi_akhir" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
+                        <label for="prediksi_akhir_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Prediksi Release</label>
                             <div class="col-lg-6">
-                                <input type="date" name="prediksi_akhir" id="prediksi_akhir" class="form-control" required autofocus readonly>
+                                <input type="date" name="prediksi_akhir_tekprod" id="prediksi_akhir_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                     </div>
                 <div class="form-group row">
-                        <label for="kode_design" class="col-lg-1 col-lg-offset-2 control-label">Kode Design</label>
+                        <label for="kode_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Kode Design</label>
                             <div class="col-lg-6">
-                                <input type="text" name="kode_design" id="kode_design" class="form-control" required autofocus readonly>
+                                <input type="text" name="kode_tekprod" id="kode_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                     </div>
                     <div class="form-group row">
-                        <label for="nama_design" class="col-lg-1 col-lg-offset-2 control-label">Nama Design</label>
+                        <label for="nama_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Nama Design</label>
                             <div class="col-lg-6">
-                                <input type="text" name="nama_design" id="nama_design" class="form-control" required autofocus readonly>
+                                <input type="text" name="nama_tekprod" id="nama_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                     </div>
                     <div class="form-group row">
-                        <label for="revisi" class="col-lg-1 col-lg-offset-2 control-label">Revisi</label>
+                        <label for="revisi_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Revisi</label>
                             <div class="col-lg-6">
-                                <input type="text" name="revisi" id="revisi" class="form-control" required autofocus readonly>
+                                <input type="text" name="revisi_tekprod" id="revisi_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                     </div>
                     <div class="form-group row">
-                        <label for="status" class="col-lg-1 col-lg-offset-2 control-label">Status</label>
+                        <label for="status_tekprod" class="col-lg-1 col-lg-offset-2 control-label">Status</label>
                             <div class="col-lg-6">
-                                <input value="Release" placeholder="Release" type="text" name="status" id="status" class="form-control" required autofocus readonly>
+                                <input value="Release" placeholder="Release" type="text" name="status_tekprod" id="status_tekprod" class="form-control" required autofocus readonly>
                                 <span class="help-block with-errors"></span>
                             </div>
                     </div>

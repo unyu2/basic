@@ -90,6 +90,25 @@
     </div>
 </div>
 
+<div class="hurup-kapital">Production Technology Department Progress</div>
+<br></br>
+            <!-- /.box-header -->
+            <div class="box-body">
+<div class="row">
+    <div class="col-lg-6">
+        <div class="chart">
+            <!-- Sales Chart Canvas -->
+            <div id="chart_div3E" style="width: 100%; height: 300px;"></div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="chart">
+            <!-- Sales Chart Canvas -->
+            <div id="chart_div4E" style="width: 100%; height: 300px;"></div>
+        </div>
+    </div>
+</div>
+
 <div class="hurup-kapital"> Electrical Design Progress</div>
 <br> </br>
 <div class="row">
@@ -216,6 +235,22 @@
         <div class="chart">
             <!-- Sales Chart Canvas -->
             <div id="chart_div19" style="width: 100%; height: 300px;"></div>
+        </div>
+    </div>
+</div>
+<div class="hurup-kapital">Teknologi Proses </div>
+<br> </br>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="chart">
+            <!-- Sales Chart Canvas -->
+            <div id="chart_div20" style="width: 100%; height: 300px;"></div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="chart">
+            <!-- Sales Chart Canvas -->
+            <div id="chart_div21" style="width: 100%; height: 300px;"></div>
         </div>
     </div>
 </div>
@@ -933,6 +968,209 @@ $(document).ready(function() {
 
 </script>
 
+<!------------------------------------------- PIE CHART STATUS TEKNOLOGI PRODUKSI ----------------------------------------------------->
+<script type="text/javascript">
+    $('body').addClass('sidebar-collapse');
+
+    google.charts.load('current', {
+        'packages': ['corechart']
+    });
+
+    google.charts.setOnLoadCallback(function() {
+    });   
+
+    function drawStatusPieChartTekprod(chart_data, chart_main_title) {
+    let jsonData = chart_data;
+
+    if (jsonData !== null && jsonData.length !== undefined) {
+        let data = new google.visualization.DataTable();
+        data.addColumn('string', 'Status');
+        data.addColumn('number', 'Jumlah');
+
+        let statusData = {};
+
+        if (jsonData.length === 0) {
+            data.addRow(['Open']);
+        } else {
+            $.each(jsonData, (i, itemData) => {
+                let status = itemData.status;
+                let jumlah = parseFloat($.trim(itemData.jumlah));
+
+                if (statusData[status]) {
+                    statusData[status] += jumlah;
+                } else {
+                    statusData[status] = jumlah;
+                }
+            });
+        }
+
+        for (let status in statusData) {
+            data.addRow([status, statusData[status]]);
+        }
+
+        var options = {
+            title: chart_main_title,
+            chartArea: {
+                width: '80%',
+                height: '80%'
+            },
+            slices: {}
+        };
+
+        var isAllOpen = Object.keys(statusData).length === 1 && statusData.hasOwnProperty('Open');
+
+        if (isAllOpen) {
+            options.slices[0] = { color: 'red' };
+        } else {
+            options.slices[0] = { color: 'red' };
+            options.slices[1] = { color: 'green' };
+            options.slices[2] = { color: 'orange' };
+        }
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div3E'));
+        chart.draw(data, options);
+
+        var openCount = statusData['Open'] || 0;
+        var releaseCount = statusData['Release'] || 0;
+        var prosesCount = statusData['Proses Revisi'] || 0;
+
+        $('#open_count').text(openCount);
+        $('#released_count').text(releaseCount);
+        $('#proses_count').text(prosesCount);
+    } else {
+        console.error("Data yang diterima tidak valid.");
+    }
+}
+
+function loadStatusPieChartDataTekprod(id_proyek, title) {
+    const temp_title = title + ' ' + id_proyek;
+
+    if (id_proyek === '') {
+        id_proyek = null;
+    }
+
+    $.ajax({
+        url: '/charts/chartDesign/fetch_data_tekprod',
+        method: "POST",
+        data: {
+            "_token": "{{ csrf_token() }}",
+            id_proyek: id_proyek
+        },
+        dataType: "JSON",
+        success: function(data) {
+            if (data !== null && data.length !== undefined) {
+                drawStatusPieChartTekprod(data, temp_title);
+            } else {
+                console.error("Data yang diterima tidak valid atau kosong.");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error("Kesalahan dalam permintaan AJAX:", textStatus, errorThrown);
+        }
+    });
+    console.log(`Proyek: ${id_proyek}`);
+}
+
+$(document).ready(function() {
+    $('#id_proyek').change(function() {
+        var selectedProyekId = $(this).val();
+        if (selectedProyekId !== '') {
+            loadStatusPieChartDataTekprod(selectedProyekId, 'Status Penyelesaian (Tanpa Bobot) - ID:');
+        } else {
+            loadStatusPieChartDataTekprod('', 'Status Penyelesaian - All Proyek');
+        }
+    });
+});
+</script>
+
+
+<!-------------------------------------------------------- PIE CHART STATUS TEKNOLOGI PRODUKSI DENGAN BOBOT ------------------------------------------------------>
+<script type="text/javascript">
+    google.charts.load('current', {
+        'packages': ['corechart']
+    });
+
+    google.charts.setOnLoadCallback(drawStatusPieChartTekprodBobot);
+
+    function drawStatusPieChartTekprodBobot(chart_data, chart_main_title) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Status');
+        data.addColumn('number', 'Persentase');
+
+        var statusData = {};
+
+        $.each(chart_data, function (i, item) {
+            var status = item.status;
+            var prosentase = parseFloat(item.prosentase);
+
+            if (statusData[status]) {
+                statusData[status] += prosentase;
+            } else {
+                statusData[status] = prosentase;
+            }
+        });
+
+        for (var status in statusData) {
+            data.addRow([status, statusData[status]]);
+        }
+
+        var options = {
+            title: chart_main_title,
+            colors: ['red', 'green', 'orange'],
+            chartArea: {
+                width: '80%',
+                height: '80%'
+            }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div4E'));
+        chart.draw(data, options);
+    }
+
+    function loadStatusPieChartDataTekprodBobot(id_proyek, title) {
+        const temp_title = title + ' ' + id_proyek;
+
+        if (id_proyek === '') {
+            id_proyek = null;
+        }
+
+        $.ajax({
+            url: '/charts/chartDesign/fetch_data_tekprod_bobot',
+            method: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                id_proyek: id_proyek
+            },
+            dataType: "JSON",
+            success: function(data) {
+                if (data !== null && data.length !== undefined) {
+                    drawStatusPieChartTekprodBobot(data, temp_title);
+                } else {
+                    console.error("Data yang diterima tidak valid atau kosong.");
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+        console.error("Kesalahan dalam permintaan AJAX:");
+        console.error("Status: " + textStatus);
+        console.error("Error: " + errorThrown);
+        console.error(jqXHR.responseText);
+    }
+        });
+        console.log(`Proyek: ${id_proyek}`);
+    }
+
+    $(document).ready(function() {
+        $('#id_proyek').change(function() {
+            var selectedProyekId = $(this).val();
+            if (selectedProyekId !== '') {
+                loadStatusPieChartDataTekprodBobot(selectedProyekId, 'Status Penyelesaian Dengan Bobot - ID:');
+            } else {
+                loadStatusPieChartDataTekprodBobot('', 'Status Penyelesaian - All Proyek');
+            }
+        });
+    });
+
+</script>
 
 <!------------------------------------JS ELD---------------------------------------------------------->
 
@@ -2430,5 +2668,191 @@ $(document).ready(function() {
     });
 
 </script>
+
+<!------------------------------------------------JS TPS---------------------------------------------------------->
+
+<!-- PIE CHART TPS -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('body').addClass('sidebar-collapse');
+
+        google.charts.load('current', {'packages': ['corechart']});
+
+        google.charts.setOnLoadCallback(drawStatusPieChartTps);
+
+        function drawStatusPieChartTps(chart_data, chart_main_title) {
+            let jsonData = chart_data;
+
+            let data = new google.visualization.DataTable();
+            data.addColumn('string', 'Status');
+            data.addColumn('number', 'Jumlah');
+
+            let statusData = {};
+
+            $.each(jsonData, (i, jsonData) => {
+                let status = jsonData.status;
+                let jumlah = parseFloat($.trim(jsonData.jumlah));
+
+                if (statusData[status]) {
+                    statusData[status] += jumlah;
+                } else { 
+                    statusData[status] = jumlah;
+                }
+            });
+
+            for (let status in statusData) {
+                data.addRow([status, statusData[status]]);
+            }
+
+            var options = {
+                title: chart_main_title,
+                colors: ['red', 'green', 'orange'],
+                chartArea: {
+                    width: '80%',
+                    height: '80%'
+                },
+                is3D: true
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div20'));
+            chart.draw(data, options);
+
+            var openCount = statusData['Open'] || 0;
+            var releaseCount = statusData['Release'] || 0;
+            var prosesCount = statusData['Proses Revisi'] || 0;
+
+            $('#open_count').text(openCount);
+            $('#released_count').text(releaseCount);
+            $('#proses_count').text(prosesCount);
+        }
+
+        function loadStatusPieChartDataTps(id_proyek, title) {
+            const temp_title = title + ' ' + id_proyek;
+            $.ajax({
+                url: '/charts/chartDesign/fetch_data_tps',
+                method: "POST",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id_proyek: id_proyek
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    drawStatusPieChartTps(data, temp_title);
+                }
+            });
+            console.log(`Proyek: ${id_proyek}`);
+        }
+
+        $('#id_proyek').change(function() {
+            var selectedProyekId = $(this).val();
+            if (selectedProyekId !== '') {
+                loadStatusPieChartDataTps(selectedProyekId, 'Status Penyelesaian - ID:');
+            } else {
+                loadStatusPieChartDataTps('', 'Status Penyelesaian - All Proyek');
+            }
+        });
+    });
+</script>
+
+
+
+<!-- PIE CHART TPS DENGAN BOBOT 
+<script type="text/javascript">
+
+    google.charts.load('current', {
+        'packages': ['corechart']
+    });
+
+    google.charts.setOnLoadCallback(drawStatusPieChartBobotTps);
+
+    function drawStatusPieChartBobotTps(chart_data, chart_main_title) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Status');
+        data.addColumn('number', 'Persentase');
+
+        var statusData = {};
+
+        $.each(chart_data, function (i, item) {
+            var status = item.status;
+            var prosentase = parseFloat(item.prosentase);
+
+            if (statusData[status]) {
+                statusData[status] += prosentase;
+            } else {
+                statusData[status] = prosentase;
+            }
+        });
+
+        for (var status in statusData) {
+            data.addRow([status, statusData[status]]);
+        }
+            var options = {
+                title: chart_main_title,
+                chartArea: {
+                    width: '80%',
+                    height: '80%'
+                },
+                is3D: true,
+                slices: {}
+            };
+
+            var isAllOpen = Object.keys(statusData).length === 1 && statusData.hasOwnProperty('Open');
+
+            if (isAllOpen) {
+                options.slices[0] = { color: 'red' };
+            } else {
+                options.slices[0] = { color: 'red' };
+                options.slices[1] = { color: 'green' };
+                options.slices[2] = { color: 'orange' };
+            }
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div21'));
+        chart.draw(data, options);
+    }
+
+    function loadStatusPieChartDataBobotTps(id_proyek, title) {
+        const temp_title = title + ' ' + id_proyek;
+
+        if (id_proyek === '') {
+            id_proyek = null; 
+        }
+
+        $.ajax({
+            url: '/charts/chartDesign/fetch_data_tps_bobot',
+            method: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                id_proyek: id_proyek
+            },
+            dataType: "JSON",
+            success: function(data) {
+                if (data !== null && data.length !== undefined) {
+                    drawStatusPieChartBobotTps(data, temp_title);
+                } else {
+                    console.error("Data yang diterima tidak valid atau kosong.");
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+        console.error("Kesalahan dalam permintaan AJAX:");
+        console.error("Status: " + textStatus);
+        console.error("Error: " + errorThrown);
+        console.error(jqXHR.responseText);
+    }
+        });
+        console.log(`Proyek: ${id_proyek}`);
+    }
+
+    $(document).ready(function() {
+        $('#id_proyek').change(function() {
+            var selectedProyekId = $(this).val();
+            if (selectedProyekId !== '') {
+                loadStatusPieChartDataBobotTps(selectedProyekId, 'Status Penyelesaian Dengan Bobot - ID:');
+            } else {
+                loadStatusPieChartDataBobotTps('', 'Status Penyelesaian - All Proyek');
+            }
+        });
+    });
+
+</script>
+-->
 
 @endpush

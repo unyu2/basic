@@ -113,6 +113,7 @@
                     <i class="fa fa-cube"></i> <span>Supplier</span>
                 </a>
             </li>
+
             <li class="header">DOC DESIGN & ENG</li>
             <li>
                 <a href="{{ route('design.index') }}">
@@ -125,13 +126,32 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('dinas.index') }}">
-                    <i class="fa fa-cube"></i> <span>Data Dinas Saya</span>
+                <a href="{{ route('design_overall.indexOverall') }}">
+                    <i class="fa fa-cube"></i> <span>Overall Data</span>
+                </a>
+            </li>
+
+            <li class="header">DOC TEK PRODUKSI</li>
+            <li>
+                <a href="{{ route('tekprod.index') }}">
+                    <i class="fa fa-cube"></i> <span>Dokumen TP Saya</span>
                 </a>
             </li>
             <li>
-                <a href="{{ route('design_overall.indexOverall') }}">
-                    <i class="fa fa-cube"></i> <span>Data Overall</span>
+                <a href="{{ route('tekprod_detail.index') }}">
+                    <i class="fa fa-cube"></i> <span>Release Dokumen TP</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('tekprod_overall.indexOverall') }}">
+                    <i class="fa fa-cube"></i> <span>Overall Data TP</span>
+                </a>
+            </li>
+
+            <li class="header">DATA DINAS</li>
+            <li>
+                <a href="{{ route('dinas.index') }}">
+                    <i class="fa fa-cube"></i> <span>Data Dinas Saya</span>
                 </a>
             </li>
 
@@ -271,6 +291,7 @@
                     <i class="fa fa-cube"></i> <span>Kepala Gambar</span>
                 </a>
             </li>
+
             <li class="header">DOC DESIGN & ENG</li>
             <li>
                 <a href="{{ route('design.index') }}">
@@ -283,13 +304,32 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('dinas.index') }}">
-                    <i class="fa fa-cube"></i> <span>Data Dinas Saya</span>
+                <a href="{{ route('design_overall.indexOverall') }}">
+                    <i class="fa fa-cube"></i> <span>Overall Data</span>
+                </a>
+            </li>
+
+            <li class="header">DOC TEK PRODUKSI</li>
+            <li>
+                <a href="{{ route('tekprod.index') }}">
+                    <i class="fa fa-cube"></i> <span>Dokumen TP Saya</span>
                 </a>
             </li>
             <li>
-                <a href="{{ route('design_overall.indexOverall') }}">
-                    <i class="fa fa-cube"></i> <span>Data Overall</span>
+                <a href="{{ route('tekprod_detail.index') }}">
+                    <i class="fa fa-cube"></i> <span>Release Dokumen TP</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('tekprod_overall.indexOverall') }}">
+                    <i class="fa fa-cube"></i> <span>Overall Data TP</span>
+                </a>
+            </li>
+
+            <li class="header">DATA DINAS</li>
+            <li>
+                <a href="{{ route('dinas.index') }}">
+                    <i class="fa fa-cube"></i> <span>Data Dinas Saya</span>
                 </a>
             </li>
 

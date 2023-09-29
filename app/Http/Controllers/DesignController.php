@@ -39,13 +39,18 @@ class DesignController extends Controller
         $design = Design::select('id_design')->orderBy('id_design', 'DESC')->get();
         $userLoggedIn = Auth::user(); 
         $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
+        $level4Users = User::where('level', '4')->pluck('id');
+
 
         $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar', 'bobot_kepala');
         $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
     
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '3')->pluck('name', 'id');
+        $approver = User::where('bagian', $bagianUser)->pluck('name', 'id');
+        $drafter = User::where(function ($query) use ($bagianUser) {
+          $query->where('bagian', $bagianUser)->where('level', '3');
+        })
+        ->orWhereIn('id', $level4Users)
+        ->pluck('name', 'id');
     
         $proyek = Proyek::where('status', 'open')->pluck('nama_proyek' , 'id_proyek');
 
@@ -69,13 +74,17 @@ class DesignController extends Controller
         $design = Design::select('id_design')->orderBy('id_design', 'DESC')->get();
         $userLoggedIn = Auth::user(); 
         $bagianUser = $userLoggedIn->bagian;
-        $levelUser = $userLoggedIn->level;
+        $level4Users = User::where('level', '4')->pluck('id');
 
         $kepala = KepalaGambar::all()->pluck('nama', 'id_kepala_gambar');
         $subsistem = Subsistem::all()->pluck('nama_subsistem', 'id_subsistem');
     
-        $approver = User::where('bagian', $bagianUser)->where('level', $levelUser)->pluck('name', 'id');
-        $drafter = User::where('bagian', $bagianUser)->where('level', '3')->pluck('name', 'id');
+        $approver = User::where('bagian', $bagianUser)->pluck('name', 'id');
+        $drafter = User::where(function ($query) use ($bagianUser) {
+          $query->where('bagian', $bagianUser)->where('level', '3');
+        })
+        ->orWhereIn('id', $level4Users)
+        ->pluck('name', 'id');
     
         $proyek = Proyek::where('status', 'open')->pluck('nama_proyek' , 'id_proyek');
 

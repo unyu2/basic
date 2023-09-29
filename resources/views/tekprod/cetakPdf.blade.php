@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Daftar Design</title>
+    <title>Daftar Dokumen</title>
 
     <style>
         table td {
@@ -45,7 +45,7 @@
     <table width="100%">
         <thead>
             <tr>
-                <th><b> <font size=4>DRAWING LIST DATA</b></th>
+                <th><b> <font size=4>DATA DOKUMEN</b></th>
             <tr>
         <tr>
                 <th><b>
@@ -59,8 +59,8 @@
     <table class="data" width="100%">
         <thead>           <tr>
 <th>Proyek</th>
-<th>No Dwg</th>
-<th>Nama Dwg</th>
+<th>No Doc</th>
+<th>Nama Doc</th>
 <th>Konfigurasi</th>
 <th>Revisi</th>
 <th>Status</th>
@@ -71,17 +71,17 @@
             </tr>
         </thead>
         <tbody>
-        @foreach ($datadesign as $index => $design)
+        @foreach ($datatekprod as $index => $tekprod)
     <tr>
-        <td class="text-left">{{ $design->proyek->nama_proyek }}</td>
-        <td class="text-left">{{ $design->kode_design }}</td>
-        <td class="text-left">{{ $design->nama_design }}</td>
-        <td class="text-center-isi">{{ $design->konfigurasi }}</td>
-        <td class="text-center-isi">{{ $design->revisi }}</td>
-        <td class="text-center-isi">{{ $design->status }}</td>
-        <td class="text-center-isi">{{ $design->draft_user_name }}</td>
-        <td class="text-center-isi">{{ $design->check_user_name }}</td>
-        <td class="text-center-isi">{{ $design->approve_user_name }}</td>
+        <td class="text-left">{{ $tekprod->proyek->nama_proyek }}</td>
+        <td class="text-left">{{ $tekprod->kode_tekprod }}</td>
+        <td class="text-left">{{ $tekprod->nama_tekprod }}</td>
+        <td class="text-center-isi">{{ $tekprod->konfigurasi_tekprod }}</td>
+        <td class="text-center-isi">{{ $tekprod->revisi_tekprod }}</td>
+        <td class="text-center-isi">{{ $tekprod->status_tekprod }}</td>
+        <td class="text-center-isi">{{ $tekprod->draft_user_name }}</td>
+        <td class="text-center-isi">{{ $tekprod->check_user_name }}</td>
+        <td class="text-center-isi">{{ $tekprod->approve_user_name }}</td>
     </tr>
 @endforeach
 </tbody>

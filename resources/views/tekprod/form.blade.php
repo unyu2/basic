@@ -118,11 +118,11 @@
                         </div>
                     </div>
                     <div class="form-group row hidden-form">
-                        <label for="id_kepala_gambar" class="col-lg-2 col-lg-offset-1 control-label">Kepala Gambar</label> 
+                        <label for="id_design" class="col-lg-2 col-lg-offset-1 control-label">Design</label> 
                         <div class="col-lg-6">
-                        <select type="text" name="id_kepala_gambar" id="id_kepala_gambar" class="form-control" required autofocus>
+                        <select type="text" name="id_design" id="id_design" class="form-control" required autofocus>
                             <option></option>
-                            @foreach ($kepala as $key => $item)
+                            @foreach ($design as $key => $item)
                                 <option value="{{ $key }}">{{ $item }}</option>
                                 @endforeach
                             </select>
@@ -214,7 +214,6 @@
  <!-- End hidden -->                   
                         <a> <b><center> !!!!! DATA UNTUK SCHEDULE !!!!! DATA UNTUK SCHEDULE !!!!!</center></b></a>
                         <br>
-
                    <div class="form-group row">
                         <label for="tanggal_prediksi_tekprod" class="col-lg-2 col-lg-offset-1 control-label datepicker">Prediksi Tanggal (Start)</label> 
                         <div class="col-lg-6 datepicker">
@@ -225,14 +224,14 @@
                         </div>
                     </div>
                      <div class="form-group row">
-                        <label for="refrensi_design_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Predececors/ Refrensi Jadwal Doc (Bila Ada)</label> 
+                        <label for="" class="col-lg-2 col-lg-offset-1 control-label">Predececors/ Refrensi Jadwal Doc (Bila Ada)</label> 
                         <div class="col-lg-2">
-                        <button onclick="addRef()" type="button" class="btn btn-info">Pilih Refrensi</button>
+                        <button onclick="addRef()"  type="button" class="btn btn-info">Pilih Refrensi</button>
                         </div>
                         <div class="col-lg-4">
-                            <input name="refrensi_design_tekprod" id="refrensi_design_tekprod" class="form-control">
-                            <input type="date" name="tanggal_refrensi_tekprod" id="tanggal_refrensi_tekprod" class="form-control">
-                            <input  name="id_refrensi_tekprod" id="id_refrensi_tekprod" class="form-control">
+                            <input name="refrensi_design_tekprod" id="refrensi_design_tekprod" class="form-control" readonly>
+                            <input type="date" name="tanggal_refrensi_tekprod" id="tanggal_refrensi_tekprod" class="form-control" readonly>
+                            <input  name="id_refrensi_tekprod" id="id_refrensi_tekprod" class="form-control" readonly>
 
                             <span class="help-block with-errors"></span>
                             <span style="color: green;">Gunakan Refrensi Document (field ini) Bila Prediksi Tanggal Start Tidak Bisa Ditentukan.</span>

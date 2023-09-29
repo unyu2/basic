@@ -14,14 +14,14 @@ class tekprodExport implements FromCollection, WithHeadings, WithMapping
 {
     public function collection()
     {
-        return Design::all();
+        return Tekprod::all();
     }
 
     public function headings(): array
     {
         return [
             'id_tekprod',
-            'id_kepala_gambar',
+            'id_design',
             'id_proyek',
             'kode_tekprod',
             'nama_tekprod',
@@ -56,7 +56,7 @@ class tekprodExport implements FromCollection, WithHeadings, WithMapping
         // Sesuaikan dengan data yang ingin Anda ekspor
         return [
             $row->id_tekprod,
-            $row->id_kepala_gambar,
+            $row->id_design,
             $row->proyek->nama_proyek,
             $row->kode_tekprod,
             $row->nama_tekprod,

@@ -12,7 +12,6 @@
         <thead>
             <tr>
                 <th width="5%">No</th>
-                <th>ID</th>
                 <th>No Dwg</th>
                 <th>Nama</th>
                 <th>Proyek</th>

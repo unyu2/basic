@@ -70,6 +70,7 @@
                                 <input type="checkbox" name="select_all" id="select_all">
                             </th>
                             <th width="5%">No</th>
+                            <th>ID Design</th>
                             <th>No Document</th>
                             <th>Nama</th>
                             <th>Proyek</th>
@@ -162,7 +163,6 @@
     let table0;
     let tableModal;
     let tableModal2;
-    let tableModal3;
     let tableDetail;
 
     $(function () {
@@ -177,14 +177,15 @@
             columns: [
                 {data: 'select_all', searchable: false, sortable: false},
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'id_design'},
                 {data: 'kode_tekprod'},
                 {data: 'nama_tekprod'},
-                {data: 'id_proyek_tekprod'},
+                {data: 'id_proyek'},
                 {data: 'id_draft_tekprod'},
                 {data: 'id_check_tekprod'},
                 {data: 'id_approve_tekprod'},
                 {data: 'revisi_tekprod'},
-                {data: 'kondisi_tekprod'},
+                {data: 'kondisi'},
                 {data: 'status_tekprod'},
                 {data: 'aksi', searchable: false, sortable: false},
                 ]
@@ -216,7 +217,7 @@
                 {data: 'nama_tekprod'},
                 {data: 'id_proyek'},
                 {data: 'revisi_tekprod'},
-                {data: 'kondisi_tekprod'},
+                {data: 'kondisi'},
                 {data: 'status_tekprod'},
                 {data: 'aksi', searchable: false, sortable: false},
                 ]
@@ -239,8 +240,9 @@
                 },
                 columns: [
                     {data: 'DT_RowIndex', searchable: false, sortable: false},
-                    {data: 'kode_tekprod'},
-                    {data: 'nama_tekprod'},
+                    {data: 'id_design'},
+                    {data: 'kode_design'},
+                    {data: 'nama_design'},
                     {data: 'id_proyek'},
                     {data: 'aksi', searchable: false, sortable: false},
                 ]
@@ -284,13 +286,13 @@
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                $('#refrensi_design_tekprod').val(data.kode_design_tekprod);
-                $('#tanggal_refrensi_tekprod').val(data.prediksi_akhir_tekprod);
-                $('#id_refrensi_tekprod').val(data.id_design_tekprod);
+                $('#refrensi_design_tekprod').val(data.kode_design);
+                $('#tanggal_refrensi_tekprod').val(data.prediksi_akhir);
+                $('#id_refrensi_tekprod').val(data.id_design);
 
 
-                if (data.prediksi_akhir_tekprod !== $('#tanggal_refrensi_tekprod').val()) {
-                $('#tanggal_refrensi_tekprod').val(data.prediksi_akhir_tekprod);
+                if (data.prediksi_akhir !== $('#tanggal_refrensi_tekprod').val()) {
+                $('#tanggal_refrensi_tekprod').val(data.prediksi_akhir);
             }
 
                 $('#modal-dwg').modal('hide');
@@ -300,7 +302,6 @@
             }
         });
     }
-
 
     function tambahBaru(url) {
         $('#modal-form3').modal('show');
@@ -343,7 +344,7 @@
             $('#id_tekprod').val(data.id_tekprod);
             $('#nama_tekprod').val(data.nama_tekprod);
             $('#kode_tekprod').val(data.kode_tekprod);
-            $('#id_kepala_gambar').val(data.id_kepala_gambar);
+            $('#id_design').val(data.id_design);
             $('#id_proyek').val(data.id_proyek);
             $('#revisi_tekprod').val(data.revisi_tekprod);
             $('#bobot_rev_tekprod').val(data.bobot_rev_tekprod);
@@ -401,7 +402,7 @@
                 $('#modal-form [name=nama_tekprod]').val(response.nama_tekprod);
                 $('#modal-form [name=kode_tekprod]').val(response.kode_tekprod);
                 $('#modal-form [name=id_proyek]').val(response.id_proyek);
-                $('#modal-form [name=id_kepala_gambar]').val(response.id_kepala_gambar);
+                $('#modal-form [name=id_design]').val(response.id_design);
                 $('#modal-form [name=id_draft_tekprod]').val(response.id_draft_tekprod);
                 $('#modal-form [name=id_check_tekprod]').val(response.id_check_tekprod);
                 $('#modal-form [name=id_approve_tekprod]').val(response.id_approve_tekprod);
@@ -411,6 +412,8 @@
                 $('#modal-form [name=konfigurasiv]').val(response.konfigurasi_tekprod);
                 $('#modal-form [name=tipe_tekprod]').val(response.tipe_tekprod);
                 $('#modal-form [name=prosentase_tekprod]').val(response.prosentase_tekprod);
+                $('#modal-form [name=pemilik_tekprod]').val(response.pemilik_tekprod);
+
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');
@@ -539,7 +542,6 @@
             $('#modal-form4 [name=nama_tekprod]').val(response.nama_tekprod);
             $('#modal-form4 [name=kode_tekprod]').val(response.kode_tekprod);
             $('#modal-form4 [name=id_proyek]').val(response.id_proyek);
-            $('#modal-form4 [name=id_kepala_gambar]').val(response.id_kepala_gambar);
             $('#modal-form4 [name=id_draft_tekprod]').val(response.id_draft_tekprod);
             $('#modal-form4 [name=id_check_tekprod]').val(response.id_check_tekprod);
             $('#modal-form4 [name=id_approve_tekprod]').val(response.id_approve_tekprod);
@@ -550,6 +552,7 @@
             $('#modal-form4 [name=tipe_tekprod]').val(response.tipe_tekprod);
             $('#modal-form4 [name=bobot_rev_tekprod]').val(response.bobot_rev_tekprod);
             $('#modal-form4 [name=bobot_design_tekprod]').val(response.bobot_design_tekprod);
+            $('#modal-form4 [name=pemilik_tekprod]').val(response.pemilik_tekprod);
 
         })
         .fail((errors) => {
@@ -557,7 +560,6 @@
             return;
         });
     }
-
 
     $('#modal-form4').validator().on('submit', function (e) {
             if (! e.preventDefault()) {

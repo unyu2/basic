@@ -16,8 +16,8 @@ class CreateTekprodTable extends Migration
         Schema::create('tekprod', function (Blueprint $table) {
             $table->increments('id_tekprod');
 
-            $table->unsignedInteger('id_kepala_gambar')->nullable();
-            $table->foreign('id_kepala_gambar')->references('id_kepala_gambar')->on('kepala_gambar')->onDelete('restrict')->onUpdate('restrict');
+            $table->unsignedInteger('id_design')->nullable();
+            $table->foreign('id_design')->references('id_design')->on('design')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedInteger('id_proyek')->nullable();
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
 

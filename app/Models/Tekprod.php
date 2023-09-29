@@ -38,14 +38,14 @@ class Tekprod extends Model
         return $this->belongsTo(Subsistem::class, 'id_subsistem', 'id_subsistem');
     }
 
-    public function kepalagambar()
+    public function design()
     {
-        return $this->belongsTo(KepalaGambar::class, 'id_kepala_gambar', 'id_kepala_gambar');
+        return $this->belongsTo(Design::class, 'id_design', 'id_design');
     }
 
-    public function designdetail()
+    public function tekproddetail()
     {
-        return $this->belongsTo(DesignDetail::class, 'id_tekprod_detail', 'id_tekprod_detail');
+        return $this->belongsTo(TekprodDetail::class, 'id_tekprod_detail', 'id_tekprod_detail');
     }
 
 }

@@ -48,4 +48,9 @@ class Design extends Model
         return $this->belongsTo(DesignDetail::class, 'id_design_detail', 'id_design_detail');
     }
 
+    public function tekprod()
+    {
+        return $this->belongsTo(Tekprod::class, 'id_tekprod', 'id_tekprod');
+    }
+
 }

@@ -29,18 +29,7 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="id_kepala_gambar" class="col-lg-2 col-lg-offset-1 control-label">Kepala Gambar</label> 
-                        <div class="col-lg-6">
-                        <select type="text" name="id_kepala_gambar" id="id_kepala_gambar" class="form-control" required autofocus>
-                            <option></option>
-                            @foreach ($kepala as $key => $item)
-                                <option value="{{ $key }}">{{ $item }}</option>
-                                @endforeach
-                            </select>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
+                    
                 <div class="form-group row">
                         <label for="nama_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
                         <div class="col-lg-6">
@@ -87,6 +76,19 @@
                                 <option Value="1">New</option>
                                 <option Value="0.5">Konversi</option>
                                 <option Value="0.05">Konversi & Revisi</option>
+                         </select>
+                         </div>
+                            <span class="help-block with-errors"></span>
+                    </div>
+                    <div class="form-group row">
+                        <label for="pemilik_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Pemilik</label> 
+                        <div class="col-lg-6">
+                        <select name="pemilik_tekprod" id="pemilik_tekprod" class="form-control" required autofocus>
+                                <option></option>
+                                <option Value="Teknologi Proses">Teknologi Proses</option>
+                                <option Value="Shop Drawing">Shop Drawing</option>
+                                <option Value="Preparation Support">Preparation Support</option>
+                                <option Value="Welding Technology">Welding Technology</option>
                          </select>
                          </div>
                             <span class="help-block with-errors"></span>
