@@ -49,7 +49,7 @@
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'tanggal'},
+                {data: 'created_at'},
                 {data: 'surat'},
                 {data: 'kode_pemesanan_detail'},
                 {data: 'nama'},

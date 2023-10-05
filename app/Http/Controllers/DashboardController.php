@@ -232,7 +232,7 @@ class DashboardController extends Controller
                 'user',));
         }
 
-        if (auth()->user()->level == 6 ||  auth()->user()->level == 7 || auth()->user()->level == 3|| auth()->user()->level == 2 || auth()->user()->level == 1  || auth()->user()->level == 11 || auth()->user()->level == 12) {
+        if (auth()->user()->level == 6 ||  auth()->user()->level == 7 || auth()->user()->level == 5 ||  auth()->user()->level == 8 || auth()->user()->level == 3|| auth()->user()->level == 2 || auth()->user()->level == 1  || auth()->user()->level == 11 || auth()->user()->level == 12) {
             return view('tamu.dashboard');
         }
     }

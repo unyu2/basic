@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Jabatan
+    Daftar Bagian
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar Jabatan</li>
+    <li class="active">Daftar Bagian</li>
 @endsection
 
 @section('content')

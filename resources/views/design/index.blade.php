@@ -550,6 +550,7 @@
             $('#modal-form4 [name=tipe]').val(response.tipe);
             $('#modal-form4 [name=bobot_rev]').val(response.bobot_rev);
             $('#modal-form4 [name=bobot_design]').val(response.bobot_design);
+            $('#modal-form4 [name=status]').val(response.status);
 
         })
         .fail((errors) => {

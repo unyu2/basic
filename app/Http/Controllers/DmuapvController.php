@@ -69,12 +69,14 @@ class DmuapvController extends Controller
                 return $dmu->proyek->nama_proyek ?? '';
             })
             ->addColumn('aksi', function ($dmu) {
-                return '
-                <div class="btn-group">
-                    <button type="button" onclick="editForm3(`'. route('dmuapv.update', $dmu->id_dmu) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-pencil">Approve</i></button>
-                    <button type="button" onclick="deleteData(`'. route('dmuapv.destroy', $dmu->id_dmu) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                </div>
-                ';
+                $buttons = '<div class="btn-group">';
+                if ($dmu->status !== 'Approved') {
+                    $buttons .= '<button type="button" onclick="editForm3(`'. route('dmuapv.update', $dmu->id_dmu) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-pencil">Approve</i></button>';
+                  }
+                    $buttons .= '<button type="button" onclick="deleteData(`'. route('dmuapv.destroy', $dmu->id_dmu) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                $buttons .= '</div>';
+        
+                return $buttons;
             })
             ->rawColumns(['aksi', 'kode_dmu', 'select_all'])
             ->make(true);

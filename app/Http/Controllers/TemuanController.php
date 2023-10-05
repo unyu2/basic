@@ -197,7 +197,12 @@ class TemuanController extends Controller
 
         foreach ($request->id_temuan as $id) {
 
-            $temuan = Temuan::with('user')->where('id_temuan', $id)->find($id);
+            $temuan = Temuan::with('user')
+            ->leftjoin('proyek', 'proyek.id_proyek', 'temuan.id_proyek')
+            ->select('temuan.*' , 'nama_proyek')
+            ->where('id_temuan', $id)
+            ->find($id);
+
             $datatemuan[] = $temuan;
         }
 

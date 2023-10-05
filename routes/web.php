@@ -245,9 +245,14 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::post('/charts/chartDesign/fetch_data_mes_bobot', [ChartDesignController::class, 'fetch_data_mes_bobot']);
         Route::post('/charts/chartDesign/fetch_data_qes', [ChartDesignController::class, 'fetch_data_qes']);
         Route::post('/charts/chartDesign/fetch_data_qes_bobot', [ChartDesignController::class, 'fetch_data_qes_bobot']);
-
         Route::post('/charts/chartDesign/fetch_data_tps', [ChartDesignController::class, 'fetch_data_tps']);
         Route::post('/charts/chartDesign/fetch_data_tps_bobot', [ChartDesignController::class, 'fetch_data_tps_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_wlt', [ChartDesignController::class, 'fetch_data_wlt']);
+        Route::post('/charts/chartDesign/fetch_data_wlt_bobot', [ChartDesignController::class, 'fetch_data_wlt_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_sdr', [ChartDesignController::class, 'fetch_data_sdr']);
+        Route::post('/charts/chartDesign/fetch_data_sdr_bobot', [ChartDesignController::class, 'fetch_data_sdr_bobot']);
+        Route::post('/charts/chartDesign/fetch_data_prs', [ChartDesignController::class, 'fetch_data_prs']);
+        Route::post('/charts/chartDesign/fetch_data_prs_bobot', [ChartDesignController::class, 'fetch_data_prs_bobot']);
 
         Route::get('/charts/chartsCurva', [ChartCurvaController::class, 'index'])->name('chartsCurva');
         Route::post('/charts/chartCurva/fetch_data_curvaS_sample_dua', [ChartCurvaController::class, 'fetch_data_curvaS_sample_dua']);
@@ -255,9 +260,7 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::post('/charts/chartCurva/fetch_data_combined', [ChartCurvaController::class, 'fetch_data_combined']);
         Route::post('/charts/chartCurva/fetch_data_combined_engineering', [ChartCurvaController::class, 'fetch_data_combined_engineering']);
         Route::post('/charts/chartCurva/fetch_data_combined_design', [ChartCurvaController::class, 'fetch_data_combined_design']);
-
-        Route::post('/charts/chartCurva/fetch_data_combined_eld', [ChartCurvaController::class, 'fetch_data_combined_eld']);
-
+        Route::post('/charts/chartCurva/fetch_data_combined_tekprod', [ChartCurvaController::class, 'fetch_data_combined_tekprod']);
         Route::post('/charts/chartCurva/getSData', [ChartCurvaController::class, 'getSData']);
 
         Route::get('/charts/chartsJadwal', [ChartJadwalController::class, 'index'])->name('chartsJadwal');
@@ -268,7 +271,11 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('/charts/chartsEld', [ChartJadwalController::class, 'chartEld'])->name('chartsEld');
         Route::get('/charts/chartsMid', [ChartJadwalController::class, 'chartMid'])->name('chartsMid');
         Route::get('/charts/chartsCbd', [ChartJadwalController::class, 'chartCbd'])->name('chartsCbd');
-        Route::get('/charts/chartsBwd', [ChartJadwalController::class, 'chartBwd'])->name('chartsBwd');          
+        Route::get('/charts/chartsBwd', [ChartJadwalController::class, 'chartBwd'])->name('chartsBwd');
+        Route::get('/charts/chartsTps', [ChartJadwalController::class, 'chartTps'])->name('chartsTps');
+        Route::get('/charts/chartsWlt', [ChartJadwalController::class, 'chartWlt'])->name('chartsWlt');
+        Route::get('/charts/chartsSdr', [ChartJadwalController::class, 'chartSdr'])->name('chartsSdr'); 
+        Route::get('/charts/chartsPrs', [ChartJadwalController::class, 'chartPrs'])->name('chartsPrs');     
     
     Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
         Route::get('/dinas/data', [DinasController::class, 'data'])->name('dinas.data');
@@ -458,8 +465,9 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
 
         Route::get('/emu/data', [EmuController::class, 'data'])->name('emu.data');
         Route::get('/emu/{id}/create', [EmuController::class, 'create'])->name('emu.create');
+        Route::put('/emu/update/{id}', [EmuController::class, 'update'])->name('emu.update');
         Route::resource('/emu', EmuController::class)
-            ->except('create','show2', 'edit');
+            ->except('create','show2');
 
         Route::get('/emu_detail/{id}/data', [EmuDetailController::class, 'data'])->name('emu_detail.data');
         Route::get('/emu_detail/loadform/{diskon}/{total}', [EmuDetailController::class, 'loadForm'])->name('emu_detail.load_form');
@@ -477,6 +485,8 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::resource('/emu_ctrl2', EmuCtrl2Controller::class);
 
         Route::get('/emu_ctrl/data', [EmuCtrlController::class, 'data'])->name('emu_ctrl.data');
+        Route::put('/emu_ctrl/update/{id}', [EmuCtrlController::class, 'update'])->name('emu_ctrl.update');
+        Route::get('/emu_ctrl/updates/{id}', [EmuCtrlController::class, 'updates'])->name('emu_ctrl.updates');
         Route::post('/emu_ctrl/delete-selected', [EmuCtrlController::class, 'deleteSelected'])->name('emu_ctrl.delete_selected');
         Route::post('/emu_ctrl/cetak-barcode', [EmuCtrlController::class, 'cetakBarcode'])->name('emu_ctrl.cetak_barcode');
         Route::resource('/emu_ctrl', EmuCtrlController::class);

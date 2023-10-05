@@ -84,11 +84,6 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('part.index') }}">
-                    <i class="fa fa-cube"></i> <span>Part</span>
-                </a>
-            </li>
-            <li>
                 <a href="{{ route('subpengujian.index') }}">
                     <i class="fa fa-cube"></i> <span>Tipe Inspeksi / Pengujian</span>
                 </a>
@@ -342,6 +337,43 @@
         </ul>
         @endif
 
+<!-------------------------------------------Side Bar For Teknologi ----------------------------------------------->
+
+@if (auth()->user()->level == 5)
+        <ul class="sidebar-menu" data-widget="tree">
+            <li>
+                <a href="{{ route('dashboard') }}">
+                    <i class="fa fa-dashboard"></i> <span>My Performance</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('chartsDesign') }}">
+                    <i class="fa fa-cube"></i> <span>Chart Des & Eng</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('chartsJadwal') }}">
+                    <i class="fa fa-cube"></i> <span>Chart Jadwal</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('chartsCurva') }}">
+                    <i class="fa fa-cube"></i> <span>Chart S-Curve</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('dashboard_oil') }}">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard OIL</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('charts') }}">
+                    <i class="fa fa-cube"></i> <span>Chart OIL</span>
+                </a>
+            </li>
+        </ul>
+        @endif
+
 <!--------------------------------------------------Side Bar For Exsternal Sourche IMSS, IMST Dll ------------------------------------------------------>
 
         @if (auth()->user()->level == 6)
@@ -411,7 +443,7 @@
 
 <!--------------------------------------------------Side Bar For Manager QaQc ------------------------------------------------------>
 
-        @if (auth()->user()->level == 12 || auth()->user()->level == 11)
+        @if (auth()->user()->level == 12 || auth()->user()->level == 11 || auth()->user()->level == 8)
         <ul class="sidebar-menu" data-widget="tree">
             <li>
                 <a href="{{ route('dashboard_oil') }}">
@@ -500,22 +532,6 @@
             <li>
                 <a href="{{ route('proses.index') }}">
                     <i class="fa fa-download"></i> <span>Terima Barang</span>
-                </a>
-            </li>
-            <li class="header">PENGIRIMAN BARANG</li>
-            <li>
-                <a href="{{ route('minta.index') }}">
-                    <i class="fa fa-cart-arrow-down"></i> <span>Terima Permintaan</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('transaksi_pemesanan.baru') }}">
-                    <i class="fa fa-truck"></i> <span>Kirim Barang</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('pemesanan.index') }}">
-                    <i class="fa fa-upload"></i> <span>Data Out Barang</span>
                 </a>
             </li>
             <li class="header">KEUANGAN PROYEK</li>

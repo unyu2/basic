@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Dmu;
 use App\Models\Emu;
+use App\Models\Car;
+use App\Models\EmuDetail;
 use App\Models\Proyek;
 use App\Models\Subpengujian;
 use App\Models\Setting;
@@ -28,48 +30,15 @@ class EmuCtrlController extends Controller
        $dmus = Dmu::find(session('id_dmu'));
        $emus = Dmu::find(session('id_emu'));
 
+       $emuLeft = Emu::leftjoin('car', 'car.id_car', 'emu.id_car')
+       ->select('emu.*', 'nama_car' )
+       ->get();
+
        $dmu = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
        ->select('dmu.*', 'nama_subpengujian', 'nama_dmu')
        ->get();
 
-        $nilairev='Rev.0';
-        if ($nilairev === 'Rev.0') {
-        $inputrev = 'Rev.A';
-        } elseif ($nilairev === 'Rev.A') {
-        $inputrev = 'Rev.B';
-        } elseif ($nilairev === 'Rev.B') {
-        $inputrev = 'Rev.C';
-        } elseif ($nilairev === 'Rev.C') {
-        $inputrev = 'Rev.D';
-        } elseif ($nilairev === 'Rev.D') {
-        $inputrev = 'Rev.E';
-        } elseif ($nilairev === 'Rev.E') {
-        $inputrev = 'Rev.F';
-        } elseif ($nilairev === 'Rev.F') {
-        $inputrev = 'Rev.G';
-        } elseif ($nilairev === 'Rev.G') {
-        $inputrev = 'rev.H';
-        } elseif ($nilairev === 'Rev.H') {
-        $inputrev = 'Rev.I';
-        } elseif ($nilairev === 'Rev.I') {
-        $inputrev = 'Rev.J';
-        } else {
-        $inputrev = '0';
-        }
-        
-        $nilairev = $inputrev;
-
-        $nilaiapv ='waiting';
-        if ($nilaiapv === 'waiting') {
-        $inputapv = 'Approved';
-        } elseif ($nilaiapv === 'Approved') {
-        $inputapv = 'waiting';
-        } else {
-        $inputapv = '0';
-        }
-        $nilaiapv = $inputapv;
-
-        return view('emu_ctrl.index', compact('dmu', 'emu', 'nilairev', 'nilaiapv', 'dmus', 'emus'));
+        return view('emu_ctrl.index', compact('dmu', 'emu', 'dmus', 'emus'));
     }
 
     public function data()
@@ -113,14 +82,16 @@ class EmuCtrlController extends Controller
             })
             ->addColumn('aksi', function ($emu) {
                 $buttons = '<div class="btn-group">';
-                if ($emu->status !== 'Approved') {
-                    $buttons .= '<button type="button" onclick="deleteData(`'. route('emu_ctrl.destroy', $emu->id_emu) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';        
+                if ($emu->status === 'waiting') {
                     $buttons .= '<button type="button" onclick="editForm(`'. route('emu_ctrl.update', $emu->id_emu) .'`)" class="btn btn-success btn-xs">Approve</button>';
-                  }
+                    $buttons .= '<button type="button" onclick="editForm2(`'. route('emu_ctrl.update', $emu->id_emu) .'`)" class="btn btn-info btn-xs">Edit</button>';
+                } else {
+                    $buttons .= '<button type="button" onclick="deleteData(`'. route('emu_ctrl.destroy', $emu->id_emu) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                }
                 $buttons .= '</div>';
-        
                 return $buttons;
-            })
+            })            
+            
             ->rawColumns(['aksi', 'nama_proyek', 'select_all'])
             ->make(true);
     }
@@ -205,10 +176,16 @@ class EmuCtrlController extends Controller
     public function destroy($id)
     {
         $emu = Emu::find($id);
-        $emu->delete();
-
-        return response(null, 204);
+    
+        if (!$emu) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+            EmuDetail::where('id_emu', $id)->delete();
+            $emu->delete();
+    
+        return response()->json(['message' => 'Data berhasil dihapus'], 204);
     }
+    
 
     public function deleteSelected(Request $request)
     {
@@ -221,46 +198,27 @@ class EmuCtrlController extends Controller
     }
 
     public function cetakBarcode(Request $request)
-    {
-       
+    { 
         $dataemu = array();
 
         foreach ($request->id_emu as $id) {
 
-            $emuss = Emu::with('setting')
-            ->orderBy('id_emu', 'desc')
-            ->where('id_emu', $id)
+            $emu = Emu::with('setting')
+            ->leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
+            ->leftJoin('car', 'car.id_car', 'emu.id_car')
+            ->leftJoin('users', 'users.id', 'emu.id_users')
+            ->leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'emu.id_subpengujian')
+            ->leftJoin('proyek', 'proyek.id_proyek', 'emu.id_proyek')
+            ->orderBy('emu.id_emu', 'desc')
+            ->where('emu.id_emu', $id)
             ->get();
-
-            $x1 = Setting::all()->pluck('path_logo2','id_setting');
-            
-            
-            $dmu = Emu::leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
-            ->select('dmu.*', 'nama_dmu')
-            ->where('id_emu', $id)
-            ->get();
-
-            $users = Emu::leftJoin('users', 'users.id', 'emu.id_users')
-            ->select('users.*', 'name')
-            ->where('id_emu', $id)
-            ->get();
-
-            $subpengujian = Emu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'emu.id_subpengujian')
-            ->select('subpengujian.*', 'nama_subpengujian')
-            ->where('id_emu', $id)
-            ->get();
-
-            $emusss = Emu::leftJoin('proyek', 'proyek.id_proyek', 'emu.id_proyek')
-            ->select('emu.*', 'nama_proyek')
-            ->where('id_emu', $id)
-            ->get();
-
-            $emu = Emu::with('dmu')->where('id_emu', $id)->find($id);
-            $dataemu[] = $emu;
+        
+        $dataemu[] = $emu;
+        
         }
 
         $no  = 1;
-        $pdf = PDF::loadView('emu_ctrl.barcode', compact('dataemu','users', 'no','dmu','x1','subpengujian','emusss'));
+        $pdf = PDF::loadView('emu_ctrl.barcode', compact('dataemu', 'emu'));
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('emu.pdf');
     }

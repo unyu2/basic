@@ -18,6 +18,8 @@ class EmuController extends Controller
 {
     public function index()
     {
+        $userlog = Auth::id();
+
         $emuss = Dmu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'dmu.id_subpengujian')
         ->select('dmu.*', 'nama_subpengujian', 'nama_dmu')
         ->get();
@@ -25,6 +27,8 @@ class EmuController extends Controller
         $emus = Emu::leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
         ->select('emu.*', 'nama_dmu')
         ->get();
+
+        $emu = Emu::orderBy('id_emu', 'asc')->where('id_user', $userlog)->get();
 
         $x1 = Proyek::all()->pluck('nama_proyek','id_proyek');
         $x2 = Produk::all()->pluck('komat','id_produk');
@@ -38,7 +42,7 @@ class EmuController extends Controller
         $r6= Dmu::where('id_subpengujian','9')->get();
         $r7= Dmu::where('id_subpengujian','10')->get();
 
-        return view('emu.index', compact('emuss','x1','x2','emus', 'x3', 'r1','r2','r3','r4','r5','r6','r7'));
+        return view('emu.index', compact('emuss','x1','x2','emus', 'emu', 'x3', 'r1','r2','r3','r4','r5','r6','r7'));
     }
     
     public function data()
@@ -83,7 +87,7 @@ class EmuController extends Controller
             ->addColumn('aksi', function ($emus) {
                 return '
                     <div class="btn-group">
-                        <button onclick="showDetail(`' . route('emu.show', $emus->id_emu) . '`)" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Lihat Komponen Rusak</button>
+                        <button onclick="showDetail(`' . route('emu.show', $emus->id_emu) . '`)" class="btn btn-success btn-xs btn-flat"><i class="fa fa-barcode"></i> Lihat Komponen Rusak</button>
                     </div>
                 ';
             })
@@ -116,6 +120,14 @@ class EmuController extends Controller
             })
             ->rawColumns(['kode_produk'])
             ->make(true);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $emu = Emu::find($id);
+        $emu->update($request->all());
+        return response()->json('Data berhasil disimpan', 200);
+
     }
 
     public function destroy($id)

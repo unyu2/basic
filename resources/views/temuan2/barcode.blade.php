@@ -50,7 +50,7 @@
 @foreach ($datatemuan as $item)
     <table class="data" width="100%">
         <thead>            <tr> 
-<th class="text-left">Proyek : {{$item -> nama_proyeks }} </th>
+<th class="text-left">Proyek : {{$item->proyek->nama_proyek }} </th>
 <th class="text-left">Status : {{ $item->status }} </th>
 <th class="text-left">Tanggal Temuan : {{ $item->created_at }} </th>
 <th class="text-left">Kode : {{ $item->kode_temuan }} </th>

@@ -68,10 +68,12 @@ class DmuController extends Controller
             })
             ->addColumn('aksi', function ($dmu) {
                 $buttons = '<div class="btn-group">';
-                $buttons .= '<button type="button" onclick="editForm2(`'. route('dmu.update', $dmu->id_dmu) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-pencil">Revisi</i></button>';        
                 if ($dmu->status !== 'Approved') {
                     $buttons .= '<button type="button" onclick="editForm3(`'. route('dmu.updatex', $dmu->id_dmu) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
                     $buttons .= '<button type="button" onclick="deleteData(`'. route('dmu.destroy', $dmu->id_dmu) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                  }
+                elseif ($dmu->status !== 'Waiting') {
+                    $buttons .= '<button type="button" onclick="editForm2(`'. route('dmu.update', $dmu->id_dmu) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-pencil">Revisi</i></button>';
                   }
                 $buttons .= '</div>';
         
@@ -884,37 +886,72 @@ class DmuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updates(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $dmu = Dmu::find($id);
 
-        if (!$dmu) {
-            return response()->json('Data DMU tidak ditemukan', 404);
+        if ($dmu) {
+            $nilairev = $dmu->revisi;
+        
+            if ($nilairev === '0') {
+                $inputrev = 'A';
+            } elseif ($nilairev === 'A') {
+                $inputrev = 'B';
+            } elseif ($nilairev === 'B') {
+                $inputrev = 'C';
+            } elseif ($nilairev === 'C') {
+                $inputrev = 'D';
+            } elseif ($nilairev === 'D') {
+                $inputrev = 'E';
+            } elseif ($nilairev === 'E') {
+                $inputrev = 'F';
+            } elseif ($nilairev === 'F') {
+                $inputrev = 'G';
+            } elseif ($nilairev === 'G') {
+                $inputrev = 'H';
+            } elseif ($nilairev === 'H') {
+                $inputrev = 'I';
+            } elseif ($nilairev === 'I') {
+                $inputrev = 'J';
+            } elseif ($nilairev === 'J') {
+                $inputrev = 'K';
+            } elseif ($nilairev === 'K') {
+                $inputrev = 'L';
+            } elseif ($nilairev === 'L') {
+                $inputrev = 'M';
+            } elseif ($nilairev === 'M') {
+                $inputrev = 'N';
+            } elseif ($nilairev === 'N') {
+                $inputrev = 'O';
+            } elseif ($nilairev === 'O') {
+                $inputrev = 'P';
+            } elseif ($nilairev === 'P') {
+                $inputrev = 'Q';
+            } elseif ($nilairev === 'Q') {
+                $inputrev = 'R';
+            } elseif ($nilairev === 'R') {
+                $inputrev = 'S';
+            } elseif ($nilairev === 'S') {
+                $inputrev = 'T';
+            } elseif ($nilairev === 'T') {
+                $inputrev = 'U';
+            } elseif ($nilairev === 'U') {
+                $inputrev = 'V';
+            } elseif ($nilairev === 'V') {
+                $inputrev = 'W';
+            } elseif ($nilairev === 'W') {
+                $inputrev = 'X';
+            } elseif ($nilairev === 'X') {
+                $inputrev = 'Y';
+            } elseif ($nilairev === 'Y') {
+                $inputrev = 'Z';
+            } else {
+                $inputrev = '0';
+            }
         }
 
-        $nilairev = $dmu->revisi;
 
-        // Definisikan urutan revisi
-        $urutanRevisi = ['Rev.0', 'Rev.A', 'Rev.B', 'Rev.C', 'Rev.D', 'Rev.E', 'Rev.F', 'Rev.G', 'Rev.H', 'Rev.I', 'Rev.J'];
-
-        // Cari indeks revisi saat ini
-        $indeksRevisi = array_search($nilairev, $urutanRevisi);
-
-        // Perbarui revisi sesuai dengan indeks berikutnya
-        $indeksRevisi++;
-
-        // Jika sudah melebihi jumlah revisi yang didefinisikan, kembalikan ke 'Rev.0'
-        if ($indeksRevisi >= count($urutanRevisi)) {
-            $indeksRevisi = 0;
-        }
-
-        // Tentukan revisi yang baru
-        $inputrev = $urutanRevisi[$indeksRevisi];
-
-        // Perbarui revisi di dalam database
-        $dmu->revisi = $inputrev;
-        $dmu->save();
-
+        $dmu->update($request->all());
         return view('dmu.index', compact('dmu'));
     }
 
@@ -938,7 +975,7 @@ class DmuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updates(Request $request, $id)
     {
         $dmu = Dmu::find($id);
 
@@ -987,26 +1024,26 @@ class DmuController extends Controller
         if ($dmu) {
             $nilairev = $dmu->revisi;
         
-            if ($nilairev === 'Rev.0') {
-                $inputrev = 'Rev.A';
-            } elseif ($nilairev === 'Rev.A') {
-                $inputrev = 'Rev.B';
-            } elseif ($nilairev === 'Rev.B') {
-                $inputrev = 'Rev.C';
-            } elseif ($nilairev === 'Rev.C') {
-                $inputrev = 'Rev.D';
-            } elseif ($nilairev === 'Rev.D') {
-                $inputrev = 'Rev.E';
-            } elseif ($nilairev === 'Rev.E') {
-                $inputrev = 'Rev.F';
-            } elseif ($nilairev === 'Rev.F') {
-                $inputrev = 'Rev.G';
-            } elseif ($nilairev === 'Rev.G') {
-                $inputrev = 'Rev.H';
-            } elseif ($nilairev === 'Rev.H') {
-                $inputrev = 'Rev.I';
-            } elseif ($nilairev === 'Rev.I') {
-                $inputrev = 'Rev.J';
+            if ($nilairev === '0') {
+                $inputrev = 'A';
+            } elseif ($nilairev === 'A') {
+                $inputrev = 'B';
+            } elseif ($nilairev === 'B') {
+                $inputrev = 'C';
+            } elseif ($nilairev === 'C') {
+                $inputrev = 'D';
+            } elseif ($nilairev === 'D') {
+                $inputrev = 'E';
+            } elseif ($nilairev === 'E') {
+                $inputrev = 'F';
+            } elseif ($nilairev === 'F') {
+                $inputrev = 'G';
+            } elseif ($nilairev === 'G') {
+                $inputrev = 'H';
+            } elseif ($nilairev === 'H') {
+                $inputrev = 'I';
+            } elseif ($nilairev === 'I') {
+                $inputrev = 'J';
             } else {
                 $inputrev = '0';
             }

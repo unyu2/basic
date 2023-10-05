@@ -79,7 +79,7 @@
                                 <img src="{{ public_path($setting->path_kartu_member) }}" alt="card" width="100%">
                                 <div class="logo">
                                     <p>{{ $setting->nama_perusahaan }}</p>
-                                    <img src="{{ public_path($setting->path_logo) }}" alt="logo">
+                                    <img src="{{ public_path($setting->path_logo2) }}" alt="logo">
                                 </div>
                                 <div class="nama">{{ $item->nama }}</div>
                                 <div class="barcode text-left">

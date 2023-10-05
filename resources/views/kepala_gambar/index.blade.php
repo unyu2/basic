@@ -9,6 +9,24 @@
     <li class="active">Daftar Kepala Gambar</li>
 @endsection
 
+<style>
+    .hidden-form {
+        display: none;
+    }
+</style>
+
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 @section('content')
 <div class="row">
     <div class="col-lg-12">

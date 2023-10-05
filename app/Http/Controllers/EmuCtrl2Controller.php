@@ -69,14 +69,18 @@ class EmuCtrl2Controller extends Controller
             })
             ->addColumn('aksi', function ($emu) {
                 $buttons = '<div class="btn-group">';
-                if ($emu->Approved !== 'Followed Up') {
+                
+                if ($emu->Approved !== 'Followed Up' && $emu->status !== 'waiting') {
                     $buttons .= '<button type="button" onclick="deleteData(`'. route('emu_ctrl2.destroy', $emu->id_emu) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';        
                     $buttons .= '<button type="button" onclick="editForm(`'. route('emu_ctrl2.update', $emu->id_emu) .'`)" class="btn btn-success btn-xs">Follow Up</button>';
-                  }
+                } elseif ($emu->status !== 'waiting') {
+                    $buttons .= '<button type="button" onclick="deleteData(`'. route('emu_ctrl2.destroy', $emu->id_emu) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';        
+                }
+                
                 $buttons .= '</div>';
-        
                 return $buttons;
             })
+            
 
             ->rawColumns(['aksi', 'nama_proyek', 'select_all'])
             ->make(true);
@@ -183,35 +187,22 @@ class EmuCtrl2Controller extends Controller
 
         foreach ($request->id_emu as $id) {
 
-            $emuss = Emu::with('setting')
-            ->orderBy('id_emu', 'desc')
-            ->where('id_emu', $id)
+            $emu = Emu::with('setting')
+            ->leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
+            ->leftJoin('car', 'car.id_car', 'emu.id_car')
+            ->leftJoin('users', 'users.id', 'emu.id_users')
+            ->leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'emu.id_subpengujian')
+            ->leftJoin('proyek', 'proyek.id_proyek', 'emu.id_proyek')
+            ->orderBy('emu.id_emu', 'desc')
+            ->where('emu.id_emu', $id)
             ->get();
-
-            $x1 = Setting::all()->pluck('path_logo2','id_setting');
-            
-            
-            $dmu = Emu::leftJoin('dmu', 'dmu.id_dmu', 'emu.id_dmu')
-            ->select('dmu.*', 'nama_dmu')
-            ->where('id_emu', $id)
-            ->get();
-
-            $users = Emu::leftJoin('users', 'users.id', 'emu.id_users')
-            ->select('users.*', 'name')
-            ->where('id_emu', $id)
-            ->get();
-
-            $subpengujian = Emu::leftJoin('subpengujian', 'subpengujian.id_subpengujian', 'emu.id_subpengujian')
-            ->select('subpengujian.*', 'nama_subpengujian')
-            ->where('id_emu', $id)
-            ->get();
-
-            $emu = Emu::with('dmu')->where('id_emu', $id)->find($id);
-            $dataemu[] = $emu;
+        
+        $dataemu[] = $emu;
+        
         }
 
         $no  = 1;
-        $pdf = PDF::loadView('emu_ctrl2.barcode', compact('dataemu','users', 'no','dmu','x1','subpengujian'));
+        $pdf = PDF::loadView('emu_ctrl2.barcode', compact('dataemu', 'emu'));
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('emu.pdf');
     }

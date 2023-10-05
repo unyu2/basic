@@ -17,6 +17,18 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
+                <div class="form-group row">
+                    <label for="id_proyek" class="col-lg-2 col-lg-offset-1 control-label">Proyek</label>
+                        <div class="col-lg-6">
+                            <select type="text" name="id_proyek" id="id_proyek" class="form-control" required autofocus>
+                                <option></option>
+                                @foreach ($proyek as $key => $item)
+                                    <option value="{{ $key }}">{{ $item }}</option>
+                                @endforeach
+                            </select>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="nama_tekprod" class="col-lg-2 col-lg-offset-1 control-label">Nama Design</label> 
                         <div class="col-lg-6">

@@ -1269,7 +1269,7 @@ public function fetch_chart_tp_normal($id_proyek, $pemilik_doc)
     $proyek_dengan_status_open = Proyek::where('status', 'Open')->pluck('id_proyek')->toArray();
 
     $data = Tekprod::select("id_tekprod", "id_proyek", "status_tekprod")
-        ->where('pemilik', $pemilik_doc) 
+        ->where('pemilik_tekprod', $pemilik_doc) 
         ->where('jenis_tekprod', 'Doc');
 
     if (empty($id_proyek)) {
@@ -1333,14 +1333,12 @@ public function fetch_data_tps(Request $request)
 }
 
 
-/*
-
 public function fetch_data_tps_bobot(Request $request)
 {
     $id_proyek = $request->input('id_proyek');
-    $kode_unit = '313.TPS';
+    $pemilik_doc = 'Teknologi Proses';
 
-    $chart_data = $this->fetch_chart_tp_bobot($id_proyek, $kode_unit);
+    $chart_data = $this->fetch_chart_tp_bobot($id_proyek, $pemilik_doc);
 
     $chart_data = $chart_data->get();
     
@@ -1387,11 +1385,261 @@ public function fetch_data_tps_bobot(Request $request)
     return response()->json($output);
 }
 
-*/
+//*--------------------------------------------TP - PREPARATION & SUPPORT-----------------------------------------------*/
+
+public function fetch_data_prs(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $pemilik_doc = 'Preparation Support';
+
+    $chart_data = $this->fetch_chart_tp_normal($id_proyek, $pemilik_doc);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
 
 
+public function fetch_data_prs_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $pemilik_doc = 'Preparation Support';
+
+    $chart_data = $this->fetch_chart_tp_bobot($id_proyek, $pemilik_doc);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        $size = $row->size_tekprod;
+        $lembar = $row->lembar_tekprod;
+        $bobot_rev = $row->bobot_rev_tekprod;
+        $bobot_design = $row->bobot_design_tekprod;
+        $tipe = $row->tipe_tekprod;
+
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
+
+//*--------------------------------------------TP - SHOP DRAWING-----------------------------------------------*/
+
+public function fetch_data_sdr(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $pemilik_doc = 'Shop Drawing';
+
+    $chart_data = $this->fetch_chart_tp_normal($id_proyek, $pemilik_doc);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
 
 
+public function fetch_data_sdr_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $pemilik_doc = 'Shop Drawing';
+
+    $chart_data = $this->fetch_chart_tp_bobot($id_proyek, $pemilik_doc);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        $size = $row->size_tekprod;
+        $lembar = $row->lembar_tekprod;
+        $bobot_rev = $row->bobot_rev_tekprod;
+        $bobot_design = $row->bobot_design_tekprod;
+        $tipe = $row->tipe_tekprod;
+
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
+
+
+//*--------------------------------------------TP - WELDING TECHNOLOGY-----------------------------------------------*/
+
+public function fetch_data_wlt(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $pemilik_doc = 'Welding Technology';
+
+    $chart_data = $this->fetch_chart_tp_normal($id_proyek, $pemilik_doc);
+
+    $chart_data = $chart_data->get();
+
+    $statusData = [];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        if (isset($statusData[$status])) {
+            $statusData[$status]++;
+        } else {
+            $statusData[$status] = 1;
+        }
+    }
+
+    $output = [];
+    foreach ($statusData as $status => $jumlah) {
+        $output[] = [
+            'status' => $status,
+            'jumlah' => $jumlah
+        ];
+    }
+    return response()->json($output);
+}
+
+
+public function fetch_data_wlt_bobot(Request $request)
+{
+    $id_proyek = $request->input('id_proyek');
+    $pemilik_doc = 'Welding Technology';
+
+    $chart_data = $this->fetch_chart_tp_bobot($id_proyek, $pemilik_doc);
+
+    $chart_data = $chart_data->get();
+    
+    $statusData = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    $totalStatus = [
+        'Open' => 0,
+        'Release' => 0,
+        'Proses Revisi' => 0,
+    ];
+
+    foreach ($chart_data as $row) {
+        $status = $row->status_tekprod;
+        $size = $row->size_tekprod;
+        $lembar = $row->lembar_tekprod;
+        $bobot_rev = $row->bobot_rev_tekprod;
+        $bobot_design = $row->bobot_design_tekprod;
+        $tipe = $row->tipe_tekprod;
+
+        $jumlah = $size * $lembar * $tipe * ($bobot_rev/3) * ($bobot_design/3);
+
+        $totalStatus[$status] += $jumlah;
+    }
+
+    $totalJumlah = array_sum($totalStatus);
+
+    $output = [];
+    foreach ($totalStatus as $status => $total) {
+        if ($totalJumlah != 0) {
+            $prosentase = ($total / $totalJumlah) * 100;
+        } else {
+            $prosentase = 0;
+        }
+        $output[] = [
+            'status' => $status,
+            'prosentase' => $prosentase,
+        ];
+    }
+
+    return response()->json($output);
+}
 
 
 

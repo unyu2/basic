@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Car
+    Daftar Trainset
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar Car</li>
+    <li class="active">Daftar Trainset</li>
 @endsection
 
 @section('content')
@@ -69,7 +69,7 @@
 
     function addForm(url) {
         $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Tambah car');
+        $('#modal-form .modal-title').text('Tambah Trainset');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
@@ -79,7 +79,7 @@
 
     function editForm(url) {
         $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Edit car');
+        $('#modal-form .modal-title').text('Edit Trainset');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);

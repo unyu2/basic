@@ -553,6 +553,8 @@
             $('#modal-form4 [name=bobot_rev_tekprod]').val(response.bobot_rev_tekprod);
             $('#modal-form4 [name=bobot_design_tekprod]').val(response.bobot_design_tekprod);
             $('#modal-form4 [name=pemilik_tekprod]').val(response.pemilik_tekprod);
+            $('#modal-form4 [name=status_tekprod]').val(response.status_tekprod);
+
 
         })
         .fail((errors) => {

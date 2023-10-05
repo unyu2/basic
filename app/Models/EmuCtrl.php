@@ -27,6 +27,10 @@ class EmuCtrl extends Model
     {
         return $this->belongsto(User::class, 'id', 'id_user');
     }
+    public function car()
+    {
+        return $this->belongsto(Car::class, 'id_car', 'id_car');
+    }
     public function proyek()
     {
         return $this->belongsto(Proyek::class, 'id_proyek', 'id_proyek');

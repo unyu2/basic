@@ -94,44 +94,6 @@
     }
 
 
-
-    $(document).ready(function() {
-    $('#modal-form3 form').submit(function(e) {
-        e.preventDefault();
-
-        let formData = new FormData(this);
-
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                $('#modal-form3').modal('hide');
-                alert(data.message);
-                // Refresh halaman atau lakukan tindakan lain setelah berhasil menyimpan
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                let err = xhr.responseJSON;
-                // Tampilkan pesan error jika diperlukan
-                if (err.errors) {
-                    let errorMessage = '';
-                    Object.values(err.errors).forEach((errorMessages) => {
-                        errorMessage += errorMessages.join('\n') + '\n';
-                    });
-                    alert(errorMessage);
-                } else {
-                    alert('CAN NOT SAVE - Pastikan Jumlah Karakter Sesuai - Pastikan Ukuran Gambar Max 100Kb');
-                }
-            }
-        });
-    });
-});
-
-
     // Fungsi untuk menampilkan pratinjau gambar
     function preview(selector, file, maxWidth) {
     if (file) {
@@ -471,40 +433,20 @@
     }
 
     $(document).ready(function() {
-    $('#modal-form2 form').submit(function(e) {
-        e.preventDefault();
-
-        let formData = new FormData(this);
-
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                $('#modal-form2').modal('hide');
-                alert(data.message);
-                // Refresh halaman atau lakukan tindakan lain setelah berhasil menyimpan
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                let err = xhr.responseJSON;
-                // Tampilkan pesan error jika diperlukan
-                if (err.errors) {
-                    let errorMessage = '';
-                    Object.values(err.errors).forEach((errorMessages) => {
-                        errorMessage += errorMessages.join('\n') + '\n';
-                    });
-                    alert(errorMessage);
-                } else {
-                    alert('CAN NOT SAVE - Pastikan Jumlah Karakter Sesuai - Pastikan Ukuran Gambar Max 100Kb');
-                }
-            }
+        $('#modal-form3').validator().on('submit', function(e) {
+            e.preventDefault(); 
+            console.log('Mengirim permintaan AJAX...');
+            $.post($('#modal-form3 form').attr('action'), $('#modal-form3 form').serialize())
+                .done(function(response) {
+                    $('#modal-form3').modal('hide');
+                    table.ajax.reload();
+                })
+                .fail(function(errors) {
+                    console.log('Permintaan AJAX gagal:', errors);
+                    alert('Tidak dapat menyimpan data | Periksa kembali :)');
+                });
         });
     });
-});
 
     function deleteData(url) {
         if (confirm('Yakin ingin menghapus data terpilih?')) {

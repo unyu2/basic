@@ -239,12 +239,12 @@ class DesignController extends Controller
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
                 if ($design->status !== 'Release') {
-                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
                     $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
                 }
                 if ($design->status === 'Release') {
                     $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>'; 
                 }
+                $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
                 $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
                 $buttons .= '</div>';
                 return $buttons;
@@ -292,12 +292,12 @@ class DesignController extends Controller
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
                 if ($design->status !== 'Release') {
-                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
                     $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
                 }
                 if ($design->status === 'Release') {
                     $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>'; 
                 }
+                $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
                 $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
                 $buttons .= '</div>';
                 return $buttons;
