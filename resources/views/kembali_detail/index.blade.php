@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Transaksi Pinjam
+    Transaksi Pengembalian Barang
 @endsection
 
 @push('css')
@@ -25,7 +25,7 @@
         background: #f0f0f0;
     }
 
-    .table-pinjam tbody tr:last-child {
+    .table-kembali tbody tr:last-child {
         display: none;
     }
 
@@ -46,7 +46,7 @@
 
 @section('breadcrumb')
     @parent
-    <li class="active">Transaksi Peminjaman Inventaris</li>
+    <li class="active">Transaksi Pengembalian Barang</li>
 @endsection
 
 @section('content')
@@ -72,7 +72,7 @@
                     </div>
                 </form>
 
-                <table class="table table-stiped table-bordered table-pinjam">
+                <table class="table table-stiped table-bordered table-kembali">
                     <thead>
                         <th width="5%">No</th>
                         <th>Kode</th>
@@ -83,7 +83,7 @@
                 </table>
                 <div class="row">
                     <div class="col-lg-5">
-                        <form action="{{ route('transaksi_pinjam.simpan') }}" class="form-pinjam" method="post">
+                        <form action="{{ route('transaksi_pengembalian.simpan') }}" class="form-kembali" method="post">
                             @csrf
                             <input type="hidden" name="id_pinjam" value="{{ $id_pinjam }}">
                             <input type="hidden" name="total_item" id="total_item">
@@ -116,7 +116,7 @@
     </div>
 </div>
 
-@includeIf('pinjam_detail.barang')
+@includeIf('kembali_detail.barang')
 @endsection
 
 @push('scripts')
@@ -127,13 +127,13 @@
 
     $(function () {
         $('body').addClass('sidebar-collapse');
-        table = $('.table-pinjam').DataTable({
+        table = $('.table-kembali').DataTable({
             responsive: true,
             processing: true,
             serverSide: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('transaksi_pinjam.data', $id_pinjam) }}',
+                url: '{{ route('transaksi_pengembalian.data', $id_pinjam) }}',
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
@@ -163,7 +163,7 @@
                 return;
             }
 
-            $.post(`{{ url('/transaksi_pinjam') }}/${id}`, {
+            $.post(`{{ url('/transaksi_pengembalian') }}/${id}`, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'put',
                     'jumlah': jumlah
@@ -180,7 +180,7 @@
         });
 
         $('.btn-simpan').on('click', function () {
-            $('.form-pinjam').submit();
+            $('.form-kembali').submit();
         });
     });
 
@@ -201,7 +201,7 @@
     }
 
     function tambahBarang() {
-    $.post('{{ route('transaksi_pinjam.store') }}', $('.form-barang').serialize())
+    $.post('{{ route('transaksi_pengembalian.store') }}', $('.form-barang').serialize())
         .done(response => {
             $('#kode_barang').focus();
             table.ajax.reload();
@@ -234,7 +234,7 @@ function deleteData(url) {
         $('#total').val($('.total').text());
         $('#total_item').val($('.total_item').text());
 
-        $.get(`{{ url('/transaksi_pinjam/loadform') }}/${diskon}/${$('.total').text()}/${diterima}`)
+        $.get(`{{ url('/transaksi_pengembalian/loadform') }}/${diskon}/${$('.total').text()}/${diterima}`)
             .done(response => {
                 $('#totalrp').val('Rp. '+ response.totalrp);
                 $('#bayarrp').val('Rp. '+ response.bayarrp);

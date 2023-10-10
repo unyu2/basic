@@ -190,8 +190,6 @@
         });
         table2 = $('.table-produk').DataTable();
 
-//hhhhhh
-
         $(document).on('input', '.quantity', function () {
             let id = $(this).data('id');
             let jumlah = parseInt($(this).val());

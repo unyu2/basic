@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\Setting;
 use PDF;
 
-class PinjamController extends Controller
+class KembaliController extends Controller
 {
     public function index()
     {
@@ -33,8 +33,8 @@ class PinjamController extends Controller
             ->addColumn('aksi', function ($pinjam) {
                 return '
                 <div class="btn-group">
-                    <button onclick="showDetail(`'. route('pinjam.show', $pinjam->id_pinjam) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
-                    <button onclick="deleteData(`'. route('pinjam.destroy', $pinjam->id_pinjam) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                    <button onclick="showDetail(`'. route('kembali.show', $pinjam->id_pinjam) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
+                    <button onclick="deleteData(`'. route('kembali.destroy', $pinjam->id_pinjam) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 ';
             })
@@ -52,7 +52,7 @@ class PinjamController extends Controller
         $pinjam->save();
 
         session(['id_pinjam' => $pinjam->id_pinjam]);
-        return redirect()->route('transaksi_pinjam.index');
+        return redirect()->route('transaksi_pengembalian.index');
     }
 
     public function store(Request $request)
@@ -66,11 +66,11 @@ class PinjamController extends Controller
         $detail = PinjamDetail::where('id_pinjam', $pinjam->id_pinjam)->get();
         foreach ($detail as $item) {
             $barang = Barang::find($item->id_barang);
-            $barang->stok -= $item->jumlah;
+            $barang->stok += $item->jumlah;
             $barang->update();
         }
 
-        return redirect()->route('transaksi_pinjam.selesai');
+        return redirect()->route('transaksi_pengembalian.selesai');
     }
 
     public function show($id)
@@ -100,7 +100,7 @@ class PinjamController extends Controller
         foreach ($detail as $item) {
             $barang = Barang::find($item->id_barang);
             if ($barang) {
-                $barang->stok -= $item->jumlah;
+                $barang->stok += $item->jumlah;
                 $barang->update();
             }
 
@@ -116,7 +116,6 @@ class PinjamController extends Controller
     {
         $setting = Setting::first();
 
-        return view('pinjam.selesai', compact('setting'));
+        return view('kembali.selesai', compact('setting'));
     }
 }
-

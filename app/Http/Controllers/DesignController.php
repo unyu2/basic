@@ -233,23 +233,27 @@ class DesignController extends Controller
                         return '-' . $selisihHari . ' Hari';
                     }
                 } else {
-                    return ''; // Return empty string for 'Release' status
+                    return '';
                 }
             })
             ->addColumn('aksi', function ($design) {
                 $buttons = '<div class="btn-group">';
-                if ($design->status !== 'Release') {
+                if ($design->status != 'Release') {
                     $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
                 }
-                if ($design->status === 'Release') {
-                    $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>'; 
+                elseif ($design->status != 'Proses Revisi') {
+                    $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                    $buttons .= '<button type="button" onclick="editForm2(`'. route('design.updatex', $design->id_design) .'`)" class="btn btn-xs btn-primary btn-flat"><i class="fa fa-reply-all">Rev</i></button>';
+                    $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
                 }
-                $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
-                $buttons .= '<button type="button" onclick="showDetail(`'. route('design.showDetail', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-eye"></i></button>';
+                elseif ($design->status != 'Open') {
+                    $buttons .= '<button type="button" onclick="deleteData(`'. route('design.destroy', $design->id_design) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>';
+                    $buttons .= '<button type="button" onclick="editForm4(`'. route('design.update', $design->id_design) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil">Edit</i></button>';
+                }
                 $buttons .= '</div>';
                 return $buttons;
             })
-            
             ->rawColumns(['aksi', 'id_design', 'select_all'])
             ->make(true);
     }
@@ -460,7 +464,7 @@ public function stores(Request $request)
         $design->bobot_design = $request->bobot_design;
         $design->lembar = $request->lembar;
         $design->size = $request->size;
-        $design->prediksi_hari = $design->lembar * $design->size / 8; //tipe integer
+        $design->prediksi_hari = $design->lembar * $design->size / 8;
 
         $design->tanggal_prediksi = \Carbon\Carbon::now()->format('Y-m-d');
         $design->prediksi_akhir = \Carbon\Carbon::parse($design->tanggal_prediksi)->addDays($design->prediksi_hari)->format('Y-m-d'); //tipe date
@@ -482,15 +486,12 @@ public function stores(Request $request)
 
     public function storeRevisi(Request $request)
     {
-        // Mencari data dengan kode yang sama
         $existingDesign = Design::where('kode_design', $request->kode_design)->first();
     
-        // Jika ada data dengan kode yang sama, hapus data tersebut
         if ($existingDesign) {
             $existingDesign->delete();
         }
-    
-        // Buat dan simpan data baru
+
         $design = Design::create($request->all());
         $design->kode_design = $request->kode_design;
     
@@ -523,7 +524,7 @@ public function stores(Request $request)
     
     public function updatex(Request $request, $id)
     {
-            $design = Design::find($id);
+        $design = Design::find($id);
 
             if ($design) {
                 $nilairev = $design->revisi;
@@ -678,10 +679,8 @@ public function stores(Request $request)
     
             return redirect()->route('design.index')->with('success', 'Import data berhasil.');
         } catch (\Exception $e) {
-
             return redirect()->route('design.index')->with('error', 'Import data gagal: ' . $e->getMessage() . ' Line: ' . $e->getLine());
         }
     }
-    
 
 }

@@ -15,7 +15,6 @@ class MintaController extends Controller
 {
     public function index()
     {
-        // return view('minta.index');
         $produks = Produk::orderby('id_produk', 'asc');
         $produk = Produk::all()->pluck('nama_produk', 'id_produk');
         $proyek = Proyek::all()->pluck('nama_proyek', 'id_proyek');
@@ -45,8 +44,13 @@ class MintaController extends Controller
             })
             ->addColumn('aksi', function ($minta) {
                 $buttons = '<div class="btn-group">';
-                $buttons .= '<button type="button" onclick="editForm2(`'. route('minta.update', $minta->id_permintaan_detail) .'`)" class="btn btn-block btn-success btn-xs">Process PO</button>';
                 if ($minta->status2 !== 'PR') {
+                    $buttons .= '<button type="button" onclick="editForm(`'. route('minta.update', $minta->id_permintaan_detail) .'`)" class="btn btn-block btn-success btn-xs">Process PR</button>';
+                }
+                elseif ($minta->status3 !== 'PO') {
+                    $buttons .= '<button type="button" onclick="editForm2(`'. route('minta.update', $minta->id_permintaan_detail) .'`)" class="btn btn-block btn-success btn-xs">Process PO</button>';
+                }
+                elseif ($minta->status !== 'Diterima') {
                     $buttons .= '<button type="button" onclick="editForm(`'. route('minta.update', $minta->id_permintaan_detail) .'`)" class="btn btn-block btn-success btn-xs">Process PR</button>';
                 }
                 $buttons .= '</div>';

@@ -67,6 +67,8 @@ use App\Http\Controllers\{
     PartController,
     PinjamController,
     PinjamDetailController,
+    KembaliController,
+    KembaliDetailController,
     BarangController,
     DmuController,
     DmuapvController,
@@ -514,15 +516,30 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('/penjualan/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
         Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
 
+        Route::get('/pemesanan/data', [PemesananController::class, 'data'])->name('pemesanan.data');
+        Route::get('/pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
+        Route::get('/pemesanan/{id}', [PemesananController::class, 'show'])->name('pemesanan.show');
+        Route::delete('/pemesanan/{id}', [PemesananController::class, 'destroy'])->name('pemesanan.destroy');
+
         Route::get('/pinjam/data', [PinjamController::class, 'data'])->name('pinjam.data');
         Route::get('/pinjam', [PinjamController::class, 'index'])->name('pinjam.index');
         Route::get('/pinjam/{id}', [PinjamController::class, 'show'])->name('pinjam.show');
         Route::delete('/pinjam/{id}', [PinjamController::class, 'destroy'])->name('pinjam.destroy');
 
-        Route::get('/pemesanan/data', [PemesananController::class, 'data'])->name('pemesanan.data');
-        Route::get('/pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
-        Route::get('/pemesanan/{id}', [PemesananController::class, 'show'])->name('pemesanan.show');
-        Route::delete('/pemesanan/{id}', [PemesananController::class, 'destroy'])->name('pemesanan.destroy');
+        Route::get('/kembali', [KembaliController::class, 'index'])->name('kembali.index');
+        Route::get('/kembali/data', [KembaliController::class, 'data'])->name('kembali.data');
+        Route::get('/kembali/{id}', [KembaliController::class, 'show'])->name('kembali.show');
+        Route::delete('/kembali/{id}', [KembaliController::class, 'destroy'])->name('kembali.destroy');
+
+        Route::get('/transaksi_pengembalian/baru', [KembaliController::class, 'create'])->name('transaksi_pengembalian.baru');
+        Route::post('/transaksi_pengembalian/simpan', [KembaliController::class, 'store'])->name('transaksi_pengembalian.simpan');
+        Route::get('/transaksi_pengembalian/selesai', [KembaliController::class, 'selesai'])->name('transaksi_pengembalian.selesai');
+        Route::get('/transaksi_pengembalian/nota-kecil', [KembaliController::class, 'notaKecil'])->name('transaksi_pengembalian.nota_kecil');
+        Route::get('/transaksi_pengembalian/nota-besar', [KembaliController::class, 'notaBesar'])->name('transaksi_pengembalian.nota_besar');
+
+        Route::get('/transaksi_pengembalian/{id}/data', [KembaliDetailController::class, 'data'])->name('transaksi_pengembalian.data');
+        Route::get('/transaksi_pengembalian/loadform/{diskon}/{total}/{diterima}', [KembaliDetailController::class, 'loadForm'])->name('transaksi_pengembalian.load_form');
+        Route::resource('/transaksi_pengembalian', KembaliDetailController::class);
 
     });
 
@@ -541,14 +558,15 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
     });
 
     Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
-        Route::get('/transaksi/baru', [PinjamController::class, 'create'])->name('transaksi.baru');
-        Route::post('/transaksi/simpan', [PinjamController::class, 'store'])->name('transaksi.simpan');
-        Route::get('/transaksi/selesai', [PinjamController::class, 'selesai'])->name('transaksi.selesai');
+        Route::get('/transaksi_pinjam/baru', [PinjamController::class, 'create'])->name('transaksi_pinjam.baru');
+        Route::post('/transaksi_pinjam/simpan', [PinjamController::class, 'store'])->name('transaksi_pinjam.simpan');
+        Route::get('/transaksi_pinjam/selesai', [PinjamController::class, 'selesai'])->name('transaksi_pinjam.selesai');
+        Route::get('/transaksi_pinjam/nota-kecil', [PinjamController::class, 'notaKecil'])->name('transaksi_pinjam.nota_kecil');
+        Route::get('/transaksi_pinjam/nota-besar', [PinjamController::class, 'notaBesar'])->name('transaksi_pinjam.nota_besar');
 
-        Route::get('/transaksi/{id}/data', [PinjamDetailController::class, 'data'])->name('transaksi.data');
-        Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PinjamDetailController::class, 'loadForm'])->name('transaksi.load_form');
-        Route::resource('/transaksi', PinjamDetailController::class)
-        ->except('create', 'show', 'edit');
+        Route::get('/transaksi_pinjam/{id}/data', [PinjamDetailController::class, 'data'])->name('transaksi_pinjam.data');
+        Route::get('/transaksi_pinjam/loadform/{diskon}/{total}/{diterima}', [PinjamDetailController::class, 'loadForm'])->name('transaksi_pinjam.load_form');
+        Route::resource('/transaksi_pinjam', PinjamDetailController::class);
 
     });
 

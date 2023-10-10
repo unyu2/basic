@@ -60,7 +60,7 @@
                     <button onclick="cetakPdf('{{ route('design.cetakPdf') }}')" class="btn btn bg-maroon btn-flat"><i class="fa fa-trash"></i> PDF</button>
                 </div>          
             </div>
-            @if (auth()->user()->level == 2 || auth()->user()->level == 3 || auth()->user()->level == 4 )
+            @if (auth()->user()->level == 2 || auth()->user()->level == 3 || auth()->user()->level == 4 || auth()->user()->level == 13|| auth()->user()->level == 14 )
             <div class="box-body table-responsive">
                 <form action="" method="post" class="form-design">
                     @csrf
@@ -301,7 +301,6 @@
         });
     }
 
-
     function tambahBaru(url) {
         $('#modal-form3').modal('show');
         $('#modal-form3 .modal-title').text('Buat Data Dokumen Baru');
@@ -311,22 +310,21 @@
         $('#modal-form3 [name=_method]').val('post');
         $('#modal-form3 [name=nama_design]').focus();
     }
-
         $(document).ready(function() {
-        $('#modal-form3').validator().on('submit', function(e) {
-            e.preventDefault(); 
-            console.log('Mengirim permintaan AJAX...');
-            $.post($('#modal-form3 form').attr('action'), $('#modal-form3 form').serialize())
-                .done(function(response) {
-                    $('#modal-form3').modal('hide');
-                    table.ajax.reload();
-                })
-                .fail(function(errors) {
-                    console.log('Permintaan AJAX gagal:', errors);
-                    alert('Tidak dapat menyimpan data | Periksa kembali :)');
-                });
+            $('#modal-form3').validator().on('submit', function(e) {
+                e.preventDefault(); 
+                console.log('Mengirim permintaan AJAX...');
+                $.post($('#modal-form3 form').attr('action'), $('#modal-form3 form').serialize())
+                    .done(function(response) {
+                        $('#modal-form3').modal('hide');
+                        table.ajax.reload();
+                    })
+                    .fail(function(errors) {
+                        console.log('Permintaan AJAX gagal:', errors);
+                        alert('Tidak dapat menyimpan data | Periksa kembali :)');
+                    });
+            });
         });
-    });
 
 
     function addBaru() {
@@ -334,48 +332,48 @@
     }
 
     function pilihBaru(url) {
-    $.ajax({
-        url: url,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            console.log('Data dari server:', data);
-            $('#id_design').val(data.id_design);
-            $('#nama_design').val(data.nama_design);
-            $('#kode_design').val(data.kode_design);
-            $('#id_kepala_gambar').val(data.id_kepala_gambar);
-            $('#id_proyek').val(data.id_proyek);
-            $('#revisi').val(data.revisi);
-            $('#bobot_rev').val(data.bobot_rev);
-            $('#bobot_design').val(data.bobot_design);
-            $('#status').val(data.status);
-            $('#size').val(data.size);
-            $('#lembar').val(data.lembar);
-            $('#konfigurasi').val(data.konfigurasi);
-            $('#id_draft').val(data.id_draft);
-            $('#id_check').val(data.id_check);
-            $('#id_approve').val(data.id_approve);
-            $('#prosentase').val(data.prosentase);
-            $('#pemilik').val(data.pemilik);
-            $('#jenis').val(data.jenis);
-            $('#rev_for_curva').val(data.rev_for_curva);
-            $('#duplicate_status').val(data.duplicate_status);
-            $('#time_release_rev0').val(data.time_release_rev0);
-            $('#tipe').val(data.tipe);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log('Data dari server:', data);
+                $('#id_design').val(data.id_design);
+                $('#nama_design').val(data.nama_design);
+                $('#kode_design').val(data.kode_design);
+                $('#id_kepala_gambar').val(data.id_kepala_gambar);
+                $('#id_proyek').val(data.id_proyek);
+                $('#revisi').val(data.revisi);
+                $('#bobot_rev').val(data.bobot_rev);
+                $('#bobot_design').val(data.bobot_design);
+                $('#status').val(data.status);
+                $('#size').val(data.size);
+                $('#lembar').val(data.lembar);
+                $('#konfigurasi').val(data.konfigurasi);
+                $('#id_draft').val(data.id_draft);
+                $('#id_check').val(data.id_check);
+                $('#id_approve').val(data.id_approve);
+                $('#prosentase').val(data.prosentase);
+                $('#pemilik').val(data.pemilik);
+                $('#jenis').val(data.jenis);
+                $('#rev_for_curva').val(data.rev_for_curva);
+                $('#duplicate_status').val(data.duplicate_status);
+                $('#time_release_rev0').val(data.time_release_rev0);
+                $('#tipe').val(data.tipe);
 
-            $('#id_refrensi').val(data.id_refrensi);
-            $('#refrensi_design').val(data.refrensi_design);
-            $('#tanggal_refrensi').val(data.tanggal_refrensi);
-            $('#tanggal_prediksi').val(data.tanggal_prediksi);
-            $('#prediksi_hari').val(data.prediksi_hari);
-            
-            $('#modal-dwg2').modal('hide');
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            console.error('Terjadi kesalahan saat mengambil data design:', textStatus, errorThrown);
-        }
-    });
-}
+                $('#id_refrensi').val(data.id_refrensi);
+                $('#refrensi_design').val(data.refrensi_design);
+                $('#tanggal_refrensi').val(data.tanggal_refrensi);
+                $('#tanggal_prediksi').val(data.tanggal_prediksi);
+                $('#prediksi_hari').val(data.prediksi_hari);
+                
+                $('#modal-dwg2').modal('hide');
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.error('Terjadi kesalahan saat mengambil data design:', textStatus, errorThrown);
+            }
+        });
+    }
 
     function addForm(url) {
         $('#modal-form').modal('show');
@@ -428,7 +426,7 @@
                         .fail((errors) => {
                             alert('Tidak dapat menyimpan data | Periksa kembali :)');
                             return;
-                    });
+                        });
                 }
             });
 
@@ -449,8 +447,6 @@
                 $('#modal-form2 [name=revisi]').val(response.revisi);
                 $('#modal-form2 [name=bobot_rev]').val(response.bobot_rev);
                 $('#modal-form2 [name=tipe]').val(response.tipe);
-
- 
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');
@@ -559,48 +555,43 @@
         });
     }
 
-
     $('#modal-form4').validator().on('submit', function (e) {
-            if (! e.preventDefault()) {
-                $.post($('#modal-form4 form').attr('action'), $('#modal-form4 form').serialize())
-                    .done((response) => {
-                        $('#modal-form4').modal('hide');
-                        table.ajax.reload();
-                    })
-                    .fail((errors) => {
-                        alert('Tidak dapat menyimpan data | Periksa kembali :)');
-                        return;
-                    });
+        if (! e.preventDefault()) {
+            $.post($('#modal-form4 form').attr('action'), $('#modal-form4 form').serialize())
+                .done((response) => {
+                    $('#modal-form4').modal('hide');
+                    table.ajax.reload();
+                })
+                .fail((errors) => {
+                    alert('Tidak dapat menyimpan data | Periksa kembali :)');
+                    return;
+                });
             }
         });
 
-//-------------------------------------------------------------------------------------
     function showDetail(url) {
         $('#modal-detail').modal('show');
         tableDetail.ajax.url(url);
         tableDetail.ajax.reload();
     }
-        $(function () {
-            tableDetail = $('.tableDetail').DataTable({
-                responsive: true,
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: {
-                    url: '{{ route('design.dataDetail') }}',
-                },
-                columns: [
-                    {data: 'DT_RowIndex', searchable: false, sortable: false},
-                    {data: 'kode_design'},
-                    {data: 'revisi'},
-                    {data: 'created_at'},
-                ]
-            });
+
+    $(function () {
+        tableDetail = $('.tableDetail').DataTable({
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: '{{ route('design.dataDetail') }}',
+            },
+            columns: [
+                {data: 'DT_RowIndex', searchable: false, sortable: false},
+                {data: 'kode_design'},
+                {data: 'revisi'},
+                {data: 'created_at'},
+            ]
+        });
     });
-
-    
-//-------------------------------------------------------------------------------------
-
 
 </script>
 @endpush

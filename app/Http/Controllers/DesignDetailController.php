@@ -103,10 +103,8 @@ class DesignDetailController extends Controller
                 $buttons = '<div class="btn-group">';
                 if ($design->status == 'Open' || $design->status == 'Proses Revisi') {
                     if ($design->revisi == 'Rev.0') {
-                        // Jika status adalah "Rev.0", tampilkan tombol "Release Rev.0"
                         $buttons .= '<button type="button" onclick="editForm3(`'. route('design_detail.updatex', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Rev. 0</i></button>';
                     } else {
-                        // Jika status bukan "Rev.0", tampilkan tombol "Release"
                         $buttons .= '<button type="button" onclick="editForm4(`'. route('design_detail.update', $design->id_design) .'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-reply-all">Release Revisi</i></button>';
                     }
                 }

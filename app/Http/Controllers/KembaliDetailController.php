@@ -9,7 +9,7 @@ use App\Models\Barang;
 use App\Models\User;
 use App\Models\Setting;
 
-class PinjamDetailController extends Controller
+class KembaliDetailController extends Controller
 {
     public function index()
     {
@@ -24,9 +24,9 @@ class PinjamDetailController extends Controller
             return view('pinjam_detail.index', compact('barang','id_pinjam', 'pinjam', 'peminjam'));
         } else {
             if (auth()->user()->level == 1) {
-                return redirect()->route('transaksi_pinjam.baru');
+                return redirect()->route('transaksi_pengembalian.baru');
             } else {
-                return redirect()->route('transaksi_pinjam.baru');
+                return redirect()->route('transaksi_pengembalian.baru');
             }
         }
     }
@@ -46,7 +46,7 @@ class PinjamDetailController extends Controller
             $row['nama_barang'] = $item->barang['nama_barang'];
             $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_pinjam_detail .'" value="'. $item->jumlah .'">';
             $row['aksi']        = '<div class="btn-group">
-                                    <button onclick="deleteData(`'. route('transaksi_pinjam.destroy', $item->id_pinjam_detail) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                                    <button onclick="deleteData(`'. route('transaksi_pengembalian.destroy', $item->id_pinjam_detail) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                                 </div>';
             $data[] = $row;
             $total_item += $item->jumlah;

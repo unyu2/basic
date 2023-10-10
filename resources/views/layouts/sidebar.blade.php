@@ -219,15 +219,20 @@
                     <i class="fa fa-upload"></i> <span>Data Out Barang</span>
                 </a>
             </li>
-            <li class="header">INVENTARIS</li>
+            <li class="header">INVENTARIS</li>fa-diamond
             <li>
                 <a href="{{ route('barang.index') }}">
                     <i class="fa fa-upload"></i> <span>Barang Inventaris</span>
                 </a>
             </li>
             <li>
-                <a href="{{ route('transaksi.index') }}">
-                    <i class="fa fa-download"></i> <span>Pinjam & Kembali Barang</span>
+                <a href="{{ route('transaksi_pinjam.index') }}">
+                    <i class="fa fa-download"></i> <span>Pinjam Barang</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('transaksi_pengembalian.index') }}">
+                    <i class="fa fa-upload"></i> <span>Kembali Barang </span>
                 </a>
             </li>
             <li class="header">KEUANGAN PROYEK</li>

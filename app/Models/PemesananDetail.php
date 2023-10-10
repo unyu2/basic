@@ -18,8 +18,8 @@ class PemesananDetail extends Model
         return $this->belongsTo(Produk::class, 'id_produk', 'id_produk');
     }
 
-    public function Pemesanan()
-    {
-        return $this->belongsTo(Pemesanan::class, 'id_pemesanan', 'id_pemesanan');
-    }
+ //   public function Pemesanan()
+ //   {
+ //       return $this->belongsTo(Pemesanan::class, 'id_pemesanan', 'id_pemesanan');
+ //   }
 }

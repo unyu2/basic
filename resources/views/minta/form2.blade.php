@@ -34,6 +34,7 @@
                         <div class="col-lg-6">
                             <select value="status" name="status" id="status" class="form-control" required>
                                         <option value="Diterima">Diterima</option>
+                                        <option value="Diterima">Ditolak</option>
                             </select>
                             <span class="help-block with-errors"></span>
                         </div>
