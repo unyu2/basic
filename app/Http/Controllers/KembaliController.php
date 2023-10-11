@@ -8,7 +8,6 @@ use App\Models\PinjamDetail;
 use App\Models\Barang;
 use App\Models\User;
 use App\Models\Setting;
-use PDF;
 
 class KembaliController extends Controller
 {
@@ -45,7 +44,8 @@ class KembaliController extends Controller
     public function create()
     {
         $pinjam = new Pinjam();
-        $pinjam->fungsi = 0;
+        $pinjam->kondisi = 0;
+        $pinjam->status = 'Kembali';
         $pinjam->id_peminjam = 0;
         $pinjam->total_item = 0;
         $pinjam->id_user = auth()->id();
@@ -59,7 +59,7 @@ class KembaliController extends Controller
     {
         $pinjam = Pinjam::findOrFail($request->id_pinjam);
         $pinjam->total_item = $request->total_item;
-        $pinjam->fungsi = $request->fungsi;
+        $pinjam->kondisi = $request->kondisi;
         $pinjam->id_peminjam = $request->id_peminjam;
         $pinjam->update();
 

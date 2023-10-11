@@ -21,7 +21,7 @@ class KembaliDetailController extends Controller
         if ($id_pinjam = session('id_pinjam')) {
             $pinjam = Pinjam::find($id_pinjam);
 
-            return view('pinjam_detail.index', compact('barang','id_pinjam', 'pinjam', 'peminjam'));
+            return view('kembali_detail.index', compact('barang','id_pinjam', 'pinjam', 'peminjam'));
         } else {
             if (auth()->user()->level == 1) {
                 return redirect()->route('transaksi_pengembalian.baru');

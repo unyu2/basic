@@ -46,6 +46,7 @@ class PinjamController extends Controller
     {
         $pinjam = new Pinjam();
         $pinjam->fungsi = 0;
+        $pinjam->status = 'Pinjam';
         $pinjam->id_peminjam = 0;
         $pinjam->total_item = 0;
         $pinjam->id_user = auth()->id();

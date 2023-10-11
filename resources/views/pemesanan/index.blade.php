@@ -59,7 +59,14 @@
             ]
         });
 
-        table1 = $('.table-detail').DataTable({
+    function showDetail(url) {
+        $('#modal-detail').modal('show');
+
+        table1.ajax.url(url);
+        table1.ajax.reload();
+    }
+
+    table1 = $('.table-detail').DataTable({
             processing: true,
             bSort: false,
             dom: 'Brt',
@@ -71,13 +78,6 @@
             ]
         })
     });
-
-    function showDetail(url) {
-        $('#modal-detail').modal('show');
-
-        table1.ajax.url(url);
-        table1.ajax.reload();
-    }
 
     function deleteData(url) {
         if (confirm('Yakin ingin menghapus data terpilih?')) {

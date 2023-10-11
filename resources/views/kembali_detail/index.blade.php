@@ -58,7 +58,7 @@
                 <form class="form-barang">
                     @csrf
                     <div class="form-group row">
-                        <label for="kode_barang" class="col-lg-2">Barang Inventaris</label>
+                        <label for="kode_barang" class="col-lg-2">Barang Inventaris Yang Dikembalikan</label>
                         <div class="col-lg-5">
                             <div class="input-group">
                                 <input type="hidden" name="id_pinjam" id="id_pinjam" value="{{ $id_pinjam }}">
@@ -88,9 +88,10 @@
                             <input type="hidden" name="id_pinjam" value="{{ $id_pinjam }}">
                             <input type="hidden" name="total_item" id="total_item">
                             <div class="form-group row">
-                                <label for="fungsi" class="col-lg-2 control-label">Digunakan Untuk ?</label>
+                                <label for="kondisi" class="col-lg-2 control-label">Kondisi</label>
                                 <div class="col-lg-12">
-                                    <input type="text" name="fungsi" id="fungsi" class="form-control">
+                                    <textarea type="text" name="kondisi" id="kondisi" class="form-control">
+                                    </textarea>
                                 </div>
                             </div>
                             <div class="form-group row">

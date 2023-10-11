@@ -69,6 +69,7 @@ use App\Http\Controllers\{
     PinjamDetailController,
     KembaliController,
     KembaliDetailController,
+    DataPinjamKembaliController,
     BarangController,
     DmuController,
     DmuapvController,
@@ -531,15 +532,10 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('/kembali/{id}', [KembaliController::class, 'show'])->name('kembali.show');
         Route::delete('/kembali/{id}', [KembaliController::class, 'destroy'])->name('kembali.destroy');
 
-        Route::get('/transaksi_pengembalian/baru', [KembaliController::class, 'create'])->name('transaksi_pengembalian.baru');
-        Route::post('/transaksi_pengembalian/simpan', [KembaliController::class, 'store'])->name('transaksi_pengembalian.simpan');
-        Route::get('/transaksi_pengembalian/selesai', [KembaliController::class, 'selesai'])->name('transaksi_pengembalian.selesai');
-        Route::get('/transaksi_pengembalian/nota-kecil', [KembaliController::class, 'notaKecil'])->name('transaksi_pengembalian.nota_kecil');
-        Route::get('/transaksi_pengembalian/nota-besar', [KembaliController::class, 'notaBesar'])->name('transaksi_pengembalian.nota_besar');
-
-        Route::get('/transaksi_pengembalian/{id}/data', [KembaliDetailController::class, 'data'])->name('transaksi_pengembalian.data');
-        Route::get('/transaksi_pengembalian/loadform/{diskon}/{total}/{diterima}', [KembaliDetailController::class, 'loadForm'])->name('transaksi_pengembalian.load_form');
-        Route::resource('/transaksi_pengembalian', KembaliDetailController::class);
+        Route::get('/data_pinjam_kembali/data', [DataPinjamKembaliController::class, 'data'])->name('data_pinjam_kembali.data');
+        Route::get('/data_pinjam_kembali/dataKembali', [DataPinjamKembaliController::class, 'dataKembali'])->name('data_pinjam_kembali.dataKembali');
+        Route::get('/data_pinjam_kembali/{id}', [DataPinjamKembaliController::class, 'showDetail'])->name('data_pinjam_kembali.showDetail');
+        Route::resource('/data_pinjam_kembali', DataPinjamKembaliController::class);
 
     });
 
@@ -555,6 +551,18 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::resource('/transaksi', PenjualanDetailController::class)
         ->except('create', 'show', 'edit');
 
+    });
+
+    Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {
+        Route::get('/transaksi_pengembalian/baru', [KembaliController::class, 'create'])->name('transaksi_pengembalian.baru');
+        Route::post('/transaksi_pengembalian/simpan', [KembaliController::class, 'store'])->name('transaksi_pengembalian.simpan');
+        Route::get('/transaksi_pengembalian/selesai', [KembaliController::class, 'selesai'])->name('transaksi_pengembalian.selesai');
+        Route::get('/transaksi_pengembalian/nota-kecil', [KembaliController::class, 'notaKecil'])->name('transaksi_pengembalian.nota_kecil');
+        Route::get('/transaksi_pengembalian/nota-besar', [KembaliController::class, 'notaBesar'])->name('transaksi_pengembalian.nota_besar');
+
+        Route::get('/transaksi_pengembalian/{id}/data', [KembaliDetailController::class, 'data'])->name('transaksi_pengembalian.data');
+        Route::get('/transaksi_pengembalian/loadform/{diskon}/{total}/{diterima}', [KembaliDetailController::class, 'loadForm'])->name('transaksi_pengembalian.load_form');
+        Route::resource('/transaksi_pengembalian', KembaliDetailController::class);
     });
 
     Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {

@@ -235,6 +235,11 @@
                     <i class="fa fa-upload"></i> <span>Kembali Barang </span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('data_pinjam_kembali.index') }}">
+                    <i class="fa fa-upload"></i> <span>Data Pinjam & Kembali</span>
+                </a>
+            </li>
             <li class="header">KEUANGAN PROYEK</li>
             <li>
                 <a href="{{ route('pengujian.index') }}">
