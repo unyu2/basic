@@ -16,9 +16,9 @@ class CreateEmuDetailTable extends Migration
         Schema::create('emu_detail', function (Blueprint $table) {
             $table->increments('id_emu_detail');
             $table->unsignedInteger('id_emu');
-            $table->foreign('id_emu')->references('id_emu')->on('emu')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_emu')->references('id_emu')->on('emu')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('id_produk');
-            $table->foreign('id_produk')->references('id_produk')->on('produk')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_produk')->references('id_produk')->on('produk')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('harga_beli');
             $table->integer('jumlah');
             $table->integer('subtotal');

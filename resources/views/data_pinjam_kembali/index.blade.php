@@ -76,24 +76,6 @@ $(function () {
     });
 });
 
-function deleteData(url) {
-    if (confirm('Yakin ingin menghapus data terpilih?')) {
-        $.post(url, {
-                '_token': $('[name=csrf-token]').attr('content'),
-                '_method': 'delete'
-            })
-            .done((response) => {
-                table.ajax.reload();
-                tableDetail.ajax.reload();
-                table1.ajax.reload();
-            })
-            .fail((errors) => {
-                alert('Tidak dapat menghapus data');
-                return;
-            });
-    }
-}
-
 function showDetail(url) {
     $('#modal-detail').modal('show');
     
@@ -118,9 +100,6 @@ function showDetail(url) {
 }
 
 
-
-//----------------------------------------------------------------------------------------------------//
-
 $(function () {
         table1 = $('#table1').DataTable({
             responsive: true,
@@ -138,5 +117,23 @@ $(function () {
             ]
         });
     });
+
+    function deleteData(url) {
+    if (confirm('Yakin ingin menghapus data terpilih?')) {
+        $.post(url, {
+                '_token': $('[name=csrf-token]').attr('content'),
+                '_method': 'delete'
+            })
+            .done((response) => {
+                table.ajax.reload();
+                tableDetail.ajax.reload();
+                table1.ajax.reload();
+            })
+            .fail((errors) => {
+                alert('Tidak dapat menghapus data');
+                return;
+            });
+    }
+}
 </script>
 @endpush

@@ -28,14 +28,14 @@ class DataPinjamKembaliController extends Controller
         $peminjaman = Pinjam::orderBy('id_pinjam', 'desc')
         ->where('status', 'pinjam')
         ->leftJoin('users', 'users.id', 'pinjam.id_peminjam')
-        ->select('pinjam.*', 'name')
+        ->select('pinjam.*', 'users.name as name')
         ->get();
 
         return datatables()
             ->of($peminjaman)
             ->addIndexColumn()
             ->editColumn('id_peminjam', function ($peminjaman) {
-                return $peminjaman->user->name ?? '';
+                return $peminjaman->name ?? '';
             })
             ->addColumn('aksi', function ($peminjaman) {
                 return '
@@ -51,17 +51,17 @@ class DataPinjamKembaliController extends Controller
 
     public function dataKembali()
     {
-        $peminjaman = Pinjam::orderBy('id_pinjam', 'desc')
+        $peminjaman = Pinjam::leftJoin('users', 'users.id', 'pinjam.id_peminjam')
         ->where('status', 'Kembali')
-        ->leftJoin('users', 'users.id', 'pinjam.id_peminjam')
-        ->select('pinjam.*', 'name')
+        ->orderBy('id_pinjam', 'desc')
+        ->select('pinjam.*', 'users.name as name')
         ->get();
 
         return datatables()
             ->of($peminjaman)
             ->addIndexColumn()
             ->editColumn('id_peminjam', function ($peminjaman) {
-                return $peminjaman->user->name ?? '';
+                return $peminjaman->name ?? '';
             })
             ->addColumn('aksi', function ($peminjaman) {
                 return '

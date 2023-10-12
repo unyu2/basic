@@ -17,14 +17,14 @@ class CreateEmuTable extends Migration
             $table->increments('id_emu');
 
             $table->unsignedInteger('id_dmu')->index();
-            $table->foreign('id_dmu')->references('id_dmu')->on('dmu')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_dmu')->references('id_dmu')->on('dmu')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedInteger('id_subpengujian')->nullable()->index();
-            $table->foreign('id_subpengujian')->references('id_subpengujian')->on('subpengujian')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_subpengujian')->references('id_subpengujian')->on('subpengujian')->onDelete('cascade')->onUpdate('restrict');
             $table->unsignedInteger('id_proyek')->nullable()->index();
-            $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('cascade')->onUpdate('restrict');
             $table->string('nama_proyeks',180)->nullable();
             $table->unsignedBigInteger('id_user')->nullable()->index();
-            $table->foreign('id_user')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('restrict');
             $table->string('id_users')->nullable()->index();
             $table->string('id_car')->nullable()->index();
 

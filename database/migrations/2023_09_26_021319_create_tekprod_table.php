@@ -17,9 +17,9 @@ class CreateTekprodTable extends Migration
             $table->increments('id_tekprod');
 
             $table->unsignedInteger('id_design')->nullable();
-            $table->foreign('id_design')->references('id_design')->on('design')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_design')->references('id_design')->on('design')->onDelete('cascade')->onUpdate('restrict');
             $table->unsignedInteger('id_proyek')->nullable();
-            $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('cascade')->onUpdate('restrict');
 
             $table->string('kode_tekprod')->nullable();
             $table->string('nama_tekprod')->nullable();

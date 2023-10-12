@@ -16,9 +16,9 @@ class CreatePenjualanDetailTable extends Migration
         Schema::create('penjualan_detail', function (Blueprint $table) {
             $table->increments('id_penjualan_detail');
             $table->unsignedInteger('id_penjualan');
-            $table->foreign('id_penjualan')->references('id_penjualan')->on('penjualan')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_penjualan')->references('id_penjualan')->on('penjualan')->onDelete('cascade')->onUpdate('restrict');
             $table->unsignedInteger('id_produk');
-            $table->foreign('id_produk')->references('id_produk')->on('produk')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_produk')->references('id_produk')->on('produk')->onDelete('cascade')->onUpdate('restrict');
             $table->integer('harga_jual')->default(0);
             $table->integer('jumlah');
             $table->integer('jumlah2')->nullable();

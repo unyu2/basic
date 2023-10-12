@@ -16,7 +16,7 @@ class CreateTekprodDetailTable extends Migration
         Schema::create('tekprod_detail', function (Blueprint $table) {
             $table->increments('id_tekprod_detail');
             $table->unsignedInteger('id_tekprod');
-            $table->foreign('id_tekprod')->references('id_tekprod')->on('tekprod')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_tekprod')->references('id_tekprod')->on('tekprod')->onDelete('cascade')->onUpdate('restrict');
 
             $table->string('kode_tekprod');
             $table->string('revisi_tekprod');

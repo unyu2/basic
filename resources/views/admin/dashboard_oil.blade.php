@@ -129,7 +129,7 @@
             <div class="inner">
                 <h3>{{ number_format ($temuan3, 2) }}%</h3>
 
-                <p>Progress <p> OIL</p>
+                <p>Progress OIL</p> Dengan Bobot
             </div>
             <div class="icon">
                 <i class="fa fa-train"></i>

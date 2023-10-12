@@ -17,9 +17,9 @@ class CreateDesignTable extends Migration
             $table->increments('id_design');
 
             $table->unsignedInteger('id_kepala_gambar')->nullable();
-            $table->foreign('id_kepala_gambar')->references('id_kepala_gambar')->on('kepala_gambar')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_kepala_gambar')->references('id_kepala_gambar')->on('kepala_gambar')->onDelete('cascade')->onUpdate('restrict');
             $table->unsignedInteger('id_proyek')->nullable();
-            $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('cascade')->onUpdate('restrict');
 
             $table->string('kode_design')->nullable();
             $table->string('nama_design')->nullable();

@@ -17,7 +17,7 @@ class CreatePemintaanTable extends Migration
             $table->increments('id_permintaan');
 
             $table->unsignedInteger('id_proyek')->nullable();
-            $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('cascade')->onUpdate('restrict');
             $table->string('memo')->nullable()->index();
             $table->string('nama_proyeks')->nullable();
             $table->integer('id_user')->nullable()->index();

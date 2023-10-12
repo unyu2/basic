@@ -536,7 +536,6 @@ Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], func
         Route::get('/data_pinjam_kembali/dataKembali', [DataPinjamKembaliController::class, 'dataKembali'])->name('data_pinjam_kembali.dataKembali');
         Route::get('/data_pinjam_kembali/{id}', [DataPinjamKembaliController::class, 'showDetail'])->name('data_pinjam_kembali.showDetail');
         Route::resource('/data_pinjam_kembali', DataPinjamKembaliController::class);
-
     });
 
     Route::group(['middleware' => 'level:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15'], function () {

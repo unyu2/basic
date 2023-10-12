@@ -17,7 +17,10 @@ class CreatePinjamTable extends Migration
             $table->increments('id_pinjam');
             $table->integer('id_user')->nullable();
             $table->foreign('id_user')->references('id_user')->on('user')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('id_peminjam')->nullable();
+            $table->foreign('id_peminjam')->references('id_user')->on('user')->onDelete('cascade')->onUpdate('cascade');
             $table->string('fungsi');
+            $table->string('kondisi');
             $table->integer('total_item')->nullable();
             $table->timestamps();
         });
