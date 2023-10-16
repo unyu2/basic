@@ -109,7 +109,7 @@ class DesignController extends Controller
             ->leftJoin('users as check_user', 'check_user.id', '=', 'design.id_check')
             ->leftJoin('users as approve_user', 'approve_user.id', '=', 'design.id_approve')
             ->leftJoin('users as draft_user', 'draft_user.id', '=', 'design.id_draft')
-            ->select('design.*', 'nama_proyek', 'nama', 'design.jenis', 'design.status as design_status', 'proyek.status as proyek_status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
+            ->select('design.*', 'nama_proyek', 'kepala_gambar.nama', 'design.jenis', 'design.status as design_status', 'proyek.status as proyek_status', 'check_user.name as check_user_name', 'approve_user.name as approve_user_name', 'draft_user.name as draft_user_name')
             ->where('jenis', 'Doc')
             ->where(function ($query) {
                 $query->where('proyek.status', 'Open');

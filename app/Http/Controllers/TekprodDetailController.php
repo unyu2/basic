@@ -153,7 +153,7 @@ class TekprodDetailController extends Controller
 
         $tekprod = Tekprod::leftJoin('design', 'design.id_design', 'tekprod.id_design')
             ->leftJoin('proyek', 'proyek.id_proyek', 'tekprod.id_proyek')
-            ->select('tekprod.*', 'nama', 'nama_proyek')
+            ->select('tekprod.*', 'nama_proyek')
             ->orderBy('id_tekprod', 'DESC')
             ->get();
 

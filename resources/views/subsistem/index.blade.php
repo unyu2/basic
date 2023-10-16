@@ -90,6 +90,7 @@
 
         $.get(url)
             .done((response) => {
+                $('#modal-form [name=id_sistem]').val(response.id_sistem);
                 $('#modal-form [name=kode_subsistem]').val(response.kode_subsistem);
                 $('#modal-form [name=nama_subsistem]').val(response.nama_subsistem);
                 $('#modal-form [name=bobot]').val(response.bobot);

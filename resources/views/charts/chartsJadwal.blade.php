@@ -179,18 +179,15 @@ Overall Design & Engineering Schedule
 
       var designData = @json($design);
 
-if (designData.length > 0) {
-    for (var i = 0; i < designData.length; i++) {
-        var item = designData[i];
-        data.addRows([
-            [item.id_design.toString(), item.kode_design + ' - ' + item.nama_design, item.refrensi_design,
-            new Date(item.tp_yy, item.tp_mm - 1, item.tp_dd), new Date(item.pa_yy, item.pa_mm - 1, item.pa_dd), item.prediksi_hari, item.prosentase, null],
-        ]);
-    }
-} else {
+      for (var i = 0; i < designData.length; i++) {
+    var item = designData[i];
+    var duration = item.prediksi_hari === null ? 0 : item.prediksi_hari;
 
+    data.addRows([
+        [item.id_design.toString(), item.kode_design + ' - ' + item.nama_design, item.refrensi_design,
+        new Date(item.tp_yy, item.tp_mm - 1, item.tp_dd), new Date(item.pa_yy, item.pa_mm - 1, item.pa_dd), duration, item.prosentase, null],
+    ]);
 }
-
       var options = {
         height: 100000,
         gantt: {

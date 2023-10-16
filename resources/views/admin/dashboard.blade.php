@@ -35,27 +35,6 @@
         </div>
     </div>
 </div>
-<!--
-<div class="row">
-    <div class="col-lg-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">My Performance {{ tanggal_indonesia($tanggal_awal, false) }} s/d {{ tanggal_indonesia($tanggal_akhir, false) }}</h3>
-            </div>
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="chart">
-                            <canvas id="kurvas" style="height: 280px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
--->
-
 <div class="row">
     <div class="col-lg-6">
         <div class="box">
@@ -158,19 +137,19 @@ $(function() {
 
   function drawChart() {
     var data = google.visualization.arrayToDataTable([
-      ["Status", "Count", { role: "style" }], // Tambahkan kolom style
-      ["Open", {{ json_encode($job_open) }}, "red"], // Berikan warna merah
-      ["Release", {{ json_encode($job_closed) }}, "green"], // Berikan warna hijau
-      ["Proses Revisi", {{ json_encode($job_revisi) }}, "orange"], // Berikan warna Hitam
+      ["Status", "Count", { role: "style" }],
+      ["Open", {{ $job_open }}, "red"],
+      ["Release", {{ $job_closed }}, "green"],
+      ["Proses Revisi", {{ $job_revisi }}, "orange"],
     ]);
 
     var options = {
       title: "Dalam Satuan Jumlah Doc Output",
       is3D: true,
       slices: {
-        0: { color: "red" }, // Atur warna merah untuk "Open"
-        1: { color: "green" }, // Atur warna hijau untuk "Closed"
-        2: { color: "orange" }, // Atur warna hijau untuk "Proses Revisi"
+        0: { color: "red" },
+        1: { color: "green" },
+        2: { color: "orange" },
       },
     };
 
@@ -212,6 +191,7 @@ $(function() {
     chart.draw(data, options);
   }
 </script>
+
 
 
 

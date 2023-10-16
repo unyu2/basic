@@ -21,8 +21,8 @@ class CreateTekprodTable extends Migration
             $table->unsignedInteger('id_proyek')->nullable();
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('cascade')->onUpdate('restrict');
 
-            $table->string('kode_tekprod')->nullable();
-            $table->string('nama_tekprod')->nullable();
+            $table->string('kode_tekprod', 1000)->nullable();
+            $table->string('nama_tekprod', 1000)->nullable();
 
             $table->string('revisi_tekprod')->nullable();
             $table->string('rev_for_curva_tekprod')->nullable();

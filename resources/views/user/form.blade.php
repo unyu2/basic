@@ -28,9 +28,7 @@
                     <div class="form-group row">
                         <label for="password" class="col-lg-3 col-lg-offset-1 control-label">Password</label>
                         <div class="col-lg-6">
-                            <input type="password" name="password" id="password" class="form-control" 
-                            required
-                            minlength="6">
+                            <input type="password" name="password" id="password" class="form-control" required autofocus minlength="6">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -38,7 +36,7 @@
                         <label for="password_confirmation" class="col-lg-3 col-lg-offset-1 control-label">Konfirmasi Password</label>
                         <div class="col-lg-6">
                             <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" 
-                                required
+                                required autofocus
                                 data-match="#password">
                             <span class="help-block with-errors"></span>
                         </div>
@@ -79,7 +77,7 @@
                         <label for="status_karyawan" class="col-lg-3 col-lg-offset-1 control-label">Status Karyawan</label>
                         <div class="col-lg-6">   
                             <select name="status_karyawan" id="status_karyawan" class="form-control" required>
-                            <option value=""></option>
+                            <option></option>
                             <option value="Organik INKA">Organik INKA</option>
                             <option value="PKWT INKA">PKWT INKA</option>
                             <option value="Organik IMS">Organik IMS</option>

@@ -21,8 +21,8 @@ class CreateDesignTable extends Migration
             $table->unsignedInteger('id_proyek')->nullable();
             $table->foreign('id_proyek')->references('id_proyek')->on('proyek')->onDelete('cascade')->onUpdate('restrict');
 
-            $table->string('kode_design')->nullable();
-            $table->string('nama_design')->nullable();
+            $table->string('kode_design', 1000)->nullable();
+            $table->string('nama_design', 1000)->nullable();
 
             $table->string('revisi')->nullable();
             $table->string('rev_for_curva')->nullable();
