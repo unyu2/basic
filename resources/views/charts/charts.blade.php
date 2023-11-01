@@ -387,7 +387,6 @@ function loadCurvasChartData(id_proyek, title) {
         },
         dataType: "JSON",
         success: function(data) {
-            console.log(data); // Tambahkan baris ini
             drawCurvasChart(data, temp_title);
         }
     });

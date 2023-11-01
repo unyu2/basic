@@ -214,7 +214,6 @@
             },
             dataType: "JSON",
             success: function (data) {
-                console.log(data); // Tambahkan baris ini
                 drawCurvasChartSample(data, temp_title);
             }
         });
@@ -321,7 +320,6 @@
             },
             dataType: "JSON",
             success: function (data) {
-                console.log(data); // Tambahkan baris ini
                 drawCurvasChartSampleDua(data, temp_title);
             }
         });
@@ -521,7 +519,6 @@
             },
             dataType: "JSON",
             success: function (data) {
-                console.log(data);
                 let targetData = data.target;
                 let realisasiData = data.realisasi;
                 drawCurvasChartCombinedEngineering(targetData, realisasiData, temp_title);
@@ -622,7 +619,6 @@
             },
             dataType: "JSON",
             success: function (data) {
-                console.log(data);
                 let targetData = data.target;
                 let realisasiData = data.realisasi;
                 drawCurvasChartCombinedDesign(targetData, realisasiData, temp_title);
@@ -723,7 +719,6 @@
             },
             dataType: "JSON",
             success: function (data) {
-                console.log(data);
                 let targetData = data.target;
                 let realisasiData = data.realisasi;
                 drawCurvasChartCombinedTekpro(targetData, realisasiData, temp_title);

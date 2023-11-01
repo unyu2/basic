@@ -99,9 +99,9 @@ $(function() {
         datasets: [
             {
                 label: 'Target',
-                fillColor: 'rgba(0, 0, 255, 0.5)', // Biru
-                strokeColor: 'rgba(0, 0, 255, 0.8)', // Biru
-                pointColor: 'rgba(0, 0, 255, 1)', // Biru
+                fillColor: 'rgba(0, 0, 255, 0.5)',
+                strokeColor: 'rgba(0, 0, 255, 0.8)',
+                pointColor: 'rgba(0, 0, 255, 1)',
                 pointStrokeColor: 'rgba(60,141,188,1)',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
@@ -109,9 +109,9 @@ $(function() {
             },
             {
                 label: 'Release',
-                fillColor: 'rgba(0, 128, 0, 0.5)', // Hijau
-                strokeColor: 'rgba(0, 128, 0, 0.8)', // Hijau
-                pointColor: 'rgba(0, 128, 0, 1)', // Hijau
+                fillColor: 'rgba(0, 128, 0, 0.5)',
+                strokeColor: 'rgba(0, 128, 0, 0.8)',
+                pointColor: 'rgba(0, 128, 0, 1)',
                 pointStrokeColor: '#3b8bba',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
@@ -205,9 +205,9 @@ $(function() {
         datasets: [
             {
                 label: 'Jumlah Doc Open',
-                fillColor: 'rgba(255, 0, 0, 0.5)', // Merah
-                strokeColor: 'rgba(255, 0, 0, 0.8)', // Merah
-                pointColor: 'rgba(255, 0, 0, 1)', // Merah
+                fillColor: 'rgba(255, 0, 0, 0.5)',
+                strokeColor: 'rgba(255, 0, 0, 0.8)',
+                pointColor: 'rgba(255, 0, 0, 1)',
                 pointStrokeColor: '#00a65a',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
@@ -215,9 +215,9 @@ $(function() {
             },
             {
                 label: 'Jumlah Doc Release',
-                fillColor: 'rgba(0, 128, 0, 0.5)', // Hijau
-                strokeColor: 'rgba(0, 128, 0, 0.8)', // Hijau
-                pointColor: 'rgba(0, 128, 0, 1)', // Hijau
+                fillColor: 'rgba(0, 128, 0, 0.5)',
+                strokeColor: 'rgba(0, 128, 0, 0.8)',
+                pointColor: 'rgba(0, 128, 0, 1)',
                 pointStrokeColor: '#3b8bba',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',

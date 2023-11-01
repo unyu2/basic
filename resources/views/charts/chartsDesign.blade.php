@@ -748,9 +748,7 @@ function loadStatusPieChartDataBobot(id_proyek, title) {
     console.error("Error: " + errorThrown);
     console.error(jqXHR.responseText); // Ini akan mencetak respons kesalahan lengkap ke konsol
 }
-//        error: function(jqXHR, textStatus, errorThrown) {
-//            console.error("Kesalahan dalam permintaan AJAX:", textStatus, errorThrown);
-//        }
+
     });
     console.log(`Proyek: ${id_proyek}`);
 }
